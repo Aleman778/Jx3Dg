@@ -1,7 +1,8 @@
 package jx3d.core;
 
 /**
- * Shared constants in the jx3DGraphics API. 
+ * Shared constants in the jx3DGraphics API.
+ *  
  * @since 1.0
  * @author Aleman778
  */
