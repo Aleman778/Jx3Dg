@@ -49,4 +49,10 @@ public abstract class Display implements Disposable {
 	 * @return all active screens
 	 */
 	public abstract Screen[] getScreens();
+	
+	/**
+	 * Checks if the display should close.
+	 * @return true if the display should close
+	 */
+	public abstract boolean shouldClose();
 }

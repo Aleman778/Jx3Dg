@@ -14,8 +14,7 @@ public class TestApplication {
 		display = new GlfwDisplay("Test Application", 640, 480);
 		display.setVisible(true);
 	}
-	
-	
+
 	public static void main(String[] args) {
 		new TestApplication();
 	}

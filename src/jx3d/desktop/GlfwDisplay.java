@@ -7,10 +7,10 @@ import jx3d.core.Screen;
 import jx3d.desktop.GlfwScreen;
 
 import java.nio.IntBuffer;
-import java.util.concurrent.Semaphore;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
+import org.lwjgl.glfw.GLFWErrorCallback;
 
 /**
  * Desktop window implementation using the <i>GLFW</i>.
@@ -32,18 +32,18 @@ public class GlfwDisplay extends Display implements Runnable {
 	private static final long NULL = 0L;
 	
 	private static boolean initialized = false;
-	
-	private Thread thread;
+
+	private Object lock = new Object();
+	private Thread mainThread;
 	private GlfwScreen screen;
 	private String title;
-	private Object lock;
 	
 	private long window = NULL;
 	private boolean visible = false;
 	private boolean disposed = false;
 	
 	private boolean fullscreen = false;
-	private boolean decorated = false;
+	private boolean decorated = true;
 	private boolean floating = false;
 	private boolean iconified = false;
 	private boolean resizable = true;
@@ -99,11 +99,23 @@ public class GlfwDisplay extends Display implements Runnable {
 		synchronized (lock) {
 			lock.notify();
 		}
+		
+		while (!shouldClose()) {
+			glfwWaitEvents();
+		}
 	}
 	
 	@Override
 	public void dispose() {
 		glfwDestroyWindow(window);
+	}
+	
+	/**
+	 * Check if the current window is active.
+	 * @return true if the window is active.
+	 */
+	public boolean isActive() {
+		return visible && isCreated();
 	}
 	
 	/**
@@ -350,8 +362,8 @@ public class GlfwDisplay extends Display implements Runnable {
 		this.visible = visible;
 		 
 		if (visible && !isCreated()) {
-			thread = new Thread(this);
-			thread.start();
+			mainThread = new Thread(this, title);
+			mainThread.start();
 			synchronized(lock) {
 				try {
 					lock.wait();
@@ -476,6 +488,15 @@ public class GlfwDisplay extends Display implements Runnable {
 		return result;
 	}
 	
+	@Override
+	public boolean shouldClose() {
+		if (!isCreated()) {
+			return true;
+		}
+		
+		return glfwWindowShouldClose(window);
+	}
+	
 	private boolean hasReference() {
 		return window != NULL;
 	}
@@ -493,6 +514,13 @@ public class GlfwDisplay extends Display implements Runnable {
 		}
 		
 		setupAttributes();
+		setupCallbacks();
+	}
+	
+	private void setupCallbacks() {
+		glfwSetWindowRefreshCallback(window, (long window) -> {
+			//glfwSwapBuffers(window);
+		});
 	}
 	
 	private void setupAttributes() {
@@ -504,12 +532,13 @@ public class GlfwDisplay extends Display implements Runnable {
 			glfwSetWindowPos(window, x, y);
 		}
 
-		glfwSwapInterval(swapInterval);
 		glfwSetWindowSizeLimits(window, minWidth, minHeight, maxWidth, maxHeight);
 		glfwSetWindowAttrib(window, GLFW_DECORATED, decorated ? 1 : 0);
 		glfwSetWindowAttrib(window, GLFW_FLOATING, floating ? 1 : 0);
 		glfwSetWindowAttrib(window, GLFW_RESIZABLE, resizable? 1 : 0);
-		glfwSetWindowAttrib(window, GLFW_ICONIFIED, iconified ? 1 : 0);
+		
+		if (iconified)
+			glfwIconifyWindow(window);
 	}
 	
 	/**
@@ -519,6 +548,7 @@ public class GlfwDisplay extends Display implements Runnable {
 		if (!initialized) {
 			if (glfwInit()) {
 				initialized = true;
+				glfwSetErrorCallback(GLFWErrorCallback.createThrow());
 			} else {
 				throw new IllegalStateException("The GLFW library failed to initialize.");
 			}
