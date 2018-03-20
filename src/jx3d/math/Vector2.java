@@ -157,7 +157,17 @@ public class Vector2 {
 	}
 	
 	/**
-	 * Multiply the components if thus vector by the components of the given vector.
+	 * Multiply the components of this vector by the given values.
+	 * @param x the x component to multiply
+	 * @param y the y component to multiply
+	 * @return the dot product of the the to vectors
+	 */
+	public float dot(float x, float y) {
+		return this.x * x + this.y * y;	
+	}
+	
+	/**
+	 * Multiply the components of this vector by the components of the given vector.
 	 * @param v the vector to multiply
 	 * @return the dot product of the the to vectors
 	 */
