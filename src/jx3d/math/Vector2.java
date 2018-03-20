@@ -15,12 +15,12 @@ import jx3d.util.BufferUtils;
 public class Vector2 {
 
 	/**
-	 * The x component of the two dimensional vector
+	 * The x component of the two dimensional vector.
 	 */
 	public float x;
 	
 	/**
-	 * The y component of the two dimensional vector
+	 * The y component of the two dimensional vector.
 	 */
 	public float y;
 	

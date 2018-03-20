@@ -15,17 +15,17 @@ import jx3d.util.BufferUtils;
 public class Vector3 {
 
 	/**
-	 * The x component of the three dimensional vector
+	 * The x component of the three dimensional vector.
 	 */
 	public float x;
 	
 	/**
-	 * The y component of the three dimensional vector
+	 * The y component of the three dimensional vector.
 	 */
 	public float y;
 	
 	/**
-	 * The z component of the three dimensional vector
+	 * The z component of the three dimensional vector.
 	 */
 	public float z;
 	
@@ -119,7 +119,7 @@ public class Vector3 {
 	 * @param z the z component to subtract
 	 * @return a new vector holding the result
 	 */
-	public Vector3 sub(float x, float y) {
+	public Vector3 sub(float x, float y, float z) {
 		return new Vector3(this.x - x, this.y - y, this.z - z);
 	}
 	
@@ -196,7 +196,7 @@ public class Vector3 {
 	 * @param z the z component to multiply
 	 * @return the dot product of the the to vectors
 	 */
-	public float dot(float x, float y) {
+	public float dot(float x, float y, float z) {
 		return this.x * x + this.y * y + this.z * z;	
 	}
 	
@@ -252,7 +252,7 @@ public class Vector3 {
 	public float distanceSquared(float x, float y, float z) {
 		float dx = this.x - x;
 		float dy = this.y - y;
-		float dz = this.y - y;
+		float dz = this.z - z;
 		return dx * dx + dy * dy + dz * dz;
 	}
 	
