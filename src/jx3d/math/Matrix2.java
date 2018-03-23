@@ -9,9 +9,8 @@ import jx3d.util.BufferUtils;
  * contains functions to transform the matrix. The matrix is column-major:
  * <p>
  * <code>
- * 		m00  m10  m20<br>
- * 		m01  m11  m21<br>
- * 		m02  m12  m22<br>
+ * 		m00  m10<br>
+ * 		m01  m11<br>
  * </code>
  * </p>
  * @since 1.0
