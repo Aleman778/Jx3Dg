@@ -5,7 +5,7 @@ import java.nio.FloatBuffer;
 import jx3d.util.BufferUtils;
 
 /**
- * Represents a 3 by 3 matrix with single precision. The class also
+ * Represents a 2 by 2 matrix with single precision. The class also
  * contains functions to transform the matrix. The matrix is column-major:
  * <p>
  * <code>
