@@ -23,8 +23,7 @@ public final class Matrix2 {
 	public float m10, m11;
 	
 	/**
-	 * Default Constructor.<br>
-	 * <b>Note:</b> The matrix is an identity matrix as default.
+	 * Default Constructor. The matrix is an identity matrix as default.
 	 */
 	public Matrix2() {
 		m00 = 1;
