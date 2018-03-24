@@ -99,8 +99,8 @@ public final class Matrix2 {
 	
 	/**
 	 * Subtract this matrix by the given matrix <code>m</code> component-wise.
-	 * @param m
-	 * @return
+	 * @param m the matrix to subtract
+	 * @return a new matrix holding the result
 	 */
 	public Matrix2 sub(Matrix2 m) {
 		Matrix2 result = new Matrix2();
