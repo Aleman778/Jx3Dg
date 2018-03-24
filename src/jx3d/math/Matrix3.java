@@ -93,6 +93,28 @@ public final class Matrix3 {
 		this.m21 = entries[7];
 		this.m22 = entries[8];
 	}
+
+	/**
+	 * Create a transformation matrix that performs a translation by the given vector <code>v</code> in two dimensions.
+	 * @param v the vector to translate to
+	 * @return a new matrix holding the result
+	 */
+	public static final Matrix3 createTranslation(Vector2 v) {
+		return createTranslation(v.x, v.y);
+	}
+	
+	/**
+	 * Create a transformation matrix that performs a translation by the given values <code>(x, y)</code> in two dimensions.
+	 * @param x the x component of the translation
+	 * @param y the y component of the translation
+	 * @return a new matrix holding the result
+	 */
+	public static final Matrix3 createTranslation(float x, float y) {
+		Matrix3 result = new Matrix3();
+		result.m02 = x;
+		result.m12 = y;
+		return result;
+	}
 	
 	/**
 	 * Create a transformation matrix that performs a rotation in the XY-plane.
