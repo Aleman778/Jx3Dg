@@ -352,9 +352,9 @@ public final class Matrix3 {
 	 * @return a new float buffer holding the data
 	 */
 	public FloatBuffer toFloatBuffer() {
-		FloatBuffer result = BufferUtils.createFloatBuffer(m00, m01, m02,
-														   m10, m11, m12,
-														   m20, m21, m22);
+		FloatBuffer result = BufferUtils.createFloatBuffer(m00, m10, m20,
+														   m01, m11, m21,
+														   m02, m12, m22);
 		return result;
 	}
 	

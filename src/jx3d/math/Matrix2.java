@@ -56,16 +56,16 @@ public final class Matrix2 {
 	
 	/**
 	 * Create a transformation matrix that performs a rotation
-	 * by the given angle.
-	 * @param angle the angle of the rotation (in radians)
+	 * by the given angle <code>a</code>.
+	 * @param a the angle of the rotation (in radians)
 	 * @return a new matrix holding the transformation
 	 */
-	public static final Matrix2 createRotation(float angle) {
+	public static final Matrix2 createRotation(float a) {
 		Matrix2 result = new Matrix2();
-		result.m00 = (float)  Math.cos(angle);
-		result.m01 = (float) -Math.sin(angle);
-		result.m10 = (float)  Math.sin(angle);
-		result.m11 = (float)  Math.cos(angle);
+		result.m00 = (float)  Math.cos(a);
+		result.m01 = (float) -Math.sin(a);
+		result.m10 = (float)  Math.sin(a);
+		result.m11 = (float)  Math.cos(a);
 		return result;
 	}
 	
@@ -219,7 +219,7 @@ public final class Matrix2 {
 	 * @return a new float buffer holding the data
 	 */
 	public FloatBuffer toFloatBuffer() {
-		FloatBuffer result = BufferUtils.createFloatBuffer(m00, m01, m10, m11);
+		FloatBuffer result = BufferUtils.createFloatBuffer(m00, m10, m01, m11);
 		return result;
 	}
 	
