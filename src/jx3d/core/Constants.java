@@ -75,4 +75,8 @@ public class Constants {
 	 */
 	public static final float TAU = (float) (2.0 * Math.PI);
 	
+	/**
+	 * Epsilon has value 0.0001.
+	 */
+	public static final float EPSILON = 0.0001f;
 }
