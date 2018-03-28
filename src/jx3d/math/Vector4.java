@@ -186,7 +186,7 @@ public class Vector4 {
 	 * Multiply the components of this vector by the given values.
 	 * @param x the x component to multiply
 	 * @param y the y component to multiply
-	 * @param z the z component to multiply
+	 * @param k the z component to multiply
 	 * @param w the w component to multiply
 	 * @return the dot product of the the to vectors
 	 */
@@ -274,15 +274,22 @@ public class Vector4 {
 	}
 	
 	/**
-	 * Get the normal (normalized, unit or direction) vector.
-	 * @return a new normalized vector
+	 * Normalize this vector.
+	 * @return this vector
+	 * @throws IllegalStateException if this vector is a zero vector i.e. length is zero
 	 */
-	public Vector4 normal() {
-		float len = length();
-		if (len > 0)
-			return new Vector4(x / len, y / len, z / len, w / len);
-		
-		return new Vector4();
+	public Vector4 normalize() throws IllegalStateException {
+		float invLength = (float) Math.sqrt(x * x + y * y + z * z + w * w);
+		if (invLength > 0.0f) {
+			invLength = 1.0f / invLength;
+			x *= invLength;
+			y *= invLength;
+			z *= invLength;
+			w *= invLength;
+		} else {
+			throw new IllegalStateException("Cannot normalize a zero vector.");
+		}
+		return this;
 	}
 	
 	/**

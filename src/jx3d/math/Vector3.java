@@ -276,15 +276,21 @@ public class Vector3 {
 	}
 	
 	/**
-	 * Get the normal (normalized, unit or direction) vector.
-	 * @return a new normalized vector
+	 * Normalize this vector.
+	 * @return this vector
+	 * @throws IllegalStateException if this vector is a zero vector i.e. length is zero
 	 */
-	public Vector3 normal() {
-		float len = length();
-		if (len > 0)
-			return new Vector3(x / len, y / len, z / len);
-		
-		return new Vector3();
+	public Vector3 normalize() throws IllegalStateException {
+		float invLength = (float) Math.sqrt(x * x + y * y + z * z);
+		if (invLength > 0.0f) {
+			invLength = 1.0f / invLength;
+			x *= invLength;
+			y *= invLength;
+			z *= invLength;
+		} else {
+			throw new IllegalStateException("Cannot normalize a zero vector.");
+		}
+		return this;
 	}
 	
 	/**

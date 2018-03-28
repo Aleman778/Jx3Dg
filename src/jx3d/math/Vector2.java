@@ -217,7 +217,7 @@ public class Vector2 {
 		float dy = this.y - y;
 		return dx * dx + dy * dy;
 	}
-	
+
 	/**
 	 * Computes the distance between the points of this vector and the point of the provided vector <code>v</code>.
 	 * @param v the point of the vector
@@ -238,15 +238,20 @@ public class Vector2 {
 	}
 	
 	/**
-	 * Get the normal (normalized, unit or direction) vector.
-	 * @return a new normalized vector
+	 * Normalize this vector.
+	 * @return this vector
+	 * @throws IllegalStateException if this vector is a zero vector i.e. length is zero
 	 */
-	public Vector2 normal() {
-		float len = length();
-		if (len > 0)
-			return new Vector2(x / len, y / len);
-		
-		return new Vector2();
+	public Vector2 normalize() throws IllegalStateException {
+		float invLength = (float) Math.sqrt(x * x + y * y);
+		if (invLength > 0.0f) {
+			invLength = 1.0f / invLength;
+			x *= invLength;
+			y *= invLength;
+		} else {
+			throw new IllegalStateException("Cannot normalize a zero vector.");
+		}
+		return this;
 	}
 	
 	/**
