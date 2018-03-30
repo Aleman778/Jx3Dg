@@ -309,8 +309,8 @@ public final class Matrix4 {
 		Matrix4 result = new Matrix4();
 		
 		Vector3 dest = target.sub(eye);
-		Vector3 zaxis = dest.normal();
-		Vector3 xaxis = up.cross(zaxis).normal();
+		Vector3 zaxis = dest.normalize();
+		Vector3 xaxis = up.cross(zaxis).normalize();
 		Vector3 yaxis = zaxis.cross(xaxis);
 		
 		result.m00 = xaxis.x;
