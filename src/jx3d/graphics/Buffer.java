@@ -55,7 +55,7 @@ public abstract class Buffer implements Disposable {
 	 * Clear the buffer.<br>
 	 * <i>Note</i>: this method may not remove the actual contents of this buffer on the GPU,
 	 * it depends on the implementation and graphics API. In order to force the graphics API to 
-	 * remove the data then use {@link Buffer#dispose()} instead.
+	 * remove the data use {@link Buffer#dispose()} instead.
 	 */
 	public void clear() {
 		position = 0;
