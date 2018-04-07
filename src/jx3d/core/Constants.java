@@ -79,4 +79,120 @@ public class Constants {
 	 * Epsilon has value 0.0001.
 	 */
 	public static final float EPSILON = 0.0001f;
+	
+	//Buffer Usage Constants
+	/**
+	 * The user will write data to the buffer once, but the user will not read it.
+	 * @see Constants#DYNAMIC_DRAW
+	 * @see Constants#STREAM_DRAW
+	 */
+	public static final int STATIC_DRAW = 0;
+	
+	/**
+	 * The user will not be writing data to the buffer, but the user will read it back.
+	 * @see Constants#DYNAMIC_READ
+	 * @see Constants#STREAM_READ
+	 */
+	public static final int STATIC_READ = 1;
+	
+	/**
+	 * The user will not be writing data to the buffer nor reading the data.
+	 * @see Constants#DYNAMIC_COPY
+	 * @see Constants#STREAM_COPY
+	 */
+	public static final int STATIC_COPY = 2;
+	
+	/**
+	 * The user will write data to the buffer occasionally, but the user will not read it.
+	 * @see Constants#STATIC_DRAW
+	 * @see Constants#STREAM_DRAW
+	 */
+	public static final int DYNAMIC_DRAW = 3;
+
+	/**
+	 * The user will not be writing data to the buffer, but the user will read it back.
+	 * @see Constants#STATIC_READ
+	 * @see Constants#STREAM_READ
+	 */
+	public static final int DYNAMIC_READ = 4;
+
+	/**
+	 * The user will not be writing data to the buffer nor reading the data.
+	 * @see Constants#STATIC_COPY
+	 * @see Constants#STREAM_COPY
+	 */
+	public static final int DYNAMIC_COPY = 5;
+
+	/**
+	 * The user will write data to the buffer after every use (or almost every use), but the user will not read it.
+	 * @see Constants#STATIC_DRAW
+	 * @see Constants#DYNAMIC_DRAW
+	 */
+	public static final int STREAM_DRAW = 6;
+
+	/**
+	 * The user will not be writing data to the buffer, but the user will read it back.
+	 * @see Constants#STATIC_DRAW
+	 * @see Constants#DYNAMIC_DRAW
+	 */
+	public static final int STREAM_READ = 7;
+
+	/**
+	 * The user will not be writing data to the buffer nor reading the data.
+	 * @see Constants#STATIC_COPY
+	 * @see Constants#STREAM_COPY
+	 */
+	public static final int STREAM_COPY = 8;
+	
+	//Data types
+	/**<b>Type:</b> 4 byte integer.*/
+	public static final int INT 		   = 0;
+	
+	/**<b>Type:</b> 4 byte unsigned integer.*/
+	public static final int UNSIGNED_INT   = 1;
+	
+	/**<b>Type:</b> 4 byte floating point.*/
+	public static final int FLOAT 		   = 2;
+	
+	/**<b>Type:</b> 8 byte double precision floating point.*/
+	public static final int DOUBLE 		   = 3;
+	
+	/**<b>Type:</b> 8 byte long.*/
+	public static final int LONG 		   = 4;
+	
+	/**<b>Type:</b> 2 byte short.*/
+	public static final int SHORT 		   = 5;
+	
+	/**<b>Type:</b> 2 byte unsigned short.*/
+	public static final int UNSIGNED_SHORT = 6;
+	
+	/**<b>Type:</b> 2 byte character.*/
+	public static final int CHAR		   = 7;
+	
+	/**<b>Type:</b> boolean.*/
+	public static final int BOOLEAN 	   = 8;
+	
+	/**<b>Type:</b> 1 byte.*/
+	public static final int BYTE           = 9;
+	
+	/**<b>Type:</b> vector of 2 floating point numbers.*/
+	public static final int VEC2		   = 10;
+	
+	/**<b>Type:</b> vector of 3 floating point numbers.*/
+	public static final int VEC3           = 11;
+	
+	/**<b>Type:</b> vector of 4 floating point numbers.*/
+	public static final int VEC4		   = 12;
+	
+	/**<b>Type:</b> matrix of 2x2 floating point numbers.*/
+	public static final int MAT2		   = 13;
+	
+	/**<b>Type:</b> matrix of 3x3 floating point numbers.*/
+	public static final int MAT3  		   = 14;
+	
+	/**<b>Type:</b> matrix of 4x4 floating point numbers.*/
+	public static final int MAT4		   = 15;
+	
+	/**<b>Type:</b> quaternion of 4 floating point numbers.*/
+	public static final int QUAT		   = 16;
 }
