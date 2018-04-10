@@ -23,7 +23,7 @@ public abstract class VertexBuffer extends Buffer {
      * Put data in the buffer.
      * @param data the data to put
      */
-	public abstract void put(short[] data);
+	public abstract void put(float[] data);
 
     /**
      * Put data in the buffer.

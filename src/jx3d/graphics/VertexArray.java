@@ -1,11 +1,13 @@
 package jx3d.graphics;
 
+import jx3d.util.Disposable;
+
 /**
- * Represents an array of vertex buffers 
+ * Represents an array of vertex buffers and each buffer is described by an attribute map.
  * @since 1.0
  * @author Aleman778
  */
-public abstract class VertexArray {
+public abstract class VertexArray implements Disposable {
 
 	/**
 	 * Bind the vertex array.

@@ -52,6 +52,16 @@ public abstract class Buffer implements Disposable {
 	public abstract void unbind();
 	
 	/**
+	 * Resizing the buffer changes the buffers capacity to the given <code>newCapacity</code>.<br>
+	 * <i>Note:</i> the buffer has a fixed capacity and will not automatically resize when full
+	 * unless you explicitly call this function.<br>
+	 * <i>Note:</i> this method generally creates a new buffer and copies its content so
+	 * it is recommended to set a the capacity once to be large enough to hold all the dynamic data.
+	 * @param newCapacity the new capacity of the buffer
+	 */
+	public abstract void resize(int newCapacity);
+	
+	/**
 	 * Clear the buffer.<br>
 	 * <i>Note</i>: this method may not remove the actual contents of this buffer on the GPU,
 	 * it depends on the implementation and graphics API. In order to force the graphics API to 

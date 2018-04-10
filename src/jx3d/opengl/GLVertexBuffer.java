@@ -1,89 +1,169 @@
 package jx3d.opengl;
 
+import static jx3d.core.Constants.*;
+import static org.lwjgl.opengl.GL15.*;
+
 import java.nio.FloatBuffer;
 
 import jx3d.graphics.VertexBuffer;
 
-import static org.lwjgl.opengl.GL15.*;
-
 /**
+ * Represents an OpenGL implementation of a vertex buffer.<br>
+ * The OpenGL buffer target for a vertex buffer is <i>GL_ARRAY_BUFFER</i>. 
  * @since 1.0
  * @author Aleman778
+ * @see VertexBuffer
  */
 public class GLVertexBuffer extends VertexBuffer {
 
 	private int object;
 	private int usage;
+	private FloatBuffer mapBuffer;
 	
 	/**
-	 * @param capacity
+	 * Creates an empty vertex buffer with a desired maximum capacity.
+	 * @param graphics the graphics processor being used in this thread
+	 * @param capacity the maximum number of elements the buffer can hold
+	 * @param dynamic elements in the buffer can be modified if the dynamic flag is true
 	 */
 	public GLVertexBuffer(int capacity, int usage) {
 		super(capacity);
+
+		this.usage = glGetUsage(usage);
+		this.object = glGenBuffers();
+		
+		glBindBuffer(GL_ARRAY_BUFFER, object);
+		glBufferData(GL_ARRAY_BUFFER, capacity * Float.BYTES, this.usage);
+	}
 	
-	}
-
-	/* (non-Javadoc)
-	 * @see jx3d.util.Disposable#dispose()
+	/**
+	 * Creates a buffer containing the provided data.
+	 * @param graphics the graphics processor being used in this thread
+	 * @param data the array of data to store in the buffer
+	 * @param dynamic elements in the buffer can be modified if the dynamic flag is true
 	 */
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
+	public GLVertexBuffer(float[] data, int usage) {
+		super(data.length);
+
+		this.usage = glGetUsage(usage);
+		this.object = glGenBuffers();
+		this.position = data.length;
+		this.count = data.length;
 		
+		glBindBuffer(GL_ARRAY_BUFFER, object);
+		glBufferData(GL_ARRAY_BUFFER, data, this.usage);
 	}
-
-	/* (non-Javadoc)
-	 * @see jx3d.graphics.VertexBuffer#put(short[])
+	
+	/**
+	 * Creates a buffer containing copies of the buffer data in the provided float buffer.
+	 * @param graphics the graphics processor being used in this thread
+	 * @param buffer the buffer data to copy from
+	 * @param dynamic elements in the buffer can be modified if the dynamic flag is true
 	 */
-	@Override
-	public void put(short[] data) {
-		// TODO Auto-generated method stub
+	public GLVertexBuffer(FloatBuffer buffer, int usage) {
+		super(buffer.remaining());
+
+		this.usage = glGetUsage(usage);
+		this.object = glGenBuffers();
+		this.position = buffer.remaining();
+		this.count = buffer.remaining();
 		
+		glBindBuffer(GL_ARRAY_BUFFER, object);
+		glBufferData(GL_ARRAY_BUFFER, buffer, this.usage);
 	}
-
-	/* (non-Javadoc)
-	 * @see jx3d.graphics.VertexBuffer#put(java.nio.FloatBuffer)
-	 */
-	@Override
-	public void put(FloatBuffer buffer) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	/* (non-Javadoc)
-	 * @see jx3d.graphics.VertexBuffer#map()
-	 */
-	@Override
-	public FloatBuffer map() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see jx3d.graphics.VertexBuffer#unmap()
-	 */
-	@Override
-	public void unmap() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	/* (non-Javadoc)
-	 * @see jx3d.graphics.Buffer#bind()
-	 */
+	
 	@Override
 	public void bind() {
-		// TODO Auto-generated method stub
-		
+		check();
+		glBindBuffer(GL_ARRAY_BUFFER, object);
 	}
 
-	/* (non-Javadoc)
-	 * @see jx3d.graphics.Buffer#unbind()
-	 */
 	@Override
 	public void unbind() {
-		// TODO Auto-generated method stub
+		check();
 		
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
+	
+	@Override
+	public void put(float[] data) {
+		bind(); 
+		glBufferSubData(GL_ARRAY_BUFFER, position * Float.BYTES, data);
+
+		position += data.length;
+		if (position > count)
+			count = position;
 	}
 
+	@Override
+	public void put(FloatBuffer buffer) {
+		bind();
+		
+		int length = buffer.remaining();
+		glBufferSubData(GL_ARRAY_BUFFER, position * Float.BYTES, buffer);
+
+		position += length;
+		if (position > count)
+			count = position;
+	}
+		
+	@Override
+	public FloatBuffer map() {
+		check();
+		
+		if (mapBuffer != null)
+			return mapBuffer;
+		
+		bind();
+		
+		return (mapBuffer = glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE).asFloatBuffer());
+	}
+
+	@Override
+	public void unmap() {
+		check();
+		bind();
+		
+		position = mapBuffer.position();
+		if (position > count)
+			count = position;
+		mapBuffer = null;
+		glUnmapBuffer(GL_ARRAY_BUFFER);
+	}
+
+	@Override
+	public void resize(int size) {
+		capacity = size;
+		
+		bind();
+		glBufferData(GL_ARRAY_BUFFER, size, usage);
+	}
+	
+	@Override
+	public void dispose() {
+		check();
+		
+		glDeleteBuffers(object);
+		object = -1;
+	}
+	
+    private void check() {
+    	if (object == -1)
+    		throw new NullPointerException();
+    }
+    
+    private static final int glGetUsage(int usage) {
+    	switch (usage) {
+    	case STATIC_DRAW:  return GL_STATIC_DRAW;
+    	case DYNAMIC_DRAW: return GL_DYNAMIC_DRAW;
+    	case STREAM_DRAW:  return GL_STREAM_DRAW;
+    	case STATIC_READ:  return GL_STATIC_READ;
+    	case DYNAMIC_READ: return GL_DYNAMIC_READ;
+    	case STREAM_READ:  return GL_STREAM_READ;
+    	case STATIC_COPY:  return GL_STATIC_COPY;
+    	case DYNAMIC_COPY: return GL_DYNAMIC_COPY;
+    	case STREAM_COPY:  return GL_STREAM_COPY;
+	    }
+	    return 0;
+    }
 }
