@@ -18,7 +18,7 @@ import org.lwjgl.opengl.GL20;
 import jx3d.util.BufferUtils;
 
 /**
- * Implementation of 
+ * OpenGL implementation using Lightweight Java Game Library 3 (LWJGL3)
  * @since 1.0
  * @author Aleman778
  */
@@ -170,7 +170,7 @@ public class LwjglGL20 implements jx3d.graphics.opengl.GL20 {
 			GL13.glCompressedTexImage2D(target, level, internalformat, width, height, border, (ByteBuffer) data);
 		} else {
 			throw new IllegalArgumentException(
-					"Cannot use " + data.getClass().getName() + " with this method. Use ByteBuffer instead.");
+					"Cannot use " + data.getClass().getName() + " with this method, use ByteBuffer instead.");
 		}
 	}
 
@@ -541,7 +541,7 @@ public class LwjglGL20 implements jx3d.graphics.opengl.GL20 {
 			GL11.glReadPixels(x, y, width, height, format, type, (FloatBuffer) pixels);
 		else
 			throw new IllegalArgumentException("Cannot use " + pixels.getClass().getName()
-					+ " with this method. Use ByteBuffer, ShortBuffer, IntBuffer or FloatBuffer instead. Blame LWJGL");
+					+ " with this method. Use ByteBuffer, ShortBuffer, IntBuffer or FloatBuffer instead.");
 	}
 
 	public void releaseShaderCompiler() {
@@ -561,7 +561,7 @@ public class LwjglGL20 implements jx3d.graphics.opengl.GL20 {
 	}
 
 	public void shaderBinary(int n, IntBuffer shaders, int binaryformat, Buffer binary, int length) {
-		throw new UnsupportedOperationException("shaderBinary is unsupported");
+		throw new UnsupportedOperationException("shaderBinary is unsupported.");
 	}
 
 	public void shaderSource(int shader, String string) {
@@ -609,7 +609,7 @@ public class LwjglGL20 implements jx3d.graphics.opengl.GL20 {
 					(DoubleBuffer) pixels);
 		else
 			throw new IllegalArgumentException("Cannot use " + pixels.getClass().getName()
-					+ " with this method. Use ByteBuffer, ShortBuffer, IntBuffer, FloatBuffer or DoubleBuffer instead. Blame LWJGL");
+					+ " with this method. Use ByteBuffer, ShortBuffer, IntBuffer, FloatBuffer or DoubleBuffer instead.");
 	}
 
 	public void texParameterf(int target, int pname, float param) {
@@ -642,7 +642,7 @@ public class LwjglGL20 implements jx3d.graphics.opengl.GL20 {
 			GL11.glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, (DoubleBuffer) pixels);
 		else
 			throw new IllegalArgumentException("Cannot use " + pixels.getClass().getName()
-					+ " with this method. Use ByteBuffer, ShortBuffer, IntBuffer, FloatBuffer or DoubleBuffer instead. Blame LWJGL");
+					+ " with this method. Use ByteBuffer, ShortBuffer, IntBuffer, FloatBuffer or DoubleBuffer instead.");
 	}
 
 	public void uniform1f(int location, float x) {
@@ -829,7 +829,7 @@ public class LwjglGL20 implements jx3d.graphics.opengl.GL20 {
 						"Cannot use " + buffer.getClass().getName() + " with type " + type + " with this method.");
 		} else
 			throw new IllegalArgumentException(
-					"Cannot use " + buffer.getClass().getName() + " with this method. Use ByteBuffer instead.");
+					"Cannot use " + buffer.getClass().getName() + " with this method, use ByteBuffer instead.");
 	}
 
 	public void vertexAttribPointer(int indx, int size, int type, boolean normalized, int stride, int ptr) {
