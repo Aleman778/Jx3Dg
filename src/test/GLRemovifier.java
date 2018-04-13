@@ -11,7 +11,8 @@ public class GLRemovifier {
 
 	
 	public static void main(String[] args) {
-		String filename = "C:\\Users\\alexa\\Documents\\eclipse\\jx3DGraphics\\src\\jx3d\\platform\\lwjgl\\LwjglGL20";
+		//String filename = "C:\\Users\\alexa\\Documents\\eclipse\\jx3DGraphics\\src\\jx3d\\graphics\\opengl\\GL30";
+		String filename = "C:\\Users\\alexa\\Documents\\eclipse\\jx3DGraphics\\src\\jx3d\\desktop\\LwjglGL30";
 		File file = new File(filename + ".java");
 		
 		try {

@@ -5,7 +5,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 /**
- * Interface wrapper for Open 2.x function and constants.
+ * Interface wrapper for Open 2.x function and constants, based on OpenGLES.
  * @since 1.0
  * @author Aleman778
  */
