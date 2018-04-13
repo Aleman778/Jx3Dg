@@ -12,7 +12,7 @@ import jx3d.util.Disposable;
  * @since 1.0
  * @author Aleman778
  */
-public abstract class Node extends Constants implements Disposable {
+public abstract class Node extends Functions implements Disposable {
 
 	private HashSet<Node> children;
 	private String name = getClass().getSimpleName();

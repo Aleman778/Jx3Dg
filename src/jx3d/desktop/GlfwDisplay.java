@@ -18,8 +18,7 @@ import org.lwjgl.glfw.GLFWErrorCallback;
  * <i>GLFW</i> is an Open Source, multi-platform library
  * for OpenGL, OpenGL ES and Vulkan development on
  * the desktop. It provides a simple API for creating
- * windows, contexts and surfaces, receiving input and events.<br>
- * 
+ * windows, contexts and surfaces, receiving input and events.
  * @since 1.0
  * @author Aleman778
  * @see <a href="http://www.glfw.org/">http://www.glfw.org/</a>
