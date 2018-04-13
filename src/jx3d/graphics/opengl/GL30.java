@@ -3,7 +3,7 @@ package jx3d.graphics.opengl;
 import java.nio.IntBuffer;
 
 /**
- * Interface wrapper for Open 3.x function and constants.
+ * Interface wrapper for Open 3.x function and constants, based on OpenGLES.
  * @since 1.0
  * @author Aleman778
  */
