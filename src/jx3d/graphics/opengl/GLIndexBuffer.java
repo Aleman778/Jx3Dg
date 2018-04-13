@@ -19,6 +19,7 @@ public class GLIndexBuffer extends IndexBuffer {
 	private int object;
 	private int usage;
 	private ShortBuffer mapBuffer;
+	private GL20 gl;
 	
 	/**
 	 * Creates an empty vertex buffer with a desired maximum capacity.
@@ -28,12 +29,12 @@ public class GLIndexBuffer extends IndexBuffer {
 	 */
 	public GLIndexBuffer(int capacity, int usage) {
 		super(capacity);
-
+		int x = gl.TEXTURE0;
 		this.usage = glGetUsage(usage);
 		this.object = glGenBuffers();
 		
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, object);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, capacity * Float.BYTES, this.usage);
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, object);
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, capacity * Float.BYTES, this.usage);
 	}
 
 	/**
