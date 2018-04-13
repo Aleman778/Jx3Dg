@@ -5,6 +5,8 @@ import java.nio.ByteOrder;
 import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.nio.LongBuffer;
+import java.nio.ShortBuffer;
 
 /**
  * Buffer utilities is a helper class that create buffers. 
@@ -56,6 +58,48 @@ public class BufferUtils {
      */
     public static IntBuffer createIntBuffer(int... data) {
         IntBuffer result = ByteBuffer.allocateDirect(data.length * Integer.BYTES).order(ByteOrder.nativeOrder()).asIntBuffer();
+        result.put(data).flip();
+        return result;
+    }
+
+	/**
+	 * Creates an empty long buffer with provided capacity.
+	 * @param capacity the number of elements the buffer can hold
+	 * @return a new empty integer buffer 
+	 */
+    public static LongBuffer createEmptyLongBuffer(int capacity) {
+    	LongBuffer result = createEmptyByteBuffer(capacity * Integer.BYTES).asLongBuffer();
+        return result;
+    }
+    
+    /**
+     * Creates an long buffer with provided data.
+     * @param data the data to put in buffer
+     * @return a new integer buffer
+     */
+    public static LongBuffer createLongBuffer(long... data) {
+        LongBuffer result = ByteBuffer.allocateDirect(data.length * Integer.BYTES).order(ByteOrder.nativeOrder()).asLongBuffer();
+        result.put(data).flip();
+        return result;
+    }
+
+	/**
+	 * Creates an empty short buffer with provided capacity.
+	 * @param capacity the number of elements the buffer can hold
+	 * @return a new empty integer buffer 
+	 */
+    public static ShortBuffer createEmptyShortBuffer(int capacity) {
+    	ShortBuffer result = createEmptyByteBuffer(capacity * Integer.BYTES).asShortBuffer();
+        return result;
+    }
+    
+    /**
+     * Creates an short buffer with provided data.
+     * @param data the data to put in buffer
+     * @return a new integer buffer
+     */
+    public static ShortBuffer createShortBuffer(short... data) {
+        ShortBuffer result = ByteBuffer.allocateDirect(data.length * Integer.BYTES).order(ByteOrder.nativeOrder()).asShortBuffer();
         result.put(data).flip();
         return result;
     }
