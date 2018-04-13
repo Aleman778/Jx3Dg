@@ -1,24 +1,24 @@
-package jx3d.opengl;
+package jx3d.graphics.opengl;
 
 import static jx3d.core.Constants.*;
 import static org.lwjgl.opengl.GL15.*;
 
-import java.nio.ShortBuffer;
+import java.nio.FloatBuffer;
 
-import jx3d.graphics.IndexBuffer;
+import jx3d.graphics.VertexBuffer;
 
 /**
- * Represents an OpenGL implementation of an index buffer.<br>
- * The OpenGL buffer target for an index buffer is <i>GL_ELEMENT_ARRAY_BUFFER</i>. 
+ * Represents an OpenGL implementation of a vertex buffer.<br>
+ * The OpenGL buffer target for a vertex buffer is <i>GL_ARRAY_BUFFER</i>. 
  * @since 1.0
  * @author Aleman778
- * @see IndexBuffer
+ * @see VertexBuffer
  */
-public class GLIndexBuffer extends IndexBuffer {
+public class GLVertexBuffer extends VertexBuffer {
 
 	private int object;
 	private int usage;
-	private ShortBuffer mapBuffer;
+	private FloatBuffer mapBuffer;
 	
 	/**
 	 * Creates an empty vertex buffer with a desired maximum capacity.
@@ -26,41 +26,41 @@ public class GLIndexBuffer extends IndexBuffer {
 	 * @param capacity the maximum number of elements the buffer can hold
 	 * @param dynamic elements in the buffer can be modified if the dynamic flag is true
 	 */
-	public GLIndexBuffer(int capacity, int usage) {
+	public GLVertexBuffer(int capacity, int usage) {
 		super(capacity);
 
 		this.usage = glGetUsage(usage);
 		this.object = glGenBuffers();
 		
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, object);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, capacity * Float.BYTES, this.usage);
+		glBindBuffer(GL_ARRAY_BUFFER, object);
+		glBufferData(GL_ARRAY_BUFFER, capacity * Float.BYTES, this.usage);
 	}
-
+	
 	/**
 	 * Creates a buffer containing the provided data.
 	 * @param graphics the graphics processor being used in this thread
 	 * @param data the array of data to store in the buffer
 	 * @param dynamic elements in the buffer can be modified if the dynamic flag is true
 	 */
-	public GLIndexBuffer(short[] data, int usage) {
+	public GLVertexBuffer(float[] data, int usage) {
 		super(data.length);
 
 		this.usage = glGetUsage(usage);
 		this.object = glGenBuffers();
 		this.position = data.length;
 		this.count = data.length;
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, object);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, data, this.usage);
+		
+		glBindBuffer(GL_ARRAY_BUFFER, object);
+		glBufferData(GL_ARRAY_BUFFER, data, this.usage);
 	}
-
+	
 	/**
-	 * Creates a buffer containing copies of the buffer data in the provided short buffer.
+	 * Creates a buffer containing copies of the buffer data in the provided float buffer.
 	 * @param graphics the graphics processor being used in this thread
 	 * @param buffer the buffer data to copy from
 	 * @param dynamic elements in the buffer can be modified if the dynamic flag is true
 	 */
-	public GLIndexBuffer(ShortBuffer buffer, int usage) {
+	public GLVertexBuffer(FloatBuffer buffer, int usage) {
 		super(buffer.remaining());
 
 		this.usage = glGetUsage(usage);
@@ -68,28 +68,27 @@ public class GLIndexBuffer extends IndexBuffer {
 		this.position = buffer.remaining();
 		this.count = buffer.remaining();
 		
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, object);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, buffer, this.usage);
+		glBindBuffer(GL_ARRAY_BUFFER, object);
+		glBufferData(GL_ARRAY_BUFFER, buffer, this.usage);
 	}
 	
 	@Override
 	public void bind() {
 		check();
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, object);
+		glBindBuffer(GL_ARRAY_BUFFER, object);
 	}
 
 	@Override
 	public void unbind() {
 		check();
 		
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 	
 	@Override
-	public void put(short[] data) {
-		bind();
-		
-		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, position * Float.BYTES, data);
+	public void put(float[] data) {
+		bind(); 
+		glBufferSubData(GL_ARRAY_BUFFER, position * Float.BYTES, data);
 
 		position += data.length;
 		if (position > count)
@@ -97,12 +96,11 @@ public class GLIndexBuffer extends IndexBuffer {
 	}
 
 	@Override
-	public void put(ShortBuffer buffer) {
+	public void put(FloatBuffer buffer) {
 		bind();
 		
 		int length = buffer.remaining();
-		
-		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, position * Float.BYTES, buffer);
+		glBufferSubData(GL_ARRAY_BUFFER, position * Float.BYTES, buffer);
 
 		position += length;
 		if (position > count)
@@ -110,26 +108,27 @@ public class GLIndexBuffer extends IndexBuffer {
 	}
 		
 	@Override
-	public ShortBuffer map() {
+	public FloatBuffer map() {
 		check();
 		
 		if (mapBuffer != null)
 			return mapBuffer;
 		
 		bind();
-		return (mapBuffer = glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_READ_WRITE).asShortBuffer());
+		
+		return (mapBuffer = glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE).asFloatBuffer());
 	}
 
 	@Override
 	public void unmap() {
 		check();
 		bind();
-
+		
 		position = mapBuffer.position();
 		if (position > count)
 			count = position;
 		mapBuffer = null;
-		glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
+		glUnmapBuffer(GL_ARRAY_BUFFER);
 	}
 
 	@Override
@@ -137,7 +136,7 @@ public class GLIndexBuffer extends IndexBuffer {
 		capacity = size;
 		
 		bind();
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, usage);
+		glBufferData(GL_ARRAY_BUFFER, size, usage);
 	}
 	
 	@Override

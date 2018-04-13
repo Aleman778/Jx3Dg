@@ -1,4 +1,4 @@
-package jx3d.opengl;
+package jx3d.graphics.opengl;
 
 import static jx3d.core.Constants.*;
 import static org.lwjgl.opengl.GL11.*;
