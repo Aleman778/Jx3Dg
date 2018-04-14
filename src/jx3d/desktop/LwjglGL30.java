@@ -22,7 +22,7 @@ import org.lwjgl.opengl.GL41;
 import org.lwjgl.opengl.GL43;
 
 /**
- * OpenGL implementation using Lightweight Java Game Library 3 (LWJGL3)
+ * OpenGL 3.x - 4.x implementation using Lightweight Java Game Library 3 (LWJGL3)
  * @since 1.0
  * @author Aleman778
  */
@@ -172,6 +172,11 @@ public class LwjglGL30 extends LwjglGL20 implements jx3d.graphics.opengl.GL30 {
 	public void deleteTransformFeedbacks(int n, IntBuffer ids) {
 		GL40.glDeleteTransformFeedbacks(ids);
 	}
+	
+	@Override
+	public void deleteVertexArray(int array) {
+		GL30.glDeleteVertexArrays(array);
+	}
 
 	@Override
 	public void deleteVertexArrays(int n, int[] arrays, int offset) {
@@ -312,6 +317,11 @@ public class LwjglGL30 extends LwjglGL20 implements jx3d.graphics.opengl.GL30 {
 		GL40.glGenTransformFeedbacks(ids);
 	}
 
+	@Override
+	public int genVertexArray() {
+		return GL30.glGenVertexArrays();
+	}
+	
 	@Override
 	public void genVertexArrays(int n, int[] arrays, int offset) {
 		for (int i = offset; i < offset + n; i++) {
@@ -625,11 +635,6 @@ public class LwjglGL30 extends LwjglGL20 implements jx3d.graphics.opengl.GL30 {
 	@Override
 	public void uniformMatrix4x3fv(int location, int count, boolean transpose, FloatBuffer value) {
 		GL21.glUniformMatrix4x3fv(location, transpose, value);
-	}
-
-	@Override
-	public boolean unmapBuffer(int target) {
-		return GL15.glUnmapBuffer(target);
 	}
 
 	@Override

@@ -1,11 +1,11 @@
 package jx3d.graphics.opengl;
 
 import static jx3d.core.Constants.*;
-import static org.lwjgl.opengl.GL15.*;
-
-import java.nio.FloatBuffer;
 
 import jx3d.graphics.VertexBuffer;
+import jx3d.util.BufferUtils;
+
+import java.nio.FloatBuffer;
 
 /**
  * Represents an OpenGL implementation of a vertex buffer.<br>
@@ -19,6 +19,7 @@ public class GLVertexBuffer extends VertexBuffer {
 	private int object;
 	private int usage;
 	private FloatBuffer mapBuffer;
+	private GL20 gl;
 	
 	/**
 	 * Creates an empty vertex buffer with a desired maximum capacity.
@@ -30,28 +31,10 @@ public class GLVertexBuffer extends VertexBuffer {
 		super(capacity);
 
 		this.usage = glGetUsage(usage);
-		this.object = glGenBuffers();
+		this.object = gl.genBuffer();
 		
-		glBindBuffer(GL_ARRAY_BUFFER, object);
-		glBufferData(GL_ARRAY_BUFFER, capacity * Float.BYTES, this.usage);
-	}
-	
-	/**
-	 * Creates a buffer containing the provided data.
-	 * @param graphics the graphics processor being used in this thread
-	 * @param data the array of data to store in the buffer
-	 * @param dynamic elements in the buffer can be modified if the dynamic flag is true
-	 */
-	public GLVertexBuffer(float[] data, int usage) {
-		super(data.length);
-
-		this.usage = glGetUsage(usage);
-		this.object = glGenBuffers();
-		this.position = data.length;
-		this.count = data.length;
-		
-		glBindBuffer(GL_ARRAY_BUFFER, object);
-		glBufferData(GL_ARRAY_BUFFER, data, this.usage);
+		gl.bindBuffer(GL20.ARRAY_BUFFER, object);
+		gl.bufferData(GL20.ARRAY_BUFFER, capacity * Float.BYTES, null, this.usage);
 	}
 	
 	/**
@@ -64,31 +47,42 @@ public class GLVertexBuffer extends VertexBuffer {
 		super(buffer.remaining());
 
 		this.usage = glGetUsage(usage);
-		this.object = glGenBuffers();
+		this.object = gl.genBuffer();
 		this.position = buffer.remaining();
 		this.count = buffer.remaining();
 		
-		glBindBuffer(GL_ARRAY_BUFFER, object);
-		glBufferData(GL_ARRAY_BUFFER, buffer, this.usage);
+		gl.bindBuffer(GL20.ARRAY_BUFFER, object);
+		gl.bufferData(GL20.ARRAY_BUFFER, buffer.remaining(), buffer, this.usage);
+	}
+	
+	/**
+	 * Creates a buffer containing the provided data.
+	 * @param graphics the graphics processor being used in this thread
+	 * @param data the array of data to store in the buffer
+	 * @param dynamic elements in the buffer can be modified if the dynamic flag is true
+	 */
+	public GLVertexBuffer(float[] data, int usage) {
+		this(BufferUtils.createFloatBuffer(data), usage);
 	}
 	
 	@Override
 	public void bind() {
 		check();
-		glBindBuffer(GL_ARRAY_BUFFER, object);
+		gl.bindBuffer(GL20.ARRAY_BUFFER, object);
 	}
 
 	@Override
 	public void unbind() {
 		check();
 		
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		gl.bindBuffer(GL20.ARRAY_BUFFER, 0);
 	}
 	
 	@Override
 	public void put(float[] data) {
 		bind(); 
-		glBufferSubData(GL_ARRAY_BUFFER, position * Float.BYTES, data);
+		FloatBuffer buffer = BufferUtils.createFloatBuffer(data);
+		gl.bufferSubData(GL20.ARRAY_BUFFER, position * Float.BYTES, data.length, buffer);
 
 		position += data.length;
 		if (position > count)
@@ -100,7 +94,7 @@ public class GLVertexBuffer extends VertexBuffer {
 		bind();
 		
 		int length = buffer.remaining();
-		glBufferSubData(GL_ARRAY_BUFFER, position * Float.BYTES, buffer);
+		gl.bufferSubData(GL20.ARRAY_BUFFER, position * Float.BYTES, length, buffer);
 
 		position += length;
 		if (position > count)
@@ -116,7 +110,7 @@ public class GLVertexBuffer extends VertexBuffer {
 		
 		bind();
 		
-		return (mapBuffer = glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE).asFloatBuffer());
+		return (mapBuffer = gl.mapBuffer(GL20.ARRAY_BUFFER, GL20.READ_WRITE).asFloatBuffer());
 	}
 
 	@Override
@@ -128,7 +122,7 @@ public class GLVertexBuffer extends VertexBuffer {
 		if (position > count)
 			count = position;
 		mapBuffer = null;
-		glUnmapBuffer(GL_ARRAY_BUFFER);
+		gl.unmapBuffer(GL20.ARRAY_BUFFER);
 	}
 
 	@Override
@@ -136,14 +130,14 @@ public class GLVertexBuffer extends VertexBuffer {
 		capacity = size;
 		
 		bind();
-		glBufferData(GL_ARRAY_BUFFER, size, usage);
+		gl.bufferData(GL20.ARRAY_BUFFER, size, null, usage);
 	}
 	
 	@Override
 	public void dispose() {
 		check();
 		
-		glDeleteBuffers(object);
+		gl.deleteBuffer(object);
 		object = -1;
 	}
 	
@@ -154,15 +148,15 @@ public class GLVertexBuffer extends VertexBuffer {
     
     private static final int glGetUsage(int usage) {
     	switch (usage) {
-    	case STATIC_DRAW:  return GL_STATIC_DRAW;
-    	case DYNAMIC_DRAW: return GL_DYNAMIC_DRAW;
-    	case STREAM_DRAW:  return GL_STREAM_DRAW;
-    	case STATIC_READ:  return GL_STATIC_READ;
-    	case DYNAMIC_READ: return GL_DYNAMIC_READ;
-    	case STREAM_READ:  return GL_STREAM_READ;
-    	case STATIC_COPY:  return GL_STATIC_COPY;
-    	case DYNAMIC_COPY: return GL_DYNAMIC_COPY;
-    	case STREAM_COPY:  return GL_STREAM_COPY;
+    	case STATIC_DRAW:  return GL20.STATIC_DRAW;
+    	case DYNAMIC_DRAW: return GL20.DYNAMIC_DRAW;
+    	case STREAM_DRAW:  return GL20.STREAM_DRAW;
+    	case STATIC_READ:  return GL20.STATIC_READ;
+    	case DYNAMIC_READ: return GL20.DYNAMIC_READ;
+    	case STREAM_READ:  return GL20.STREAM_READ;
+    	case STATIC_COPY:  return GL20.STATIC_COPY;
+    	case DYNAMIC_COPY: return GL20.DYNAMIC_COPY;
+    	case STREAM_COPY:  return GL20.STREAM_COPY;
 	    }
 	    return 0;
     }

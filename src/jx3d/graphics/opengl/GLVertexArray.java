@@ -1,9 +1,6 @@
 package jx3d.graphics.opengl;
 
 import static jx3d.core.Constants.*;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.*;
 
 import jx3d.graphics.Attribute;
 import jx3d.graphics.AttributeMap;
@@ -24,28 +21,29 @@ public class GLVertexArray extends VertexArray {
 	
 	private int object;
 	private int index;
+	private GL30 gl;
 	
 	/**
 	 * Constructor. Create an empty vertex array.
 	 */
 	public GLVertexArray() {
-		this.object = glGenVertexArrays();
-		this.buffers = new ArrayList<>();
-		this.index = 0;
+		object = gl.genVertexArray();
+		buffers = new ArrayList<>();
+		index = 0;
 	}
 	
 	@Override
 	public void bind() {
 		check();
 		
-		glBindVertexArray(object);
+		gl.bindVertexArray(object);
 	}
 	
 	@Override
 	public void unbind() {
 		check();
 		
-		glBindVertexArray(0);
+		gl.bindVertexArray(0);
 	}
 	
 	@Override
@@ -64,8 +62,8 @@ public class GLVertexArray extends VertexArray {
 		//Apply layouts
 		for (int i = 0; i < attrib.size(); i++) {
 			Attribute e = attrib.getAt(i);
-			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(index, e.count, glGetType(e.type), e.normalized, attrib.stride(), e.offset * e.size);
+			gl.enableVertexAttribArray(index);
+			gl.vertexAttribPointer(index, e.count, glGetType(e.type), e.normalized, attrib.stride(), e.offset * e.size);
 			index += 1;
 		}
 		
@@ -79,7 +77,7 @@ public class GLVertexArray extends VertexArray {
 		bind();
 		
 		for (int i = 0; i < index; i++) {
-			glDisableVertexAttribArray(i);
+			gl.disableVertexAttribArray(i);
 		}
 		index = 0;
 	}
@@ -88,7 +86,7 @@ public class GLVertexArray extends VertexArray {
 	public void dispose() {
 		check();
 		
-		glDeleteVertexArrays(object);
+		gl.deleteVertexArray(object);
 		object = -1;
 	}
 	
@@ -107,12 +105,12 @@ public class GLVertexArray extends VertexArray {
     
 	private static final int glGetType(int type) {
 		switch (type) {
-		case INT: 		     return GL_INT;
-		case UNSIGNED_INT:   return GL_UNSIGNED_INT;
-		case FLOAT: 		 return GL_FLOAT;
-		case DOUBLE: 		 return GL_DOUBLE;
-		case SHORT: 		 return GL_SHORT;
-		case UNSIGNED_SHORT: return GL_UNSIGNED_SHORT;
+		case INT: 		     return GL30.INT;
+		case UNSIGNED_INT:   return GL30.UNSIGNED_INT;
+		case FLOAT: 		 return GL30.FLOAT;
+		case DOUBLE: 		 return GL30.DOUBLE;
+		case SHORT: 		 return GL30.SHORT;
+		case UNSIGNED_SHORT: return GL30.UNSIGNED_SHORT;
 		}
 		
 		return 0;

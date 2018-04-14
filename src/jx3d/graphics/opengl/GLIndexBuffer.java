@@ -1,11 +1,12 @@
 package jx3d.graphics.opengl;
 
 import static jx3d.core.Constants.*;
-import static org.lwjgl.opengl.GL15.*;
-
-import java.nio.ShortBuffer;
 
 import jx3d.graphics.IndexBuffer;
+import jx3d.util.BufferUtils;
+
+import java.nio.Buffer;
+import java.nio.ShortBuffer;
 
 /**
  * Represents an OpenGL implementation of an index buffer.<br>
@@ -29,30 +30,14 @@ public class GLIndexBuffer extends IndexBuffer {
 	 */
 	public GLIndexBuffer(int capacity, int usage) {
 		super(capacity);
-		int x = gl.TEXTURE0;
+
 		this.usage = glGetUsage(usage);
-		this.object = glGenBuffers();
+		this.object = gl.genBuffer();
+		this.position = 0;
+		this.count = 0;
 		
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, object);
-		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, capacity * Float.BYTES, this.usage);
-	}
-
-	/**
-	 * Creates a buffer containing the provided data.
-	 * @param graphics the graphics processor being used in this thread
-	 * @param data the array of data to store in the buffer
-	 * @param dynamic elements in the buffer can be modified if the dynamic flag is true
-	 */
-	public GLIndexBuffer(short[] data, int usage) {
-		super(data.length);
-
-		this.usage = glGetUsage(usage);
-		this.object = glGenBuffers();
-		this.position = data.length;
-		this.count = data.length;
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, object);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, data, this.usage);
+		gl.bindBuffer(GL20.ELEMENT_ARRAY_BUFFER, object);
+		gl.bufferData(GL20.ELEMENT_ARRAY_BUFFER, capacity, null, usage);
 	}
 
 	/**
@@ -65,33 +50,42 @@ public class GLIndexBuffer extends IndexBuffer {
 		super(buffer.remaining());
 
 		this.usage = glGetUsage(usage);
-		this.object = glGenBuffers();
+		this.object = gl.genBuffer();
 		this.position = buffer.remaining();
 		this.count = buffer.remaining();
 		
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, object);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, buffer, this.usage);
+		gl.bindBuffer(GL20.ELEMENT_ARRAY_BUFFER, object);
+		gl.bufferData(GL20.ELEMENT_ARRAY_BUFFER, buffer.remaining(), buffer, usage);
+	}
+
+	/**
+	 * Creates a buffer containing the provided data.
+	 * @param graphics the graphics processor being used in this thread
+	 * @param data the array of data to store in the buffer
+	 * @param dynamic elements in the buffer can be modified if the dynamic flag is true
+	 */
+	public GLIndexBuffer(short[] data, int usage) {
+		this(BufferUtils.createShortBuffer(data), usage);
 	}
 	
 	@Override
 	public void bind() {
 		check();
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, object);
+		gl.bindBuffer(GL20.ELEMENT_ARRAY_BUFFER, object);
 	}
 
 	@Override
 	public void unbind() {
 		check();
-		
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		gl.bindBuffer(GL20.ELEMENT_ARRAY_BUFFER, 0);
 	}
 	
 	@Override
 	public void put(short[] data) {
 		bind();
 		
-		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, position * Float.BYTES, data);
-
+		ShortBuffer buffer = BufferUtils.createShortBuffer(data);
+		gl.bufferSubData(GL20.ELEMENT_ARRAY_BUFFER, position * Float.BYTES, data.length, buffer);
 		position += data.length;
 		if (position > count)
 			count = position;
@@ -102,9 +96,7 @@ public class GLIndexBuffer extends IndexBuffer {
 		bind();
 		
 		int length = buffer.remaining();
-		
-		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, position * Float.BYTES, buffer);
-
+		gl.bufferSubData(GL20.ELEMENT_ARRAY_BUFFER, position * Float.BYTES, length, buffer);
 		position += length;
 		if (position > count)
 			count = position;
@@ -118,7 +110,7 @@ public class GLIndexBuffer extends IndexBuffer {
 			return mapBuffer;
 		
 		bind();
-		return (mapBuffer = glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_READ_WRITE).asShortBuffer());
+		return (mapBuffer = gl.mapBuffer(GL20.ELEMENT_ARRAY_BUFFER, GL30.READ_WRITE).asShortBuffer());
 	}
 
 	@Override
@@ -130,7 +122,7 @@ public class GLIndexBuffer extends IndexBuffer {
 		if (position > count)
 			count = position;
 		mapBuffer = null;
-		glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
+		gl.unmapBuffer(GL20.ELEMENT_ARRAY_BUFFER);
 	}
 
 	@Override
@@ -138,14 +130,14 @@ public class GLIndexBuffer extends IndexBuffer {
 		capacity = size;
 		
 		bind();
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, usage);
+		gl.bufferData(GL20.ELEMENT_ARRAY_BUFFER, size, null, usage);
 	}
 	
 	@Override
 	public void dispose() {
 		check();
 		
-		glDeleteBuffers(object);
+		gl.deleteBuffer(object);
 		object = -1;
 	}
 	
@@ -156,15 +148,15 @@ public class GLIndexBuffer extends IndexBuffer {
     
     private static final int glGetUsage(int usage) {
     	switch (usage) {
-    	case STATIC_DRAW:  return GL_STATIC_DRAW;
-    	case DYNAMIC_DRAW: return GL_DYNAMIC_DRAW;
-    	case STREAM_DRAW:  return GL_STREAM_DRAW;
-    	case STATIC_READ:  return GL_STATIC_READ;
-    	case DYNAMIC_READ: return GL_DYNAMIC_READ;
-    	case STREAM_READ:  return GL_STREAM_READ;
-    	case STATIC_COPY:  return GL_STATIC_COPY;
-    	case DYNAMIC_COPY: return GL_DYNAMIC_COPY;
-    	case STREAM_COPY:  return GL_STREAM_COPY;
+    	case STATIC_DRAW:  return GL20.STATIC_DRAW;
+    	case DYNAMIC_DRAW: return GL20.DYNAMIC_DRAW;
+    	case STREAM_DRAW:  return GL20.STREAM_DRAW;
+    	case STATIC_READ:  return GL20.STATIC_READ;
+    	case DYNAMIC_READ: return GL20.DYNAMIC_READ;
+    	case STREAM_READ:  return GL20.STREAM_READ;
+    	case STATIC_COPY:  return GL20.STATIC_COPY;
+    	case DYNAMIC_COPY: return GL20.DYNAMIC_COPY;
+    	case STREAM_COPY:  return GL20.STREAM_COPY;
 	    }
 	    return 0;
     }
