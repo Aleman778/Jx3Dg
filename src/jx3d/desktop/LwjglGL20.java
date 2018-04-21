@@ -522,6 +522,11 @@ public class LwjglGL20 implements jx3d.graphics.opengl.GL20 {
 		buffer.get(bytes);
 		return new String(bytes);
 	}
+	
+	@Override
+	public int getShaderi(int shader, int pname) {
+		return GL20.glGetShaderi(shader, pname);
+	}
 
 	@Override
 	public void getShaderiv(int shader, int pname, IntBuffer params) {

@@ -169,6 +169,8 @@ public interface GL20 extends GLConstants {
 	public void getRenderbufferParameteriv(int target, int pname, IntBuffer params);
 
 	public String getShaderInfoLog(int shader);
+	
+	public int getShaderi(int shader, int pname);
 
 	public void getShaderiv(int shader, int pname, IntBuffer params);
 
