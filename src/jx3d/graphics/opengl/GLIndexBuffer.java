@@ -5,7 +5,6 @@ import static jx3d.core.Constants.*;
 import jx3d.graphics.IndexBuffer;
 import jx3d.util.BufferUtils;
 
-import java.nio.Buffer;
 import java.nio.ShortBuffer;
 
 /**
