@@ -17,16 +17,18 @@ import java.util.ArrayList;
  */
 public class GLVertexArray extends VertexArray {
 
-	private ArrayList<VertexBuffer> buffers;
+	private final GL30 gl;
 	
+	private ArrayList<VertexBuffer> buffers;
 	private int object;
 	private int index;
-	private GL30 gl;
 	
 	/**
 	 * Constructor. Create an empty vertex array.
 	 */
 	public GLVertexArray() {
+		gl = null;
+		
 		object = gl.genVertexArray();
 		buffers = new ArrayList<>();
 		index = 0;

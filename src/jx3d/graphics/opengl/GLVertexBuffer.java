@@ -15,11 +15,12 @@ import java.nio.FloatBuffer;
  * @see VertexBuffer
  */
 public class GLVertexBuffer extends VertexBuffer {
+	
+	private final GL20 gl;
 
 	private int object;
 	private int usage;
 	private FloatBuffer mapBuffer;
-	private GL20 gl;
 	
 	/**
 	 * Creates an empty vertex buffer with a desired maximum capacity.
@@ -29,9 +30,12 @@ public class GLVertexBuffer extends VertexBuffer {
 	 */
 	public GLVertexBuffer(int capacity, int usage) {
 		super(capacity);
-
+		
+		this.gl = null;
 		this.usage = glGetUsage(usage);
 		this.object = gl.genBuffer();
+		this.position = 0;
+		this.count = 0;
 		
 		gl.bindBuffer(GL20.ARRAY_BUFFER, object);
 		gl.bufferData(GL20.ARRAY_BUFFER, capacity * Float.BYTES, null, this.usage);
@@ -46,6 +50,7 @@ public class GLVertexBuffer extends VertexBuffer {
 	public GLVertexBuffer(FloatBuffer buffer, int usage) {
 		super(buffer.remaining());
 
+		this.gl = null;
 		this.usage = glGetUsage(usage);
 		this.object = gl.genBuffer();
 		this.position = buffer.remaining();

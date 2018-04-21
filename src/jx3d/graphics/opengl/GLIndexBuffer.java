@@ -17,10 +17,11 @@ import java.nio.ShortBuffer;
  */
 public class GLIndexBuffer extends IndexBuffer {
 
+	private final GL20 gl;
+	
 	private int object;
 	private int usage;
 	private ShortBuffer mapBuffer;
-	private GL20 gl;
 	
 	/**
 	 * Creates an empty vertex buffer with a desired maximum capacity.
@@ -30,7 +31,8 @@ public class GLIndexBuffer extends IndexBuffer {
 	 */
 	public GLIndexBuffer(int capacity, int usage) {
 		super(capacity);
-
+		
+		this.gl = null;
 		this.usage = glGetUsage(usage);
 		this.object = gl.genBuffer();
 		this.position = 0;
@@ -48,6 +50,8 @@ public class GLIndexBuffer extends IndexBuffer {
 	 */
 	public GLIndexBuffer(ShortBuffer buffer, int usage) {
 		super(buffer.remaining());
+		
+		gl = null;
 
 		this.usage = glGetUsage(usage);
 		this.object = gl.genBuffer();
