@@ -50,8 +50,7 @@ public class GLIndexBuffer extends IndexBuffer {
 	public GLIndexBuffer(ShortBuffer buffer, int usage) {
 		super(buffer.remaining());
 		
-		gl = null;
-
+		this.gl = null;
 		this.usage = glGetUsage(usage);
 		this.object = gl.genBuffer();
 		this.position = buffer.remaining();
