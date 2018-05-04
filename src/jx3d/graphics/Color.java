@@ -11,22 +11,22 @@ public class Color {
 	/**
 	 * The red component of the color vector.
 	 */
-	private float r;
+	public float r;
 	
 	/**
 	 * The green component of the color vector.
 	 */
-	private float g;
+	public float g;
 	
 	/**
 	 * The blue component of the color vector.
 	 */
-	private float b;
+	public float b;
 	
 	/**
 	 * The alpha component of the color vector.
 	 */
-	private float a;
+	public float a;
 	
 	/**
 	 * Default Constructor.
