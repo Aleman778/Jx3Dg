@@ -79,6 +79,60 @@ public class Constants {
 	 */
 	public static final float EPSILON = 0.0001f;
 	
+	//Shader Type Constants
+	/**
+	 * <i>Vertex shader</i> is a type of shader that is performed for each vertex in a mesh.
+	 * This shader is used for transforming and projecting a mesh to screen-space coordinates.
+	 * The output from this shader is the new transformed vertex.
+	 * @see Constants#FRAGMENT_SHADER
+	 * @see Constants#GEOMETRY_SHADER
+	 * @see Constants#TESS_CONTROL_SHADER
+	 * @see Constants#TESS_EVALUATION_SHADER
+	 */
+	public static final int VERTEX_SHADER = 0;
+	
+	/**
+	 * <i>Fragment shader</i> is a type of shader that is performed for each fragment (i.e. pixel) that is being rendered.
+	 * This shader is used to apply graphical effects such as lighting, shadowing etc.
+	 * The output from this shader is the color of the fragment that is being rendered.
+	 * @see Constants#VERTEX_SHADER
+	 * @see Constants#GEOMETRY_SHADER
+	 * @see Constants#TESS_CONTROL_SHADER
+	 * @see Constants#TESS_EVALUATION_SHADER
+	 */
+	public static final int FRAGMENT_SHADER = 1;
+	
+	/**
+	 * <i>Geometry shader</i> is a type of shader that is performed on a primitive that is being rendered.
+	 * This shader is used to modify the primitive before rendering.
+	 * The output from this shader is zero or primitives
+	 * @see Constants#VERTEX_SHADER
+	 * @see Constants#FRAGMENT_SHADER
+	 * @see Constants#TESS_CONTROL_SHADER
+	 * @see Constants#TESS_EVALUATION_SHADER
+	 */
+	public static final int GEOMETRY_SHADER = 2;
+	
+	/**
+	 * <i>Tessellation control shader</i> is a type of shader that is used to control how much
+	 * tessellation a specific patch gets.
+	 * @see Constants#VERTEX_SHADER
+	 * @see Constants#FRAGMENT_SHADER
+	 * @see Constants#GEOMETRY_SHADER
+	 * @see Constants#TESS_EVALUATION_SHADER
+	 */
+	public static final int TESS_CONTROL_SHADER = 3;
+	
+	/**
+	 * <i>Tessellation evaluation shader</i> is a type of shader that is used to evaluate the 
+	 * already subdivided (tessellated) geometry and form new vertices and further modify them.
+	 * @see Constants#VERTEX_SHADER
+	 * @see Constants#FRAGMENT_SHADER
+	 * @see Constants#GEOMETRY_SHADER
+	 * @see Constants#TESS_CONTROL_SHADER
+	 */
+	public static final int TESS_EVALUATION_SHADER = 4;
+	
 	//Buffer Usage Constants
 	/**
 	 * The user will write data to the buffer once, but the user will not read it.
@@ -144,54 +198,88 @@ public class Constants {
 	public static final int STREAM_COPY = 8;
 	
 	//Data types
-	/**<b>Type:</b> 4 byte integer.*/
-	public static final int INT 		   = 0;
+	/**
+	 * 4 byte <i>integer</i> type.
+	 */
+	public static final int INT = 0;
 	
-	/**<b>Type:</b> 4 byte unsigned integer.*/
-	public static final int UNSIGNED_INT   = 1;
+	/**
+	 * 4 byte <i>unsigned integer<i> type.
+	 */
+	public static final int UNSIGNED_INT = 1;
 	
-	/**<b>Type:</b> 4 byte floating point.*/
-	public static final int FLOAT 		   = 2;
+	/**
+	 * 4 byte <i>floating point</i> type.
+	 */
+	public static final int FLOAT = 2;
 	
-	/**<b>Type:</b> 8 byte double precision floating point.*/
-	public static final int DOUBLE 		   = 3;
+	/**
+	 * 8 byte <i>double precision floating point</i> type.
+	 */
+	public static final int DOUBLE = 3;
 	
-	/**<b>Type:</b> 8 byte long.*/
-	public static final int LONG 		   = 4;
+	/**
+	 * 8 byte <i>long</i> type.
+	 */
+	public static final int LONG = 4;
 	
-	/**<b>Type:</b> 2 byte short.*/
-	public static final int SHORT 		   = 5;
+	/**
+	 * 2 byte <i>short</i> type.
+	 */
+	public static final int SHORT = 5;
 	
-	/**<b>Type:</b> 2 byte unsigned short.*/
+	/**
+	 * 2 byte unsigned <i>short</i> type.
+	 */
 	public static final int UNSIGNED_SHORT = 6;
 	
-	/**<b>Type:</b> 2 byte character.*/
-	public static final int CHAR		   = 7;
+	/**
+	 * 2 byte <i>character</i> type.
+	 */
+	public static final int CHAR = 7;
 	
-	/**<b>Type:</b> boolean.*/
-	public static final int BOOLEAN 	   = 8;
+	/**
+	 * Boolean type.
+	 */
+	public static final int BOOLEAN = 8;
 	
-	/**<b>Type:</b> 1 byte.*/
-	public static final int BYTE           = 9;
+	/**
+	 * Byte <i>type</i>.
+	 */
+	public static final int BYTE = 9;
 	
-	/**<b>Type:</b> vector of 2 floating point numbers.*/
-	public static final int VEC2		   = 10;
+	/**
+	 * Vector type containing 2 <i>floating point numbers</i>.
+	 */
+	public static final int VEC2 = 10;
 	
-	/**<b>Type:</b> vector of 3 floating point numbers.*/
-	public static final int VEC3           = 11;
+	/**
+	 * Vector type containing 3 <i>floating point numbers</i>.
+	 */
+	public static final int VEC3 = 11;
 	
-	/**<b>Type:</b> vector of 4 floating point numbers.*/
-	public static final int VEC4		   = 12;
+	/**
+	 * Vector type containing 4 <i>floating point numbers</i>.
+	 */
+	public static final int VEC4 = 12;
 	
-	/**<b>Type:</b> matrix of 2x2 floating point numbers.*/
-	public static final int MAT2		   = 13;
+	/**
+	 * Matrix type containing 2x2 <i>floating point numbers</i>.
+	 */
+	public static final int MAT2 = 13;
 	
-	/**<b>Type:</b> matrix of 3x3 floating point numbers.*/
-	public static final int MAT3  		   = 14;
+	/**
+	 * Matrix type containing 3x3 <i>floating point numbers</i>.
+	 */
+	public static final int MAT3 = 14;
 	
-	/**<b>Type:</b> matrix of 4x4 floating point numbers.*/
-	public static final int MAT4		   = 15;
+	/**
+	 * Matrix type containing 4x4 <i>floating point numbers</i>.
+	 */
+	public static final int MAT4 = 15;
 	
-	/**<b>Type:</b> quaternion of 4 floating point numbers.*/
-	public static final int QUAT		   = 16;
+	/**
+	 * Quaternion type containing 4 <i>floating point numbers</i>.
+	 */
+	public static final int QUAT = 16;
 }

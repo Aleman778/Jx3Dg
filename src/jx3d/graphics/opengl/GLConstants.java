@@ -1,5 +1,8 @@
 package jx3d.graphics.opengl;
 
+import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GL40;
+
 /**
  * @since 1.0
  * @author Aleman778
@@ -620,4 +623,12 @@ public interface GLConstants {
 	public final int WAIT_FAILED = 0x911D;
 	public final int WRITE_ONLY = 0x88B9;
 	public final int ZERO = 0;
+	
+	
+	public class EXT {
+		
+		public static final int GEOMETRY_SHADER = 0x8DD9;
+		public static final int TESS_CONTROL_SHADER = 0x8E88;
+		public static final int TESS_EVALUATION_SHADER = 0x8E87;
+	}
 }
