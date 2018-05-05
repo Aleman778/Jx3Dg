@@ -133,7 +133,7 @@ public class GLSLShader extends Shader {
 	public void set(String name, Color value) {
 		Uniform uniform = setImpl(name, value, VEC4);
 		if (uniform != null) {
-			gl.uniform4f(uniform.location, value.r, value.g, value.b, value.a);
+			gl.uniform4f(uniform.location, value.red, value.green, value.blue, value.alpha);
 		}
 	}
 
