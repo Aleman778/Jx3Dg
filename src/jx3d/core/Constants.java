@@ -5,7 +5,7 @@ package jx3d.core;
  * @since 1.0
  * @author Aleman778
  */
-public class Constants {
+public class Constants extends Module {
 
 	//Mathematical constants
 	/**
@@ -196,6 +196,107 @@ public class Constants {
 	 * @see Constants#STREAM_COPY
 	 */
 	public static final int STREAM_COPY = 8;
+	
+	//Depth testing functions
+	/** 
+	 * The depth test <i>always</i> passes.
+	 */
+	public static final int ALWAYS = 0;
+	
+	/**
+	 * The depth test <i>never</i> passes.
+	 */
+	public static final int NEVER = 1;
+
+	/**
+	 * The depth test passes when the fragment's depth value is <i>less</i> than the stored depth value.
+	 */
+	public static final int LESS = 2;
+	
+	/**
+	 * The depth test passes when the fragment's depth value is <i>equal</i> to the stored depth value.
+	 */
+	public static final int EQUAL = 3;
+	
+	/**
+	 * The depth test passes when the fragment's depth value is <i>less than or equal</i> to the stored depth value.
+	 */
+	public static final int LEQUAL = 4;
+	
+	/**
+	 * The depth test passes when the fragment's depth value is <b>grater</b> than the stored depth value.
+	 */
+	public static final int GREATER = 5;
+	
+	/**
+	 * The depth test passes when the fragment's depth value is <b>not equal</b> than the stored depth value.
+	 */
+	public static final int NOTEQUAL = 6;
+	
+	/**
+	 * The depth test passes when the fragment's depth value is <b>grater than or equal</b> to the stored depth value.
+	 */
+	public static final int GEQUAL = 7;
+	
+	//Rendering engines
+	
+	// -> OpenGL
+	/**
+	 * The OpenGL rendering engine.
+	 */
+	public static final int OPENGL = 0;
+	
+	/**
+	 * OpenGL profile for version 2.x.
+	 */
+	public static final int GL20_PROFILE = 1;
+	
+	/**
+	 * OpenGL profile for version 3.x with the core profile.
+	 */
+	public static final int GL30_PROFILE = 2;
+	
+	/**
+	 * OpenGL profile for version 3.x with the compatibility profile.
+	 * The OpenGL compatibility profile includes deprecated functionality
+	 * of previous OpenGL versions.
+	 */
+	public static final int GL30_COMPAT_PROFILE = 3;
+
+	/**
+	 * OpenGL profile for version 3.x with the core profile.
+	 */
+	public static final int GL40_PROFILE = 4;
+
+	/**
+	 * OpenGL profile for version 4.x with the compatibility profile.
+	 * The OpenGL compatibility profile includes deprecated functionality
+	 * of previous OpenGL versions.
+	 */
+	public static final int GL40_COMPAT_PROFILE = 4;
+	
+	
+	//Stencil testing functions
+	/** 
+	 * Keeps the currently stored value.
+	 */
+	public static final int KEEP = 0;
+	
+	/** 
+	 * The stencil value is set to zero.
+	 */
+	public static final int ZERO = 1;
+	
+	/** 
+	 * The stencil value is replaced by a provided reference value passed in the function {@link Graphics
+	 * #setStencilFunc(StencilFunc, int, int)}.
+	 */
+	public static final int REPLACE = 2;
+	public static final int INCR = 3;
+	public static final int INCR_WRAP = 4;
+	public static final int DECR = 5;
+	public static final int DECR_WRAP = 6;
+	public static final int INVERT  = 7;
 	
 	//Data types
 	/**

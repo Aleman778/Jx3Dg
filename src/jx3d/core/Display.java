@@ -31,6 +31,31 @@ public abstract class Display extends Node implements Disposable {
 	public abstract int getHeight();
 	
 	/**
+	 * Set the rendering engine of the display.
+	 * This method can also accept an optional profile
+	 * parameter, see {@link #setRenderer(int, int)}.
+	 * @param renderer the rendering engine constant
+	 */
+	public abstract void setRenderer(int renderer);
+	
+	/**
+	 * Set the rendering engine of the display with a
+	 * specific profile. By using this function you are
+	 * explicitly setting the graphics requirements, so
+	 * if a user does not support the requirements then 
+	 * the application will be either glitchy or will not run at all.
+	 * Thus you are recommended to use this function
+	 * {@link #setRenderer(int)} instead as it automatically sets
+	 * the appropriate requirements for the users systems.
+	 * @param renderer the rendering engine constant
+	 * @param profile an optional parameter that specifies
+	 * 		a version number and/ or other settings for the
+	 * 		provided renderer
+	 * @see #setRenderer(int)
+	 */
+	public abstract void setRenderer(int renderer, int profile);
+	
+	/**
 	 * Get the aspect ratio (width / height) of the display
 	 * @return the aspect ratio of the display
 	 */

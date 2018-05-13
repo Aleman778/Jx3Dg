@@ -1,8 +1,5 @@
 package jx3d.graphics.opengl;
 
-import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.GL40;
-
 /**
  * @since 1.0
  * @author Aleman778

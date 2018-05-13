@@ -5,6 +5,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import jx3d.core.Display;
 import jx3d.core.Screen;
 import jx3d.desktop.GlfwScreen;
+import jx3d.graphics.opengl.GLGraphics;
 
 import java.nio.IntBuffer;
 
@@ -134,6 +135,92 @@ public class GlfwDisplay extends Display implements Runnable {
 		if (isCreated()) {
 			glfwSetWindowTitle(window, title);
 		}
+	}
+	
+	/**
+	 * Set the rendering engine of the display. 
+	 * This method can also accept an optional profile
+	 * parameter if applicable, see {@link #setRenderer(int, int)}.
+	 * @param renderer the rendering engine constant,
+	 * 		supported renderer of GlfwDisplay is <code>OPENGL</code>.
+	 */
+	public void setRenderer(int renderer) {
+		if (isCreated()) {
+			throw new IllegalStateException("The renderer cannot be set after the window has been initialized.");
+		}
+		setRendererImpl(renderer);
+	}
+
+	/**
+	 * Set the rendering engine of the display with a
+	 * specific profile. By using this function you are
+	 * explicitly setting the graphics requirements, so
+	 * if a user does not support the requirements then 
+	 * the application will be either glitchy or will not run at all.
+	 * Thus you are recommended to use this function
+	 * {@link #setRenderer(int)} instead as it automatically sets
+	 * the appropriate requirements for the users systems.
+	 * @param renderer the rendering engine constant
+	 * @param profile an optional parameter that specifies
+	 * 		a version number and/ or other settings for the
+	 * 		provided renderer
+	 * @see #setRenderer(int)
+	 */
+	public void setRenderer(int renderer, int profile) {
+		if (isCreated()) {
+			throw new IllegalStateException("The renderer cannot be set after the window has been initialized.");
+		}
+		
+		setRendererImpl(renderer);
+		
+		switch (renderer) {
+		case OPENGL:
+			setGLProfile(profile);
+			break;
+		default:
+			throw new IllegalArgumentException("Renderer does not support different profiles.");
+		}
+	}
+	
+	
+	/**
+	 * Set the renderer.
+	 * @param renderer the renderer to use
+	 */
+	private void setRendererImpl(int renderer) {
+		switch (renderer) {
+		case OPENGL:
+			graphics = new GLGraphics(this);
+			
+			break;
+		default:
+			throw new IllegalArgumentException("Invalid or unsupported renderer provided.");
+		}
+	}
+	
+	/**
+	 * Set the opengl profile.
+	 * @param profile the profile to use
+	 */
+	private void setGLProfile(int profile) {
+		switch (profile) {
+		case GL20_PROFILE:
+			setProfileImpl(2, false);
+			break;
+		}
+	}
+	
+	/**
+	 * Setup glfw context creation profile window hints.
+	 * @param major major version
+	 * @param compat compatibility profile? 
+	 */
+	private void setProfileImpl(int major, boolean compat) {
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);
+		if (compat && major >= 3)
+			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
+		else
+			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	}
 	
 	/**
