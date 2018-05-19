@@ -8,7 +8,10 @@ import jx3d.core.Display;
 import static jx3d.core.Constants.*;
 
 /**
- * Graphics class contains 
+ * Abstract graphics context class provides methods for
+ * drawing on a display. An implemented graphics class
+ * class is generally built on top of a graphics api,
+ * e.g. OpenGL. 
  * @since 1.0
  * @author Aleman778
  */
@@ -50,7 +53,7 @@ public abstract class Graphics {
 	
 	public abstract void present();
 
-	public abstract void clear();
+	public abstract void clear(int flag);
 	
 	public abstract void viewport(float x, float y, float w, float h);
 
