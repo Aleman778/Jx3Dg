@@ -55,7 +55,7 @@ public abstract class Graphics {
 
 	public abstract void clear(int flag);
 	
-	public abstract void viewport(float x, float y, float w, float h);
+	public abstract void viewport(int x, int y, int w, int h);
 
 	public abstract void render(int mode, VertexArray vao);
 	
