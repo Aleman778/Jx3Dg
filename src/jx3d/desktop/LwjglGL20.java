@@ -469,6 +469,11 @@ public class LwjglGL20 implements jx3d.graphics.opengl.GL20 {
 	}
 
 	@Override
+	public float getFloat(int pname) {
+		return GL11.glGetFloat(pname);
+	}
+	
+	@Override
 	public void getFloatv(int pname, FloatBuffer params) {
 		GL11.glGetFloatv(pname, params);
 	}
@@ -477,7 +482,12 @@ public class LwjglGL20 implements jx3d.graphics.opengl.GL20 {
 	public void getFramebufferAttachmentParameteriv(int target, int attachment, int pname, IntBuffer params) {
 		EXTFramebufferObject.glGetFramebufferAttachmentParameterivEXT(target, attachment, pname, params);
 	}
-
+	
+	@Override
+	public int getInteger(int pname) {
+		return GL11.glGetInteger(pname);
+	}
+	
 	@Override
 	public void getIntegerv(int pname, IntBuffer params) {
 		GL11.glGetIntegerv(pname, params);
@@ -498,6 +508,11 @@ public class LwjglGL20 implements jx3d.graphics.opengl.GL20 {
 		return new String(bytes);
 	}
 
+	@Override
+	public int getProgrami(int program, int pname) {
+		return GL20.glGetProgrami(program, pname);
+	}
+	
 	@Override
 	public void getProgramiv(int program, int pname, IntBuffer params) {
 		GL20.glGetProgramiv(program, pname, params);

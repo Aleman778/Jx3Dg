@@ -155,15 +155,21 @@ public interface GL20 extends GLConstants {
 	public void getBufferParameteriv(int target, int pname, IntBuffer params);
 
 	public int getError();
+	
+	public float getFloat(int pname);
 
 	public void getFloatv(int pname, FloatBuffer params);
 
 	public void getFramebufferAttachmentParameteriv(int target, int attachment, int pname, IntBuffer params);
 
+	public int getInteger(int pname);
+	
 	public void getIntegerv(int pname, IntBuffer params);
 
 	public String getProgramInfoLog(int program);
 
+	public int getProgrami(int program, int pname);
+	
 	public void getProgramiv(int program, int pname, IntBuffer params);
 
 	public void getRenderbufferParameteriv(int target, int pname, IntBuffer params);

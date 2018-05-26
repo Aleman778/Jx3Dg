@@ -79,6 +79,21 @@ public class Constants extends Module {
 	 */
 	public static final float EPSILON = 0.0001f;
 	
+	//Primitives
+	/**
+	 * 
+	 */
+	public static final int POINTS 		   = 0;
+	public static final int LINES 		   = 1;
+	public static final int LINE_STRIP 	   = 2;
+	public static final int LINE_LOOP 	   = 3;
+	public static final int TRIANGLES 	   = 4;
+	public static final int TRIANGLE_STRIP = 5;
+	public static final int TRIANGLE_FAN   = 6;
+	public static final int QUAD_STRIP 	   = 7;
+	public static final int QUADS 		   = 8;
+	public static final int POLYGON 	   = 9;
+	
 	//Shader Type Constants
 	/**
 	 * <i>Vertex shader</i> is a type of shader that is performed for each vertex in a mesh.
