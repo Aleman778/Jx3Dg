@@ -78,21 +78,69 @@ public class Constants extends Module {
 	 * Epsilon has value 0.0001.
 	 */
 	public static final float EPSILON = 0.0001f;
-	
-	//Primitives
+
+	//Primitive rendering mode
 	/**
-	 * 
+	 * Point primitives are defined as individual vertices.
 	 */
-	public static final int POINTS 		   = 0;
-	public static final int LINES 		   = 1;
-	public static final int LINE_STRIP 	   = 2;
-	public static final int LINE_LOOP 	   = 3;
-	public static final int TRIANGLES 	   = 4;
+	public static final int POINTS = 0;
+	
+	/**
+	 * Lines primitives renders a line between groups of two unconnected vertices.
+	 * @see Constants#LINE_STRIP
+	 * @see Constants#LINE_LOOP
+	 */
+	public static final int LINES = 1;
+	
+	/**
+	 * Line strip primitives renders a multiple lines from the first to last vertices passing through
+	 * every vertex in the order of the list.
+	 * in the order they are 
+	 * @see Constants#LINES
+	 * @see Constants#LINE_LOOP
+	 */
+	public static final int LINE_STRIP = 2;
+	
+	/**
+	 * @see Constants#LINES
+	 * @see Constants#LINE_STRIP
+	 */
+	public static final int LINE_LOOP = 3;
+	
+	/**
+	 * @see Constants#TRIANGLES
+	 * @see Constants#TRIANGLE_STRIP
+	 * @see Constants#TRIANGLE_FAN
+	 */
+	public static final int TRIANGLES = 4;
+	
+	/**
+	 * @see Constants#TRIANGLES
+	 * @see Constants#TRIANGLE_STRIP
+	 * @see Constants#TRIANGLE_FAN
+	 */
 	public static final int TRIANGLE_STRIP = 5;
-	public static final int TRIANGLE_FAN   = 6;
-	public static final int QUAD_STRIP 	   = 7;
-	public static final int QUADS 		   = 8;
-	public static final int POLYGON 	   = 9;
+	
+	/**
+	 * @see Constants#TRIANGLES
+	 * @see Constants#TRIANGLE_STRIP
+	 * @see Constants#TRIANGLE_FAN
+	 */
+	public static final int TRIANGLE_FAN = 6;
+	
+	/**
+	 * @see Constants#QUADS
+	 */
+	public static final int QUAD_STRIP = 7;
+	
+	/**
+	 * @see Constants#QUAD_STRIP
+	 */
+	public static final int QUADS = 8;
+	
+	public static final int POLYGON = 9;
+	
+	public static final int PATCHES = 10;
 	
 	//Shader Type Constants
 	/**

@@ -101,12 +101,15 @@ public class GLGraphics extends Graphics {
 
 	@Override
 	public void render(int mode, VertexArray vao) {
-		throw new NotImplementedException();
+		vao.bind();
+		gl20.drawArrays(glGetShapeMode(mode), 0, vao.count());
 	}
 
 	@Override
 	public void render(int mode, VertexArray vao, IndexBuffer ibo) {
-		throw new NotImplementedException();
+		vao.bind();
+		ibo.bind();
+		//gl20.drawElements(glGetShapeMode(mode), count, type, indices);
 	}
 
 	@Override
