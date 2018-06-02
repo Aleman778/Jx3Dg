@@ -18,7 +18,6 @@ import jx3d.graphics.IndexBuffer;
 import jx3d.graphics.Shader;
 import jx3d.graphics.VertexArray;
 import jx3d.graphics.VertexBuffer;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * OpenGL graphics context.
@@ -109,57 +108,50 @@ public class GLGraphics extends Graphics {
 	public void render(int mode, VertexArray vao, IndexBuffer ibo) {
 		vao.bind();
 		ibo.bind();
-		//gl20.drawElements(glGetShapeMode(mode), count, type, indices);
+		gl20.drawElements(glGetShapeMode(mode), vao.count(), type, indices);
 	}
 
 	@Override
 	public Shader loadShader(String fragment) {
-		throw new NotImplementedException();
+		Shader shader = new GLSLShader();
+		shader.add(FRAGMENT_SHADER, source);
 	}
 
 	@Override
 	public Shader loadShader(String fragment, String vertex) {
-		throw new NotImplementedException();
 	}
 
 	@Override
 	public Shader loadShader(int shader) {
-		throw new NotImplementedException();
 	}
 
 	@Override
 	public VertexBuffer createVBO(int capacity, boolean dynamic) {
-		throw new NotImplementedException();
+
 	}
 
 	@Override
 	public VertexBuffer createVBO(float[] data, boolean dynamic) {
-		throw new NotImplementedException();
 	}
 
 	@Override
 	public VertexBuffer createVBO(FloatBuffer data, boolean dynamic) {
-		throw new NotImplementedException();
 	}
 
 	@Override
 	public IndexBuffer createIBO(int capacity, boolean dynamic) {
-		throw new NotImplementedException();
 	}
 
 	@Override
 	public IndexBuffer createIBO(short[] data, boolean dynamic) {
-		throw new NotImplementedException();
 	}
 
 	@Override
 	public IndexBuffer createIBO(ShortBuffer data, boolean dynamic) {
-		throw new NotImplementedException();
 	}
 
 	@Override
 	public VertexArray createVAO() {
-		throw new NotImplementedException();
 	}
 
 	private static final int glGetShapeMode(int mode) {
