@@ -79,6 +79,22 @@ public class Constants extends Module {
 	 */
 	public static final float EPSILON = 0.0001f;
 
+	//I/O constants
+	/**
+	 * Read flag is used to specify a read-only access.
+	 */
+	public static final int READ = 1;
+	
+	/**
+	 * Write flag is used to specify a write-only access.
+	 */
+	public static final int WRITE = 2;
+
+	/**
+	 * Read and write flag is used to specify both read and write access.
+	 */
+	public static final int READ_WRITE = 3;
+	
 	//Primitive rendering mode
 	/**
 	 * Point primitives are defined as individual vertices.
