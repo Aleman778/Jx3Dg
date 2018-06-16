@@ -1,11 +1,14 @@
 package jx3d.graphics.opengl;
 
 /**
+ * OpenGL constants used as arguments to functions.
  * @since 1.0
  * @author Aleman778
  */
 public interface GLConstants {
-
+	
+	public final int STACK_OVERFLOW = 0x503;
+	public final int STACK_UNDERFLOW = 0x504;
 	public final int ACTIVE_ATTRIBUTE_MAX_LENGTH = 0x8B8A;
 	public final int ACTIVE_ATTRIBUTES = 0x8B89;
 	public final int ACTIVE_TEXTURE = 0x84E0;
@@ -320,7 +323,6 @@ public interface GLConstants {
 	public final int PIXEL_PACK_BUFFER = 0x88EB;
 	public final int PIXEL_PACK_BUFFER_BINDING = 0x88ED;
 	public final int PIXEL_UNPACK_BUFFER = 0x88EC;
-
 	public final int PIXEL_UNPACK_BUFFER_BINDING = 0x88EF;
 	public final int POINTS = 0x0;
 	public final int POLYGON_OFFSET_FACTOR = 0x8038;
@@ -620,10 +622,16 @@ public interface GLConstants {
 	public final int WAIT_FAILED = 0x911D;
 	public final int WRITE_ONLY = 0x88B9;
 	public final int ZERO = 0;
-	
+	public final int TRIANGLES = 0x4;
+	public final int TRIANGLE_STRIP = 0x5;
+	public final int TRIANGLE_FAN = 0x6;
+	public final int QUADS = 0x7;
+	public final int QUAD_STRIP = 0x8;
+	public final int POLYGON = 0x9;
 	
 	public class EXT {
-		
+		public static final int CONTEXT_LOST = 0x0507;
+		public static final int TABLE_TOO_LARGE = 0x8031;
 		public static final int GEOMETRY_SHADER = 0x8DD9;
 		public static final int TESS_CONTROL_SHADER = 0x8E88;
 		public static final int TESS_EVALUATION_SHADER = 0x8E87;

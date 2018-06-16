@@ -38,20 +38,29 @@ public abstract class Shader implements Disposable {
     public abstract void add(int type, String source) throws ShaderException;
     
     /**
+     * Setup this shader<br>
+     * <i>Note:</i> calling this method is not necessary since
+     * the <code>enable()</code> method calls this method.
+     * Calling this method more than one time has not effect after
+     * the first time.  
+     */
+    public abstract void setup();
+    
+    /**
      * Enables this shader.<br>
-     * <b>Note:</b> only enabled shader can be used for rendering.
+     * <i>Note:</i> only enabled shader can be used for rendering.
      */
     public abstract void enable();
     
     /**
      * Disables this shader.<br>
-     * <b>Note:</b> only enabled shader can be used for rendering.
+     * <i>Note:</i> only enabled shader can be used for rendering.
      */
     public abstract void disable();
 
     /**
      * Disposes the program.<br>
-     * <b>Note:</b> program cannot be used after disposing.
+     * <i>Note:</i> program cannot be used after disposing.
      */
     @Override
     public abstract void dispose();

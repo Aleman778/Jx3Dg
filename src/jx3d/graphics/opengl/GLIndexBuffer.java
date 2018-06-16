@@ -28,11 +28,11 @@ public class GLIndexBuffer extends IndexBuffer {
 	 * @param capacity the maximum number of elements the buffer can hold
 	 * @param dynamic elements in the buffer can be modified if the dynamic flag is true
 	 */
-	public GLIndexBuffer(int capacity, int usage) {
+	public GLIndexBuffer(GL20 graphics, int capacity, int usage) {
 		super(capacity);
 		
-		this.gl = null;
-		this.usage = glGetUsage(usage);
+		this.gl = graphics;
+		this.usage = usage;
 		this.object = gl.genBuffer();
 		this.position = 0;
 		this.count = 0;
@@ -47,11 +47,11 @@ public class GLIndexBuffer extends IndexBuffer {
 	 * @param buffer the buffer data to copy from
 	 * @param dynamic elements in the buffer can be modified if the dynamic flag is true
 	 */
-	public GLIndexBuffer(ShortBuffer buffer, int usage) {
+	public GLIndexBuffer(GL20 graphics, ShortBuffer buffer, int usage) {
 		super(buffer.remaining());
 		
-		this.gl = null;
-		this.usage = glGetUsage(usage);
+		this.gl = graphics;
+		this.usage = usage;
 		this.object = gl.genBuffer();
 		this.position = buffer.remaining();
 		this.count = buffer.remaining();
@@ -66,8 +66,8 @@ public class GLIndexBuffer extends IndexBuffer {
 	 * @param data the array of data to store in the buffer
 	 * @param dynamic elements in the buffer can be modified if the dynamic flag is true
 	 */
-	public GLIndexBuffer(short[] data, int usage) {
-		this(BufferUtils.createShortBuffer(data), usage);
+	public GLIndexBuffer(GL20 graphics, short[] data, int usage) {
+		this(graphics, BufferUtils.createShortBuffer(data), usage);
 	}
 	
 	@Override
@@ -146,20 +146,5 @@ public class GLIndexBuffer extends IndexBuffer {
     private void check() {
     	if (object == -1)
     		throw new NullPointerException();
-    }
-    
-    private static final int glGetUsage(int usage) {
-    	switch (usage) {
-    	case STATIC_DRAW:  return GL20.STATIC_DRAW;
-    	case DYNAMIC_DRAW: return GL20.DYNAMIC_DRAW;
-    	case STREAM_DRAW:  return GL20.STREAM_DRAW;
-    	case STATIC_READ:  return GL20.STATIC_READ;
-    	case DYNAMIC_READ: return GL20.DYNAMIC_READ;
-    	case STREAM_READ:  return GL20.STREAM_READ;
-    	case STATIC_COPY:  return GL20.STATIC_COPY;
-    	case DYNAMIC_COPY: return GL20.DYNAMIC_COPY;
-    	case STREAM_COPY:  return GL20.STREAM_COPY;
-	    }
-	    return 0;
     }
 }

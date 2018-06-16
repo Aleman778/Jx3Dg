@@ -2,8 +2,6 @@ package jx3d.core;
 
 import java.util.HashSet;
 
-import jx3d.util.Disposable;
-
 /**
  * Node is an abstract class that is used to represent an object in the application.
  * Nodes can be combined to form a tree (to be specific a DAG or directed acyclic graph).
@@ -12,7 +10,7 @@ import jx3d.util.Disposable;
  * @since 1.0
  * @author Aleman778
  */
-public abstract class Node extends Functions implements Disposable {
+public abstract class Node extends NodeEvent {
 
 	private HashSet<Node> children;
 	private String name = getClass().getSimpleName();

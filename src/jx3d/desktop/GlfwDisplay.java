@@ -5,6 +5,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import jx3d.core.Display;
 import jx3d.core.Screen;
 import jx3d.desktop.GlfwScreen;
+import jx3d.graphics.opengl.GL20;
 import jx3d.graphics.opengl.GLGraphics;
 
 import java.nio.IntBuffer;
@@ -41,6 +42,7 @@ public class GlfwDisplay extends Display implements Runnable {
 	private long window = NULL;
 	private boolean visible = false;
 	private boolean disposed = false;
+	private boolean gldebug = false;
 	
 	private boolean fullscreen = false;
 	private boolean decorated = true;
@@ -86,7 +88,8 @@ public class GlfwDisplay extends Display implements Runnable {
 	 */
 	public GlfwDisplay(String title, int width, int height) {
 		initialized();
-		
+
+		this.files = new DesktopFiles(display);
 		this.title = title;
 		this.width = width;
 		this.height = height;
@@ -95,6 +98,10 @@ public class GlfwDisplay extends Display implements Runnable {
 	@Override
 	public void run() {
 		createWindow();
+		glfwMakeContextCurrent(window);
+		display = this;
+		graphics.init();
+		setup();
 		
 		synchronized (lock) {
 			lock.notify();
@@ -102,6 +109,8 @@ public class GlfwDisplay extends Display implements Runnable {
 		
 		while (!shouldClose()) {
 			glfwWaitEvents();
+			glfwSwapBuffers(window);
+			draw();
 		}
 	}
 	
@@ -174,7 +183,7 @@ public class GlfwDisplay extends Display implements Runnable {
 		setRendererImpl(renderer);
 		
 		switch (renderer) {
-		case OPENGL:
+		case OPENGL: case OPENGL_DEBUG:
 			setGLProfile(profile);
 			break;
 		default:
@@ -191,7 +200,10 @@ public class GlfwDisplay extends Display implements Runnable {
 		switch (renderer) {
 		case OPENGL:
 			graphics = new GLGraphics(this);
-			
+			break;
+		case OPENGL_DEBUG:
+			graphics = new GLGraphics(this);
+			gldebug = true;
 			break;
 		default:
 			throw new IllegalArgumentException("Invalid or unsupported renderer provided.");
@@ -622,9 +634,13 @@ public class GlfwDisplay extends Display implements Runnable {
 		glfwSetWindowAttrib(window, GLFW_DECORATED, decorated ? 1 : 0);
 		glfwSetWindowAttrib(window, GLFW_FLOATING, floating ? 1 : 0);
 		glfwSetWindowAttrib(window, GLFW_RESIZABLE, resizable? 1 : 0);
-		
+
 		if (iconified)
 			glfwIconifyWindow(window);
+		
+		//OpenGL debug mode
+		if (gldebug)
+			glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL20.TRUE);	
 	}
 	
 	/**

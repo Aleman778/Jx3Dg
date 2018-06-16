@@ -326,33 +326,40 @@ public class Constants extends Module {
 	public static final int OPENGL = 0;
 	
 	/**
+	 * The OpenGL rendering engine with debug messages enabled.<br>
+	 * <i>Note:</i> this configuration should not be used
+	 * in released applications.
+	 */
+	public static final int OPENGL_DEBUG = 1;
+	
+	/**
 	 * OpenGL profile for version 2.x.
 	 */
-	public static final int GL20_PROFILE = 1;
+	public static final int GL20_PROFILE = 2;
 	
 	/**
 	 * OpenGL profile for version 3.x with the core profile.
 	 */
-	public static final int GL30_PROFILE = 2;
+	public static final int GL30_PROFILE = 3;
 	
 	/**
 	 * OpenGL profile for version 3.x with the compatibility profile.
 	 * The OpenGL compatibility profile includes deprecated functionality
 	 * of previous OpenGL versions.
 	 */
-	public static final int GL30_COMPAT_PROFILE = 3;
+	public static final int GL30_COMPAT_PROFILE = 4;
 
 	/**
-	 * OpenGL profile for version 3.x with the core profile.
+	 * OpenGL profile for version 4.x with the core profile.
 	 */
-	public static final int GL40_PROFILE = 4;
+	public static final int GL40_PROFILE = 5;
 
 	/**
 	 * OpenGL profile for version 4.x with the compatibility profile.
 	 * The OpenGL compatibility profile includes deprecated functionality
 	 * of previous OpenGL versions.
 	 */
-	public static final int GL40_COMPAT_PROFILE = 4;
+	public static final int GL40_COMPAT_PROFILE = 6;
 	
 	
 	//Stencil testing functions

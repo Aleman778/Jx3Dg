@@ -20,4 +20,10 @@ public abstract class Module {
 	 * @see #display
 	 */
 	public Graphics graphics;
+	
+	/**
+	 * The handle to the file I/O handler that is being used by this display.
+	 * @see #display
+	 */
+	public Files files;
 }

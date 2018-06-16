@@ -1,7 +1,5 @@
 package jx3d.graphics.opengl;
 
-import static jx3d.core.Constants.*;
-
 import jx3d.graphics.Attribute;
 import jx3d.graphics.AttributeMap;
 import jx3d.graphics.VertexArray;
@@ -26,9 +24,8 @@ public class GLVertexArray extends VertexArray {
 	/**
 	 * Constructor. Create an empty vertex array.
 	 */
-	public GLVertexArray() {
-		gl = null;
-		
+	public GLVertexArray(GL30 graphics) {
+		gl = graphics;
 		object = gl.genVertexArray();
 		buffers = new ArrayList<>();
 		index = 0;
@@ -65,7 +62,8 @@ public class GLVertexArray extends VertexArray {
 		for (int i = 0; i < attrib.size(); i++) {
 			Attribute e = attrib.getAt(i);
 			gl.enableVertexAttribArray(index);
-			gl.vertexAttribPointer(index, e.count, glGetType(e.type), e.normalized, attrib.stride(), e.offset * e.size);
+			gl.vertexAttribPointer(index, e.count, GLGraphics.glGetType(e.type),
+					e.normalized, attrib.stride(), e.offset * e.size);
 			index += 1;
 		}
 		
@@ -104,17 +102,4 @@ public class GLVertexArray extends VertexArray {
     	if (object == -1)
     		throw new NullPointerException();
     }
-    
-	private static final int glGetType(int type) {
-		switch (type) {
-		case INT: 		     return GL30.INT;
-		case UNSIGNED_INT:   return GL30.UNSIGNED_INT;
-		case FLOAT: 		 return GL30.FLOAT;
-		case DOUBLE: 		 return GL30.DOUBLE;
-		case SHORT: 		 return GL30.SHORT;
-		case UNSIGNED_SHORT: return GL30.UNSIGNED_SHORT;
-		}
-		
-		return 0;
-	}
 }

@@ -25,8 +25,8 @@ public class GLSLShader extends Shader {
 	/**
 	 * Create a new empty shader program. 
 	 */
-	public GLSLShader() {
-		gl = null;
+	public GLSLShader(GL20 graphics) {
+		gl = graphics;
 		uniforms = new HashMap<>();
 		program = gl.createProgram();
 		ready = false;
@@ -38,7 +38,7 @@ public class GLSLShader extends Shader {
 			throw new IllegalStateException("Cannot modify shader after being used once.");
 		}
 		
-		int shader = gl.createShader(getShaderType(type));
+		int shader = gl.createShader(GLGraphics.glGetShaderType(type));
 		gl.shaderSource(shader, source);
 		gl.compileShader(shader);
 		if (gl.getShaderi(shader, GL20.COMPILE_STATUS) == GL20.FALSE) {
@@ -51,7 +51,11 @@ public class GLSLShader extends Shader {
 		gl.deleteShader(shader);
 	}
 	
-	private void setup() {
+	@Override
+	public void setup() {
+		if (ready)
+			return;
+			
 		ready = true;
 		gl.linkProgram(program);
 		gl.validateProgram(program);
@@ -60,10 +64,7 @@ public class GLSLShader extends Shader {
 	@Override
 	public void enable() {
 		check();
-		
-		if (!ready)
-			setup();
-		
+		setup();
 		gl.useProgram(program);
 	}
 
@@ -181,17 +182,6 @@ public class GLSLShader extends Shader {
     		throw new NullPointerException();
 	}
 
-    private static int getShaderType(int type) {
-        switch (type) {
-            case VERTEX_SHADER:          return GL20.VERTEX_SHADER;
-            case FRAGMENT_SHADER:        return GL20.FRAGMENT_SHADER;
-            case GEOMETRY_SHADER:        return GL30.EXT.GEOMETRY_SHADER;
-            case TESS_CONTROL_SHADER:    return GL30.EXT.TESS_CONTROL_SHADER;
-            case TESS_EVALUATION_SHADER: return GL30.EXT.TESS_EVALUATION_SHADER;
-        }
-        
-        return -1;
-    }
 	
 	protected class Uniform {
 		

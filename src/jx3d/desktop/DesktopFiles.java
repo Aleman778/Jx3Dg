@@ -20,7 +20,7 @@ import jx3d.core.Files;
 
 public class DesktopFiles extends Files {
 
-	public static final String EXTERNAL_DIR = System.getProperty("user.home") + File.separator;
+	//public static final String EXTERNAL_DIR = new File("").getPath() + File.separator;
 	public static final String LOCAL_DIR = new File("").getAbsolutePath() + File.separator;
 
 	private BufferedReader reader;
@@ -207,7 +207,7 @@ public class DesktopFiles extends Files {
 	
 	@Override
 	public FileHandle external(String file) {
-		return new FileHandle(EXTERNAL_DIR + file);
+		return new FileHandle(file);
 	}
 
 	@Override
