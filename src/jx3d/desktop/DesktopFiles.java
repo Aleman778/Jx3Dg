@@ -99,6 +99,14 @@ public class DesktopFiles extends Files {
 	
 	@Override
 	public String readln() {
+		if (reader == null)
+			throw new IllegalStateException("There is no opened reader to use.");
+		
+		try {
+			return reader.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 	

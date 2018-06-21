@@ -562,6 +562,79 @@ public class Color {
 	public Color lerp(Color v, float t) {
 		return lerp(v, t, this);
 	}
+	
+	/**
+	 * Get the value of the red component as a float.
+	 * @return the value of the red component
+	 */
+	public float getRed() {
+		return red;
+	}
+
+	/**
+	 * Get the value of the red component as an integer.
+	 * @return the value of the red component
+	 */
+	public int getRedInt() {
+		return (int) (red * 255);
+	}
+	
+	/**
+	 * Set the value of the red component as an 
+	 * @param red
+	 */
+	public void setRed(float red) {
+		this.red = red;
+	}
+	
+	public float getGreen() {
+		return green;
+	}
+
+	public int getGreenInt() {
+		return (int) (green * 255);
+	}
+	
+	public void setGreen(float green) {
+		this.green = green;
+	}
+	
+	public float getBlue() {
+		return blue;
+	}
+
+	public int getBlueInt() {
+		return (int) (blue * 255);
+	}
+	
+	public void setBlue(float blue) {
+		this.blue = blue;
+	}
+
+	public int getAlphaInt() {
+		return (int) (alpha * 255);
+	}
+	
+	public float getAlpha() {
+		return alpha;
+	}
+	
+	/**
+	 * Get an integer representation of the color
+	 * i.e. constructed from 32-bits of <code>rgba</code> components,
+	 * where bit 1 through 8 is the red component,
+	 *       bit 9 through 16 is the green component,
+	 *       bit 17 through 24 is the blue component and
+	 *       bit 25 through 32 is the alpha component.
+	 * @return
+	 */
+	public int toInteger() {
+		int color = getRedInt();
+		color = (color << 8) + getGreenInt();
+		color = (color << 8) + getBlueInt();
+		color = (color << 8) + getAlphaInt();
+		return color;
+	}
 
 	@Override
 	public String toString() {
@@ -1309,7 +1382,7 @@ public class Color {
 	 * The color yellow green with a hex value of #9ACD32.
 	 */
 	public static final Color YELLOWGREEN = new Color(0.6039216f, 0.8039216f, 0.19607843f);
-
+	
 	private static final class ColorMap {
 		private static final HashMap<String, Color> colors = initColors();
 		

@@ -74,6 +74,31 @@ public class Constants extends Module {
 	 */
 	public static final float TAU = (float) (2.0 * Math.PI);
 	
+	//Axis (bit flags)
+	/**
+	 * The x axis, can be combined as follows:<br>
+	 * <code>axis = X | Y;</code> (x and y plane in &#8477<sup>2</sup>)
+	 * @see Constants#Y
+	 * @see Constants#Z
+	 */
+	public static final int X = 1;
+
+	/**
+	 * The y axis, can be combined as follows:<br>
+	 * <code>axis = X | Y;</code> (x and y plane in &#8477<sup>2</sup>)
+	 * @see Constants#X
+	 * @see Constants#Z
+	 */
+	public static final int Y = 2;
+
+	/**
+	 * The z axis, can be combined as follows:<br>
+	 * <code>axis = X | Y;</code> (x and y plane in &#8477<sup>2</sup>)
+	 * @see Constants#X
+	 * @see Constants#Y
+	 */
+	public static final int Z = 4;
+	
 	/**
 	 * Epsilon has value 0.0001.
 	 */
@@ -275,6 +300,55 @@ public class Constants extends Module {
 	 * @see Constants#STREAM_COPY
 	 */
 	public static final int STREAM_COPY = 8;
+	
+	//Texture sampling
+	/**
+	 * Point texture sampling is a
+	 * nearest-neighbor interpolation method works taking the
+	 * pixel closest to the current sample point.<br>
+	 * <i>Note:</i> magnifying the texture causes the final pixel to appear large and blocky.<br>
+	 * <i>Note:</i> minifying the texture causes aliasing and noise.<br>
+	 * This method is useful when displaying pixel art and you want to preserve hard edges.
+	 */
+	public static final int POINT = 0;
+	
+	/**
+	 * Linear texture sampling is an interpolation method that is
+	 * calculated by interpolating four neighboring points around the current sample.<br>
+	 * <i>Note:</i> use mipmapping in combination with this in order to avoid aliasing and noise effects.
+	 */
+	public static final int LINEAR = 1;
+
+	/**
+	 * Bilinear texture sampling is an interpolation method that is
+	 * calculated by combining the weighted average of four nearest points around the current sample.<br>
+	 * <i>Note:</i> the weighted is determined by the distance from the camera to the sample.
+	 */
+	public static final int BILINEAR = 2;
+
+	/**
+	 * Trilinear texture sampling is an interpolation method that 
+	 * uses the different mipmaps in combination with
+	 * <i>bilinear</i> interpolation.<br>
+	 * <i>Note:</i> without mipmapping enabled the algorithm reverts back to <i>bilinear</i> interpolation.
+	 * @see Constants#BILINEAR
+	 */
+	public static final int TRILINEAR = 3;
+	
+	//TODO: add javadoc here soon!
+	public static final int NEAREST = 4;
+	public static final int NEAREST_MIPMAP_NEAREST = 5;
+	public static final int NEAREST_MIPMAP_LINEAR = 6;
+	public static final int LINEAR_MIPMAP_NEAREST = 7;
+	public static final int LINEAR_MIPMAP_LINEAR  = 8;
+	
+	//Texture wrapping modes
+	//TODO: add javadoc here soon!
+	public static final int REPEAT = 0;
+	public static final int MIRRORED_REPEAT = 1;
+	public static final int CLAMP = 2;
+	public static final int CLAMP_TO_EDGE = 3;
+	public static final int MIRROR_CLAMP_TO_EDGE = 4;
 	
 	//Depth testing functions
 	/** 
