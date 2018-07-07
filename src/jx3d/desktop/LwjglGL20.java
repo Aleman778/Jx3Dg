@@ -15,6 +15,7 @@ import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 
+import jx3d.graphics.opengl.GLState;
 import jx3d.util.BufferUtils;
 
 /**
@@ -22,7 +23,7 @@ import jx3d.util.BufferUtils;
  * @since 1.0
  * @author Aleman778
  */
-public class LwjglGL20 implements jx3d.graphics.opengl.GL20 {
+public class LwjglGL20 extends GLState implements jx3d.graphics.opengl.GL20 {
 
 	private ByteBuffer buffer = null;
 	private FloatBuffer floatBuffer = null;
@@ -56,7 +57,7 @@ public class LwjglGL20 implements jx3d.graphics.opengl.GL20 {
 
 	@Override
 	public void activeTexture(int texture) {
-		GL13.glActiveTexture(texture);
+		GL13.glActiveTexture(TEXTURE0 + texture);
 	}
 
 	@Override

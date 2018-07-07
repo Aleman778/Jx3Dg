@@ -1,5 +1,7 @@
 package jx3d.core;
 
+import jx3d.graphics.Texture2D;
+
 /**
  * Shared constants in the jx3DGraphics API.
  * @since 1.0
@@ -98,6 +100,30 @@ public class Constants extends Module {
 	 * @see Constants#Y
 	 */
 	public static final int Z = 4;
+
+	/**
+	 * The s axis is an alias for {@link Constants#X}.
+	 * This is used for texture wrapping.
+	 * @see Constants#T
+	 * @see Constants#R
+	 */
+	public static final int S = 1;
+	
+	/**
+	 * The t axis is an alias for {@link Constants#Y}.
+	 * This is used for texture wrapping.
+	 * @see Constants#S
+	 * @see Constants#R
+	 */
+	public static final int T = 2;
+
+	/**
+	 * The r axis is an alias for {@link Constants#Z}.
+	 * This is used for texture wrapping.
+	 * @see Constants#S
+	 * @see Constants#T
+	 */
+	public static final int R = 4;
 	
 	/**
 	 * Epsilon has value 0.0001.
@@ -336,6 +362,11 @@ public class Constants extends Module {
 	public static final int TRILINEAR = 3;
 	
 	//TODO: add javadoc here soon!
+	/**
+	 * Uses the pixel that is nearest of 
+	 * @see Texture2D#setMinFilter(int)
+	 * @see Texture2D#setMagFilter(int)
+	 */
 	public static final int NEAREST = 4;
 	public static final int NEAREST_MIPMAP_NEAREST = 5;
 	public static final int NEAREST_MIPMAP_LINEAR = 6;
@@ -344,10 +375,41 @@ public class Constants extends Module {
 	
 	//Texture wrapping modes
 	//TODO: add javadoc here soon!
+	/**
+	 * Repeat texture wrap mode.
+	 * Repeats the texture when drawing outside the texture area.
+	 * @see Texture2D#setWrapMode(int, int)
+	 */
 	public static final int REPEAT = 0;
+	
+	/**
+	 * Mirrored repeat texture wrap mode.
+	 * Repeats and mirror the texture when
+	 * drawing outside the texture area.
+	 * @see Texture2D#setWrapMode(int, int)
+	 */
 	public static final int MIRRORED_REPEAT = 1;
-	public static final int CLAMP = 2;
-	public static final int CLAMP_TO_EDGE = 3;
+	
+	/**
+	 * Clamp to edge texture wrap mode.
+	 * Extends the edge pixels to the edge of the shape.
+	 * @see Texture2D#setWrapMode(int, int)
+	 */
+	public static final int CLAMP_TO_EDGE = 2;
+	
+	/**
+	 * Clamp to border texture wrap mode.
+	 * The texture is clamped to a border.
+	 * @see Texture2D#setWrapMode(int, int)
+	 */
+	public static final int CLAMP_TO_BORDER = 3;
+	
+	/**
+	 * Mirror clamp to edge texture wrap mode.
+	 * The the first pixels of the mirrored repeated texture
+	 * is extended to the edge of the shape.
+	 * @see Texture2D#setWrapMode(int, int)
+	 */
 	public static final int MIRROR_CLAMP_TO_EDGE = 4;
 	
 	//Depth testing functions

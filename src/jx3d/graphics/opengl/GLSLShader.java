@@ -4,6 +4,8 @@ import static jx3d.core.Constants.*;
 
 import java.util.HashMap;
 
+import org.lwjgl.opengl.GL11;
+
 import jx3d.graphics.Color;
 import jx3d.graphics.Shader;
 import jx3d.graphics.ShaderException;
@@ -166,9 +168,11 @@ public class GLSLShader extends Shader {
 		Uniform uniform = uniforms.get(name);
 		if (uniform == null) {
 			int location = gl.getUniformLocation(program, name);
-			if (location != -1)
-				uniforms.put(name, new Uniform(type, location, value));
-			else
+			System.out.println(location);
+			if (location != -1) {
+				uniform = new Uniform(type, location, value);
+				uniforms.put(name, uniform);
+			} else
 				return null;
 		} else {
 			if (!uniform.set(value))
@@ -182,9 +186,13 @@ public class GLSLShader extends Shader {
     		throw new NullPointerException();
 	}
 
-	
+	/**
+	 * Uniform class holds the following information
+	 * the type of uniform, the location in OpenGL and
+	 * its value.
+	 * @author Aleman778
+	 */
 	protected class Uniform {
-		
 		int type;
 		int location;
 		Object value;
@@ -218,7 +226,6 @@ public class GLSLShader extends Shader {
 				value = newValue;
 				return true;
 			}
-			
 			return false;
 		}
 	}

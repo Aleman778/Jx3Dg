@@ -67,11 +67,13 @@ public class GLGraphics extends Graphics {
 		
 		initialized = false;
 		capabilities = GL.createCapabilities();
-		gl20 = new LwjglGL20();
 		if (capabilities.OpenGL30) {
 			gl30 = new LwjglGL30();
+			gl20 = (GL20) gl30;
+		} else {
+			gl30 = null;
+			gl20 = new LwjglGL20();
 		}
-		state = new GLState(gl20);
 	}
 
 	@Override
@@ -317,8 +319,19 @@ public class GLGraphics extends Graphics {
 		
 		return 0;
 	}
+
+	public static final int glGetTextureWrapMode(int type) {
+		switch (type) {
+		case REPEAT: return GL20.REPEAT;
+		case MIRRORED_REPEAT: return GL20.MIRRORED_REPEAT;
+		case CLAMP_TO_EDGE: return GL20.CLAMP_TO_EDGE;
+		case CLAMP_TO_BORDER: return GL20.EXT.CLAMP_TO_BORDER;
+		case MIRROR_CLAMP_TO_EDGE: return GL20.EXT.MIRROR_CLAMP_TO_EDGE;
+		}
+		return 0;
+	}
 	
-	public static final int glGetSizeOf(int type) {
+	public static final int getSizeOf(int type) {
 		switch (type) {
 		case INT: 		     return Integer.BYTES;
 		case UNSIGNED_INT:   return Integer.BYTES;

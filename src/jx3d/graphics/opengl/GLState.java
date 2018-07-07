@@ -10,9 +10,6 @@ public class GLState {
 	//Max number of texture units available
 	private static final int MAX_TEXTURE_UNITS = 32;
 	
-	//OpenGL graphics
-	private final GL20 gl;
-	
 	//Buffer states
 	public int arrayBuffer = 0;
 	public int elementArrayBuffer = 0;
@@ -30,8 +27,7 @@ public class GLState {
 	 * <i>Note:</i> when creating a OpenGL state there must be an
 	 * OpenGL context running on the current thread.
 	 */
-	public GLState(GL20 gl) {
-		this.gl = gl;
+	public GLState() {
 		texUnits = new GLTexUnit[MAX_TEXTURE_UNITS];
 		for (int i = 0; i < texUnits.length; i++) {
 			texUnits[i] = new GLTexUnit();
@@ -43,8 +39,7 @@ public class GLState {
 	 * @param unit texture unit to select
 	 */
 	public void setActiveTexture(int unit) {
-		activeTexture = unit;	
-		gl.activeTexture(GL20.TEXTURE0 + unit);
+		activeTexture = unit;
 	}
 	
 	/**
