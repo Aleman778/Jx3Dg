@@ -6,8 +6,6 @@ import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
-import org.lwjgl.opengl.GL11;
-
 import jx3d.desktop.GlfwDisplay;
 import jx3d.desktop.LwjglGL30;
 import jx3d.graphics.*;
@@ -39,16 +37,23 @@ public class TestApplication extends GlfwDisplay {
 //		};
 		float[] vertices = {
 					-1.0f, -1.0f, 0.0f, 0.0f,
-					 1.0f, -1.0f, 5.0f, 0.0f,
-					 1.0f,  1.0f, 5.0f, 5.0f,
-					-1.0f,  1.0f, 0.0f, 5.0f
+					 1.0f, -1.0f, 4.0f, 0.0f,
+					 1.0f,  1.0f, 4.0f, 3.0f,
+					-1.0f,  1.0f, 0.0f, 3.0f
 				};
+		
 		short[] indices = {
-			0, 1, 2,
-			2, 3, 0
+			0, 1, 3,
+			1, 2, 3
 		};
-		vbo = graphics.createVBO(vertices, STATIC_DRAW);
-		ibo = graphics.createIBO(indices, STATIC_DRAW);
+		vbo = graphics.createVBO(STATIC_DRAW);
+		vbo.bind();
+		vbo.insert(vertices, 0);
+		
+		ibo = graphics.createIBO(6, STATIC_DRAW);
+		ibo.bind();
+		ibo.insert(indices, 0);
+		
 		vao = graphics.createVAO();
 		
 		AttributeMap attribs = new AttributeMap();
@@ -60,8 +65,11 @@ public class TestApplication extends GlfwDisplay {
 									 "test/shaders/basic_vertex.glsl");
 		shader.setup();
 		shader.enable();
-		String filename = "test/textures/tex_grass.jpg";
+		String filename = "test/textures/tex_brick.jpg";
 		InputStream input = display.files.inputStream(filename);
+		
+		
+		
 		
 		if (input == null)
 			throw new RuntimeException("Image file: " + filename + " could not be found.");
@@ -94,7 +102,7 @@ public class TestApplication extends GlfwDisplay {
 
 		tex = new GLTexture2D(gl, false, false);
 		tex.image(image);
-		tex.setSample(LINEAR);
+		tex.setSample(POINT);
 		//tex.setWrapMode(REPEAT, S|T);
 		//tex.generateMipmaps();
 	}
@@ -105,14 +113,11 @@ public class TestApplication extends GlfwDisplay {
 		shader.enable();
 		tex.bind();
 		graphics.render(TRIANGLES, vao, ibo);
-		int err = GL11.glGetError();
-		if (err > 0) {
-			throw new GLException(err);
-		}
+
 	}
 	
 	public static void main(String[] args) {
-		TestApplication display = new TestApplication("jx3D Application", 640, 480);
+		TestApplication display = new TestApplication("jx3D Application", 1280, 720);
 		display.setRenderer(OPENGL_DEBUG); 
 		display.setVisible(true);
 	}

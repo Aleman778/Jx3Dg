@@ -1,7 +1,5 @@
 package jx3d.graphics.opengl;
 
-import static jx3d.core.Constants.*;
-
 import jx3d.graphics.VertexBuffer;
 import jx3d.util.BufferUtils;
 
@@ -20,134 +18,117 @@ public class GLVertexBuffer extends VertexBuffer {
 
 	private int object;
 	private int usage;
+	private boolean allocated;
 	private FloatBuffer mapBuffer;
+	
+	/**
+	 * Create an empty vertex buffer with a provided usage.
+	 * @param graphics the graphics processor being used in this thread
+	 * @param usage how the buffer is used
+	 */
+	public GLVertexBuffer(GL20 graphics, int usage) {
+		this(graphics, 0, usage);
+	}
 	
 	/**
 	 * Creates an empty vertex buffer with a desired maximum capacity.
 	 * @param graphics the graphics processor being used in this thread
 	 * @param capacity the maximum number of elements the buffer can hold
-	 * @param dynamic elements in the buffer can be modified if the dynamic flag is true
+	 * @param usage describes how the buffer is used
 	 */
 	public GLVertexBuffer(GL20 graphics, int capacity, int usage) {
 		super(capacity);
 		
 		this.gl = graphics;
 		this.usage = usage;
+		this.allocated = false;
 		this.object = gl.genBuffer();
-		this.position = 0;
-		this.count = 0;
-		
-		gl.bindBuffer(GL20.ARRAY_BUFFER, object);
-		gl.bufferData(GL20.ARRAY_BUFFER, capacity * Float.BYTES, null, usage);
-	}
-	
-	/**
-	 * Creates a buffer containing copies of the buffer data in the provided float buffer.
-	 * @param graphics the graphics processor being used in this thread
-	 * @param buffer the buffer data to copy from
-	 * @param dynamic elements in the buffer can be modified if the dynamic flag is true
-	 */
-	public GLVertexBuffer(GL20 graphics, FloatBuffer buffer, int usage) {
-		super(buffer.remaining());
-
-		this.gl = graphics;
-		this.usage = usage;
-		this.object = gl.genBuffer();
-		this.position = buffer.remaining();
-		this.count = buffer.remaining();
-		
-		gl.bindBuffer(GL20.ARRAY_BUFFER, object);
-		gl.bufferData(GL20.ARRAY_BUFFER, buffer.remaining(), buffer, usage);
-	}
-	
-	/**
-	 * Creates a buffer containing the provided data.
-	 * @param graphics the graphics processor being used in this thread
-	 * @param data the array of data to store in the buffer
-	 * @param dynamic elements in the buffer can be modified if the dynamic flag is true
-	 */
-	public GLVertexBuffer(GL20 graphics, float[] data, int usage) {
-		this(graphics, BufferUtils.createFloatBuffer(data), usage);
 	}
 	
 	@Override
 	public void bind() {
-		check();
 		gl.bindBuffer(GL20.ARRAY_BUFFER, object);
 	}
 
 	@Override
 	public void unbind() {
-		check();
-		
 		gl.bindBuffer(GL20.ARRAY_BUFFER, 0);
 	}
 	
 	@Override
-	public void put(float[] data) {
-		bind(); 
+	public void set(float[] data) {
+		if (data == null)
+			throw new IllegalArgumentException("Cannot set null as vertex buffer data.");
+		
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(data);
-		gl.bufferSubData(GL20.ARRAY_BUFFER, position * Float.BYTES, data.length, buffer);
-
-		position += data.length;
-		if (position > count)
-			count = position;
+		set(buffer);
+	}
+	
+	@Override
+	public void set(FloatBuffer buffer) {
+		if (buffer == null)
+			throw new IllegalArgumentException("Cannot set null as vertex buffer.");
+		
+		int size = buffer.remaining() * Float.BYTES;
+		gl.bufferData(GL20.ARRAY_BUFFER, size, buffer, usage);
+		capacity = buffer.remaining();
+		allocated = true;
+	}
+	
+	@Override
+	public void insert(float[] data, int index) {
+		if (data == null)
+			throw new IllegalArgumentException("Cannot insert null into vertex buffer.");
+		
+		FloatBuffer buffer = BufferUtils.createFloatBuffer(data);
+		insert(buffer, index);
 	}
 
 	@Override
-	public void put(FloatBuffer buffer) {
-		bind();
-		
-		int length = buffer.remaining();
-		gl.bufferSubData(GL20.ARRAY_BUFFER, position * Float.BYTES, length, buffer);
+	public void insert(FloatBuffer buffer, int index) {
+		if (buffer == null)
+			throw new IllegalArgumentException("Cannot insert null buffer into vertex buffer.");
 
-		position += length;
-		if (position > count)
-			count = position;
+		if (capacity == 0 && !allocated)
+			capacity = buffer.remaining() + index;
+		
+		if (index + buffer.remaining() > capacity)
+			throw new IllegalArgumentException("The insert exceeds the capacity of this buffer.");
+		
+		if (!allocated)
+			gl.bufferData(GL20.ARRAY_BUFFER, capacity * Float.BYTES, null, usage);
+		
+		gl.bufferSubData(GL20.ARRAY_BUFFER, index * Float.BYTES, buffer.remaining(), buffer);
+		allocated = true;
 	}
 		
 	@Override
 	public FloatBuffer map() {
-		check();
-		
 		if (mapBuffer != null)
-			return mapBuffer;
-		
-		bind();
+			throw new IllegalStateException("Call the unmap method before calling map.");
 		
 		return (mapBuffer = gl.mapBuffer(GL20.ARRAY_BUFFER, GL20.READ_WRITE).asFloatBuffer());
 	}
 
 	@Override
 	public void unmap() {
-		check();
-		bind();
+		if (mapBuffer == null)
+			throw new IllegalStateException("Call the map method before calling unmap.");
 		
-		position = mapBuffer.position();
-		if (position > count)
-			count = position;
 		mapBuffer = null;
 		gl.unmapBuffer(GL20.ARRAY_BUFFER);
 	}
 
 	@Override
-	public void resize(int size) {
-		capacity = size;
-		
-		bind();
-		gl.bufferData(GL20.ARRAY_BUFFER, size, null, usage);
+	public void resize(int newCapacity) {
+		capacity = newCapacity;
+		gl.bufferData(GL20.ARRAY_BUFFER, capacity, null, usage);
 	}
+	
 	
 	@Override
 	public void dispose() {
-		check();
-		
 		gl.deleteBuffer(object);
 		object = -1;
 	}
-	
-    private void check() {
-    	if (object == -1)
-    		throw new NullPointerException();
-    }
 }

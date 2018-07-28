@@ -70,17 +70,13 @@ public abstract class Graphics {
 	public abstract Shader loadShader(int shader);
 
 	//Native buffer functions
-	public abstract VertexBuffer createVBO(int capacity, int usage);
+	public abstract VertexBuffer createVBO(int usage);
 	
-	public abstract VertexBuffer createVBO(float[] data, int usage);
+	public abstract VertexBuffer createVBO(int usage, int capacity);
 	
-	public abstract VertexBuffer createVBO(FloatBuffer data, int usage);
-
-	public abstract IndexBuffer createIBO(int capacity, int usage);
+	public abstract IndexBuffer createIBO(int usage);
 	
-	public abstract IndexBuffer createIBO(short[] data, int usage);
-	
-	public abstract IndexBuffer createIBO(ShortBuffer data, int usage);
+	public abstract IndexBuffer createIBO(int usage, int capacity);
 	
 	public abstract VertexArray createVAO();
 	

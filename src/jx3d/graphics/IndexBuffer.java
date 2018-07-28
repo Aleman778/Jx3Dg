@@ -10,26 +10,62 @@ import java.nio.ShortBuffer;
  * @author Aleman778
  */
 public abstract class IndexBuffer extends Buffer {
+
+	/**
+	 * Default constructor.
+	 * Create an empty index buffer.
+	 */
+	public IndexBuffer() {
+		super();
+	}
 	
 	/**
 	 * Constructor.
+	 * Create an empty index buffer with a specific capacity.
 	 * @param capacity the maximum number of elements in the index buffer
 	 */
 	public IndexBuffer(int capacity) {
 		super(capacity);
 	}
+	
+	/**
+	 * Set the contents of the provided float array into this buffer.<br>
+	 * <i>Note:</i> if there already contains data in this buffer,
+	 * this method will overwrite the previous data.<br>
+	 * <i>Note:</i> the buffers capacity is set to the same size
+	 * as the length of the input array.
+	 * @throws IllegalArgumentException if the input array is null
+	 * @param data the data to set
+	 */
+	public abstract void set(short[] data);
+	
+	/**
+	 * Set the contents of the provided float buffer into this buffer.<br>
+	 * <i>Note:</i> if there already contains data in this buffer,
+	 * this method will overwrite the previous data.<br>
+	 * <i>Note:</i> the buffers capacity is set to the remaining
+	 * size of the float buffer.
+	 * @throws IllegalArgumentException if the input buffer is null
+	 * @param buffer the buffer data to set
+	 */
+	public abstract void set(ShortBuffer buffer);
 
     /**
-     * Put data in the buffer.
-     * @param data the data to put
+     * Put the provided data in this buffer at the specified index.
+     * @throws IllegalArgumentException if the insert exceeds the buffers capacity
+     * 									or if the input data is null
+     * @param data the data to put in the buffer
      */
-	public abstract void put(short[] data);
+	public abstract void insert(short[] data, int index);
 
     /**
-     * Put data in the buffer.
-     * @param buffer  the data to put
+     * Insert the contents of the provided float buffer into this buffer 
+     * at a specific index
+     * @throws IllegalArgumentException if the insert exceeds the buffers capacity
+     * 									or if the input buffer is null
+     * @param buffer the buffer data to insert 
      */
-	public abstract void put(ShortBuffer buffer);
+	public abstract void insert(ShortBuffer buffer, int index);
 
 	/**
 	 * Map this buffer's data into the client's address space.

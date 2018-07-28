@@ -4,6 +4,8 @@ import static jx3d.core.Constants.*;
 
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLCapabilities;
+import org.lwjgl.opengl.GLUtil;
+import org.lwjgl.system.Callback;
 
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
@@ -47,6 +49,8 @@ public class GLGraphics extends Graphics {
 	 */
 	private GLCapabilities capabilities;
 	
+	private Callback debugProc;
+	
 	/**
 	 * Flag determines if the context have been initialized before.
 	 */
@@ -67,6 +71,9 @@ public class GLGraphics extends Graphics {
 		
 		initialized = false;
 		capabilities = GL.createCapabilities();
+
+		debugProc = GLUtil.setupDebugMessageCallback();
+		
 		if (capabilities.OpenGL30) {
 			gl30 = new LwjglGL30();
 			gl20 = (GL20) gl30;
@@ -74,6 +81,9 @@ public class GLGraphics extends Graphics {
 			gl30 = null;
 			gl20 = new LwjglGL20();
 		}
+		
+		//DEBUG REMOVE LATER
+		Callback callback = GLUtil.setupDebugMessageCallback(System.out);
 	}
 
 	@Override
@@ -155,34 +165,22 @@ public class GLGraphics extends Graphics {
 		return null;
 	}
 
+	public VertexBuffer createVBO(int usage) {
+		return new GLVertexBuffer(gl20, glGetBufferUsage(usage));
+	}
+	
 	@Override
 	public VertexBuffer createVBO(int capacity, int usage) {
 		return new GLVertexBuffer(gl20, capacity, glGetBufferUsage(usage));
 	}
 
-	@Override
-	public VertexBuffer createVBO(float[] data, int usage) {
-		return new GLVertexBuffer(gl20, data, glGetBufferUsage(usage));
+	public IndexBuffer createIBO(int usage) {
+		return new GLIndexBuffer(gl20, glGetBufferUsage(usage));
 	}
-
-	@Override
-	public VertexBuffer createVBO(FloatBuffer data, int usage) {
-		return new GLVertexBuffer(gl20, data, glGetBufferUsage(usage));
-	}
-
+	
 	@Override
 	public IndexBuffer createIBO(int capacity, int usage) {
 		return new GLIndexBuffer(gl20, capacity, glGetBufferUsage(usage));
-	}
-
-	@Override
-	public IndexBuffer createIBO(short[] data, int usage) {
-		return new GLIndexBuffer(gl20, data, glGetBufferUsage(usage));
-	}
-
-	@Override
-	public IndexBuffer createIBO(ShortBuffer data, int usage) {
-		return new GLIndexBuffer(gl20, data, glGetBufferUsage(usage));
 	}
 
 	@Override

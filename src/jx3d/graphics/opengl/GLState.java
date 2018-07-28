@@ -19,8 +19,8 @@ public class GLState {
 	public int shader = 0;
 	
 	//Texture states
-	private int activeTexture = 0;
-	private GLTexUnit[] texUnits;
+	public int activeTexture = 0;
+	public GLTexUnit[] texUnits;
 	
 	/**
 	 * Constructor. Initializes some data.<br>
@@ -32,6 +32,51 @@ public class GLState {
 		for (int i = 0; i < texUnits.length; i++) {
 			texUnits[i] = new GLTexUnit();
 		}
+	}
+	
+	/**
+	 * Check and set the state of the buffer.
+	 * @param target the type of buffer
+	 * @param buffer the buffer
+	 * @return false if the buffer is already bound
+	 */
+	public boolean buffer(int target, int buffer) {
+		int oldBuffer = -1;
+		switch (target) {
+		case GL20.ARRAY_BUFFER:
+			oldBuffer = arrayBuffer;
+			arrayBuffer = buffer;
+			break;
+		case GL20.ELEMENT_ARRAY_BUFFER:
+			oldBuffer = elementArrayBuffer;
+			elementArrayBuffer = buffer;
+			break;
+		}
+		System.out.println(oldBuffer + " == " + buffer);
+		return !(oldBuffer == buffer);
+	}
+	
+	/**
+	 * Check and set the state of the vertex array.
+	 * @param array the vertex array
+	 * @return false if the array is already bound
+	 */
+	public boolean vertexArray(int array) {
+		if (vertexArray == array)
+			return false;
+		vertexArray = array;
+		return true;
+	}
+	
+	public boolean texture(int target, int texture) {
+		int oldTexture = -1;
+		switch (target) {
+		case GL20.TEXTURE_2D:
+			oldTexture = getTexture2d();
+			setTexture2d(texture);
+			break;
+		}
+		return !(oldTexture == texture);
 	}
 	
 	/**

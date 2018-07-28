@@ -34,7 +34,6 @@ public class GLVertexArray extends VertexArray {
 	@Override
 	public void bind() {
 		check();
-		
 		gl.bindVertexArray(object);
 	}
 	
@@ -48,7 +47,6 @@ public class GLVertexArray extends VertexArray {
 	@Override
 	public void put(VertexBuffer buf, AttributeMap attrib) {
 		check();
-		
 		if (attrib.empty())
 			throw new IllegalArgumentException("Provided buffer does not have any attributes attached.");
 		
@@ -73,9 +71,6 @@ public class GLVertexArray extends VertexArray {
 	@Override
 	public void clear() {
 		check();
-		
-		bind();
-		
 		for (int i = 0; i < index; i++) {
 			gl.disableVertexAttribArray(i);
 		}
@@ -94,7 +89,7 @@ public class GLVertexArray extends VertexArray {
 	public int count() {
 		int count = 0;
 		for (VertexBuffer buf : buffers)
-			count += buf.count();
+			count += buf.capacity();
 		return count;
 	}
 

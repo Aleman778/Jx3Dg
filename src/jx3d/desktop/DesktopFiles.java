@@ -136,7 +136,7 @@ public class DesktopFiles extends Files {
 		
 		//HTTP URL file
 		InputStream input = null;
-		if (file.contains("http//:") || file.contains("https//:"))
+		if (file.contains("http://") || file.contains("https://"))
 			input = inputFromURL(file);
 		
 		//Project resource

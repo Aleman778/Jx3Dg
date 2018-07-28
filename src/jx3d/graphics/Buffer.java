@@ -26,9 +26,18 @@ import jx3d.util.Disposable;
  */
 public abstract class Buffer implements Disposable {
 	
+	/**
+	 * The maximum number of elements that this buffer can hold.
+	 */
 	protected int capacity;
-	protected int position;
-	protected int count;
+	
+	/**
+	 * Default Constructor.
+	 * Create an empty buffer
+	 */
+	public Buffer() {
+		this(0);
+	}
 	
 	/**
 	 * Constructor.
@@ -37,8 +46,6 @@ public abstract class Buffer implements Disposable {
 	 */
 	public Buffer(int capacity) {
 		this.capacity = capacity;
-		this.position = 0;
-		this.count = 0;
 	}
 	
 	/**
@@ -62,45 +69,10 @@ public abstract class Buffer implements Disposable {
 	public abstract void resize(int newCapacity);
 	
 	/**
-	 * Clear the buffer.<br>
-	 * <i>Note</i>: this method may not remove the actual contents of this buffer on the GPU,
-	 * it depends on the implementation and graphics API. In order to force the graphics API to 
-	 * remove the data use {@link Buffer#dispose()} instead.
-	 */
-	public void clear() {
-		position = 0;
-		count = 0;
-	}
-	
-	/**
 	 * Get the capacity of this buffer.
 	 * @return the capacity
 	 */
 	public final int capacity() {
 		return capacity;
-	}
-	
-	/**
-	 * Get the current position in this buffer.
-	 * @return the position
-	 */
-	public final int position() {
-		return position;
-	}
-	
-	/**
-	 * Get the number of elements currently in the buffer.
-	 * @return
-	 */
-	public final int count() {
-		return count;
-	}
-	
-	/**
-	 * Check if this buffer is empty.
-	 * @return true if the buffer is empty, otherwise false
-	 */
-	public final boolean empty() {
-		return count == 0;
 	}
 }

@@ -15,7 +15,6 @@ import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 
-import jx3d.graphics.opengl.GLState;
 import jx3d.util.BufferUtils;
 
 /**
@@ -23,7 +22,7 @@ import jx3d.util.BufferUtils;
  * @since 1.0
  * @author Aleman778
  */
-public class LwjglGL20 extends GLState implements jx3d.graphics.opengl.GL20 {
+public class LwjglGL20 implements jx3d.graphics.opengl.GL20 {
 
 	private ByteBuffer buffer = null;
 	private FloatBuffer floatBuffer = null;
@@ -72,7 +71,9 @@ public class LwjglGL20 extends GLState implements jx3d.graphics.opengl.GL20 {
 
 	@Override
 	public void bindBuffer(int target, int buffer) {
-		GL15.glBindBuffer(target, buffer);
+		//if (buffer(target, buffer)) {
+			GL15.glBindBuffer(target, buffer);
+		//}
 	}
 
 	@Override
@@ -129,7 +130,7 @@ public class LwjglGL20 extends GLState implements jx3d.graphics.opengl.GL20 {
 	public void blendFuncSeparate(int srcRGB, int dstRGB, int srcAlpha, int dstAlpha) {
 		GL14.glBlendFuncSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha);
 	}
-
+	
 	@Override
 	public void bufferData(int target, int size, Buffer data, int usage) {
 		if (data == null)
