@@ -20,7 +20,7 @@ import static java.lang.Math.*;
  * @since 1.0
  * @author Aleman778
  */
-public final class Matrix4 {
+public final class Matrix44 {
 	
 	public float m00, m01, m02, m03;
 	public float m10, m11, m12, m13;
@@ -30,7 +30,7 @@ public final class Matrix4 {
 	/**
 	 * Default Constructor. The matrix is an identity matrix as default.
 	 */
-	public Matrix4() {
+	public Matrix44() {
 		this.m00 = 1;
 		this.m11 = 1;
 		this.m22 = 1;
@@ -57,7 +57,7 @@ public final class Matrix4 {
 	 * @param m32 matrix entry row 4, column 3
 	 * @param m33 matrix entry row 4, column 4
 	 */
-	public Matrix4(float m00, float m01, float m02, float m03, 
+	public Matrix44(float m00, float m01, float m02, float m03, 
 				   float m10, float m11, float m12, float m13, 
 				   float m20, float m21, float m22, float m23,
 				   float m30, float m31, float m32, float m33) {
@@ -83,7 +83,7 @@ public final class Matrix4 {
 	 * Constructor used to create a new copy of the provided matrix.
 	 * @param copy the matrix to copy from
 	 */
-	public Matrix4(Matrix4 copy) {
+	public Matrix44(Matrix44 copy) {
 		this.m00 = copy.m00;
 		this.m01 = copy.m01;
 		this.m02 = copy.m02;
@@ -106,7 +106,7 @@ public final class Matrix4 {
 	 * Constructor.
 	 * @param entries float array containing at least 16 elements
 	 */
-	public Matrix4(float[] entries) {
+	public Matrix44(float[] entries) {
 		if (entries.length < 16) {
 			throw new IllegalArgumentException(
 					"A 4x4 matrix requires at least 16 elements as an argument (Found: " + entries.length + ").");
@@ -135,8 +135,8 @@ public final class Matrix4 {
 	 * @param v the vector to translate to
 	 * @return a new matrix holding the result
 	 */
-	public static final Matrix4 createTranslation(Vector3 v) {
-		return createTranslation(v.x, v.y, v.z);
+	public final Matrix44 translate(Vector3D v) {
+		return translate(v.x, v.y, v.z);
 	}
 	
 	/**
@@ -146,12 +146,12 @@ public final class Matrix4 {
 	 * @param z the z component of the translation
 	 * @return a new matrix holding the result
 	 */
-	public static final Matrix4 createTranslation(float x, float y, float z) {
-		Matrix4 result = new Matrix4();
+	public final Matrix44 translate(float x, float y, float z) {
+		Matrix44 result = new Matrix44();
 		result.m03 = x;
 		result.m13 = y;
 		result.m23 = z;
-		return result;
+		return mulAffine(result);
 	}
 	
 	/**
@@ -161,8 +161,8 @@ public final class Matrix4 {
 	 * @param z the angle to rotate around the roll axis (in radians)
 	 * @return a new matrix holding the result
 	 */
-	public static final Matrix4 createRotation(float x, float y, float z) {
-		Matrix4 result = new Matrix4();
+	public final Matrix44 rotate(float x, float y, float z) {
+		Matrix44 result = new Matrix44();
 		result.m00 = (float) ( cos(y) * cos(z));
 		result.m01 = (float) ( cos(x) * sin(z) + sin(x) * sin(y) * cos(z));
 		result.m02 = (float) ( sin(x) * sin(z) - cos(x) * sin(y) * cos(z));
@@ -172,7 +172,17 @@ public final class Matrix4 {
 		result.m20 = (float) ( sin(y));
 		result.m21 = (float) (-sin(x) * cos(y));
 		result.m22 = (float) ( cos(x) * cos(y));
-		return result;
+		return mulAffine(result);
+	}
+
+	/**
+	 * Create a transformation matrix that performs a rotation by the given angle <code>a</code> and rotation axis vector <code>v</code>.
+	 * @param a the angle to rotate (in radians)
+	 * @param v the axis to rotate about
+	 * @return a new matrix holding the result
+	 */
+	public final Matrix44 rotate(float a, Vector3D v) {
+		return rotate(a, v.x, v.y, v.z);
 	}
 	
 	/**
@@ -184,8 +194,8 @@ public final class Matrix4 {
 	 * @param z the z component of the axis to rotate about
 	 * @return a new matrix holding the result
 	 */
-	public static final Matrix4 createRotation(float a, float x, float y, float z) {
-		Matrix4 result = new Matrix4();
+	public final Matrix44 rotate(float a, float x, float y, float z) {
+		Matrix44 result = new Matrix44();
 		float sin = (float) Math.sin(a);
 		float cos = (float) Math.cos(a);
 		float cos2 = 1.0f - cos;
@@ -199,17 +209,7 @@ public final class Matrix4 {
 		result.m02 = xz * cos2 - y * sin;
 	    result.m12 = yz * cos2 + x * sin;
 		result.m22 = cos + z * z * cos2;
-		return result;
-	}
-	
-	/**
-	 * Create a transformation matrix that performs a rotation by the given angle <code>a</code> and rotation axis vector <code>v</code>.
-	 * @param a the angle to rotate (in radians)
-	 * @param v the axis to rotate about
-	 * @return a new matrix holding the result
-	 */
-	public static final Matrix4 createRotation(float a, Vector3 v) {
-		return createRotation(a, v.x, v.y, v.z);
+		return mulAffine(result);
 	}
 
 	/**
@@ -217,8 +217,8 @@ public final class Matrix4 {
 	 * @param q the quaternion to 
 	 * @return a new matrix holding the result
 	 */
-	public static final Matrix4 createRotation(Quaternion q) {
-		return q.toMatrix4();
+	public final Matrix44 rotate(Quaternion q) {
+		return mulAffine(q.toMatrix4());
 	}
 
 	/**
@@ -226,13 +226,8 @@ public final class Matrix4 {
 	 * @param v the vector to scale to
 	 * @return a new matrix holding the result
 	 */
-	public static final Matrix4 createScale(Vector3 v) {
-		Matrix4 result = new Matrix4();
-		result.m00 = v.x;
-		result.m11 = v.y;
-		result.m22 = v.z;
-
-		return result;
+	public final Matrix44 scale(Vector3D v) {
+		return scale(v.x, v.y, v.z);
 	}
 
 	/**
@@ -242,13 +237,13 @@ public final class Matrix4 {
 	 * @param z the scaling in the z axis
 	 * @return a new matrix holding the result
 	 */
-	public static final Matrix4 createScale(float x, float y, float z) {
-		Matrix4 result = new Matrix4();
+	public final Matrix44 scale(float x, float y, float z) {
+		Matrix44 result = new Matrix44();
 		result.m00 = x;
 		result.m11 = y;
 		result.m22 = z;
 
-		return result;
+		return mulAffine(result);
 	}
 	
     /**
@@ -265,15 +260,15 @@ public final class Matrix4 {
      * 				when <code>false</code> the z range of <code>[-1..+1]</code> is used (OpenGL)
      * @return a new matrix holding the result
      */
-    public static Matrix4 orthographic(float left, float right, float bottom, float top, float near, float far, boolean range) {
-        Matrix4 result = new Matrix4();
+    public Matrix44 orthographic(float left, float right, float bottom, float top, float near, float far, boolean range) {
+        Matrix44 result = new Matrix44();
         result.m00 = 2.0f / (right - left);
         result.m11 = 2.0f / (top - bottom);
         result.m22 = 2.0f / (near - far);
         result.m03 = (left + right) / (left - right);
         result.m13 = (bottom + top) / (bottom - top);
         result.m23 = (far + near) / (far - near);
-        return result;
+        return mul(result);
     }
 	
 	/**
@@ -287,15 +282,15 @@ public final class Matrix4 {
      * @return a new matrix holding the result
 	 * @see jx3d.core.Display#getAspectRatio()
 	 */
-	public static final Matrix4 perspective(float fov, float aspectRatio, float near, float far) {
-		Matrix4 result = new Matrix4();
+	public final Matrix44 perspective(float fov, float aspectRatio, float near, float far) {
+		Matrix44 result = new Matrix44();
 		float angle = (float) Math.tan(Math.toRadians(fov / 2.0f));
 		float range = near - far;
 		result.m00 = 1.0f / (angle * aspectRatio);
 		result.m11 = 1.0f / angle;
 		result.m22 = (-near - far) / range;
 		result.m23 = 2.0f * far * near / range;		
-		return result;
+		return mul(result);
 	}
 	
 	/**
@@ -305,13 +300,13 @@ public final class Matrix4 {
 	 * @param up the vector pointing in the up direction
 	 * @return a new matrix holding the result
 	 */
-	public static final Matrix4 lookAt(Vector3 eye, Vector3 target, Vector3 up) {
-		Matrix4 result = new Matrix4();
+	public final Matrix44 lookAt(Vector3D eye, Vector3D target, Vector3D up) {
+		Matrix44 result = new Matrix44();
 		
-		Vector3 dest = target.sub(eye);
-		Vector3 zaxis = dest.normalize();
-		Vector3 xaxis = up.cross(zaxis).normalize();
-		Vector3 yaxis = zaxis.cross(xaxis);
+		Vector3D dest = target.sub(eye);
+		Vector3D zaxis = dest.normalize();
+		Vector3D xaxis = up.cross(zaxis).normalize();
+		Vector3D yaxis = zaxis.cross(xaxis);
 		
 		result.m00 = xaxis.x;
 		result.m01 = xaxis.y;
@@ -326,7 +321,7 @@ public final class Matrix4 {
 		result.m31 = -eye.y;
 		result.m32 = -eye.z;
 		
-		return result;
+		return mul(result);
 	}
 	
 	/**
@@ -334,8 +329,8 @@ public final class Matrix4 {
 	 * @param m the matrix to add
 	 * @return a new matrix holding the result
 	 */
-	public Matrix4 add(Matrix4 mat) {
-		Matrix4 result = new Matrix4();
+	public Matrix44 add(Matrix44 mat) {
+		Matrix44 result = new Matrix44();
 		result.m00 = m00 + mat.m00;
 		result.m01 = m01 + mat.m01;
 		result.m02 = m02 + mat.m02;
@@ -360,8 +355,8 @@ public final class Matrix4 {
 	 * @param m the matrix to subtract
 	 * @return a new matrix holding the result
 	 */
-	public Matrix4 sub(Matrix4 mat) {
-		Matrix4 result = new Matrix4();
+	public Matrix44 sub(Matrix44 mat) {
+		Matrix44 result = new Matrix44();
 		result.m00 = m00 - mat.m00;
 		result.m01 = m01 - mat.m01;
 		result.m02 = m02 - mat.m02;
@@ -387,29 +382,29 @@ public final class Matrix4 {
 	 * matrix multiplication (unoptimized).
 	 * <p>
 	 * For an affine transformation matrix use the
-	 * optimized version {@link #mulAffine(Matrix4)} instead.
+	 * optimized version {@link #mulAffine(Matrix44)} instead.
 	 * </p>
 	 * <p>
 	 * For a translation matrix use the optimized
-	 * version {@link #mulTranslation(Matrix4)} instead.
+	 * version {@link #mulTranslation(Matrix44)} instead.
 	 * </p>
 	 * <p>
 	 * For a perspective projection matrix use the optimized
-	 * version {@link #mulPerspective(Matrix4)} instead.
+	 * version {@link #mulPerspective(Matrix44)} instead.
 	 * </p>
 	 * <p>
 	 * For a orthographic projection matrix use the optimized
-	 * version {@link #mulOrthographic(Matrix4)} instead.
+	 * version {@link #mulOrthographic(Matrix44)} instead.
 	 * </p>
 	 * @param m the matrix to multiply on the right hand
 	 * @return a new matrix holding the result
-	 * @see Matrix4#mulAffine(Matrix4)
-	 * @see Matrix4#mulTranslation(Matrix4)
-	 * @see Matrix4#mulPerspective(Matrix4)
-	 * @see Matrix4#mulOrthographic(Matrix4)
+	 * @see Matrix44#mulAffine(Matrix44)
+	 * @see Matrix44#mulTranslation(Matrix44)
+	 * @see Matrix44#mulPerspective(Matrix44)
+	 * @see Matrix44#mulOrthographic(Matrix44)
 	 */
-	public Matrix4 mul(Matrix4 m) {
-		Matrix4 result = new Matrix4();
+	public Matrix44 mul(Matrix44 m) {
+		Matrix44 result = new Matrix44();
 		result.m00 = m00 * m.m00 + m10 * m.m01 + m20 * m.m02 + m30 * m.m03;
 		result.m01 = m01 * m.m00 + m11 * m.m01 + m21 * m.m02 + m31 * m.m03;                                                                            
 		result.m02 = m02 * m.m00 + m12 * m.m01 + m22 * m.m02 + m32 * m.m03;                                                                          
@@ -433,7 +428,7 @@ public final class Matrix4 {
 	 * Multiply this matrix by the given matrix <code>m</code>.
 	 * This matrix will be on the left hand.
 	 * <p>
-	 * This method is an optimized version of {@link #mul(Matrix4)} and assumes that
+	 * This method is an optimized version of {@link #mul(Matrix44)} and assumes that
 	 * <code>this</code> and the given <code>m</code> matrix are both an affine
 	 * transformation matrix (i.e. their last rows are equal to <code>(0, 0, 0, 1)</code>). 
 	 * </p>
@@ -442,10 +437,10 @@ public final class Matrix4 {
 	 * </p>
 	 * @param m the affine transformation matrix to multiply on the right hand
 	 * @return a new matrix holding the result
-	 * @see Matrix4#mul(Matrix4)
+	 * @see Matrix44#mul(Matrix44)
 	 */
-	public Matrix4 mulAffine(Matrix4 m) {
-		Matrix4 result = new Matrix4();
+	public Matrix44 mulAffine(Matrix44 m) {
+		Matrix44 result = new Matrix44();
 		result.m00 = m00 * m.m00 + m10 * m.m01 + m20 * m.m02;
 		result.m01 = m01 * m.m00 + m11 * m.m01 + m21 * m.m02;                                                                            
 		result.m02 = m02 * m.m00 + m12 * m.m01 + m22 * m.m02;
@@ -469,7 +464,7 @@ public final class Matrix4 {
 	 * Multiply this matrix by the given matrix <code>m</code>.
 	 * This matrix will be on the left hand.
 	 * <p>
-	 * This method is an optimized version of {@link #mul(Matrix4)} and assumes that
+	 * This method is an optimized version of {@link #mul(Matrix44)} and assumes that
 	 * <code>this</code> matrix is an affine transformation matrix (i.e. their last
 	 * rows are equal to <code>(0, 0, 0, 1)</code>) and that the given matrix
 	 * <code>m</code> is a translation matrix.
@@ -479,10 +474,10 @@ public final class Matrix4 {
 	 * </p>
 	 * @param m the translation matrix to multiply on the right hand
 	 * @return a new matrix holding the result
-	 * @see Matrix4#mul(Matrix4)
+	 * @see Matrix44#mul(Matrix44)
 	 */
-	public Matrix4 mulTranslation(Matrix4 m) {
-		Matrix4 result = new Matrix4();
+	public Matrix44 mulTranslation(Matrix44 m) {
+		Matrix44 result = new Matrix44();
 		result.m00 = m00;
 		result.m01 = m01;
 		result.m02 = m02;
@@ -506,16 +501,16 @@ public final class Matrix4 {
 	 * Multiply this matrix by the given matrix <code>m</code>.
 	 * This matrix will be on the left hand.
 	 * <p>
-	 * This method is an optimized version of {@link #mul(Matrix4)} and assumes that
+	 * This method is an optimized version of {@link #mul(Matrix44)} and assumes that
 	 * <code>this</code> matrix is a perspective projection and that the given matrix
 	 * <code>m</code> is a view matrix.
 	 * </p>
 	 * @param m the translation matrix to multiply on the right hand
 	 * @return a new matrix holding the result
-	 * @see Matrix4#mul(Matrix4)
+	 * @see Matrix44#mul(Matrix44)
 	 */
-	public Matrix4 mulPerspective(Matrix4 m) {
-		Matrix4 result = new Matrix4();
+	public Matrix44 mulPerspective(Matrix44 m) {
+		Matrix44 result = new Matrix44();
 		result.m00 = m00 * m.m00;
 		result.m01 = m11 * m.m01;
 		result.m02 = m22 * m.m02;
@@ -539,16 +534,16 @@ public final class Matrix4 {
 	 * Multiply this matrix by the given matrix <code>m</code>.
 	 * This matrix will be on the left hand.
 	 * <p>
-	 * This method is an optimized version of {@link #mul(Matrix4)} and assumes that
+	 * This method is an optimized version of {@link #mul(Matrix44)} and assumes that
 	 * <code>this</code> matrix is an orthographic projection matrix and that the
 	 * given matrix <code>m</code> is a view matrix.
 	 * </p>
 	 * @param m the translation matrix to multiply on the right hand
 	 * @return a new matrix holding the result
-	 * @see Matrix4#mul(Matrix4)
+	 * @see Matrix44#mul(Matrix44)
 	 */
-	public Matrix4 mulOrthographic(Matrix4 m) {
-		Matrix4 result = new Matrix4();
+	public Matrix44 mulOrthographic(Matrix44 m) {
+		Matrix44 result = new Matrix44();
 		result.m00 = m00 * m.m00;
 		result.m01 = m01 * m.m01;
 		result.m02 = m02 * m.m02;
@@ -573,8 +568,8 @@ public final class Matrix4 {
 	 * @param v the vector to multiply
 	 * @return a new vector holding the result 
 	 */
-	public Vector4 mul(Vector4 vec) {
-		Vector4 result = new Vector4();
+	public Vector4D mul(Vector4D vec) {
+		Vector4D result = new Vector4D();
 		result.x = this.m00 * vec.x + this.m01 * vec.y + this.m02 * vec.z + this.m03 * vec.w;
 		result.y = this.m10 * vec.x + this.m11 * vec.y + this.m12 * vec.z + this.m13 * vec.w;
 		result.z = this.m20 * vec.x + this.m21 * vec.y + this.m22 * vec.z + this.m23 * vec.w;
@@ -587,8 +582,8 @@ public final class Matrix4 {
 	 * @param s the scalar to multiply with
 	 * @return a new matrix holding the result
 	 */
-	public Matrix4 mul(float s) {
-		Matrix4 result = new Matrix4();
+	public Matrix44 mul(float s) {
+		Matrix44 result = new Matrix44();
 		result.m00 = m00 * s;
 		result.m01 = m01 * s;
 		result.m02 = m02 * s;
@@ -612,8 +607,8 @@ public final class Matrix4 {
 	 * Get the transpose of this matrix.
 	 * @return a new matrix holding the result
 	 */
-	public Matrix4 transpose() {
-		Matrix4 result = new Matrix4();
+	public Matrix44 transpose() {
+		Matrix44 result = new Matrix44();
 		result.m00 = m00;
 		result.m01 = m10;
 		result.m02 = m20;
@@ -636,7 +631,7 @@ public final class Matrix4 {
 	/**
 	 * Get the determinant of this matrix.
 	 * <p>
-	 * For an affine transformation matrix use {@link Matrix4#determinantAffine()} instead.
+	 * For an affine transformation matrix use {@link Matrix44#determinantAffine()} instead.
 	 * </p>
 	 * @return a float holding the result
 	 */
@@ -652,11 +647,11 @@ public final class Matrix4 {
 	/**
 	 * Get the determinant of this matrix.
 	 * <p>
-	 * This is an optimized version of {@link Matrix4#determinant()} and assumes that
+	 * This is an optimized version of {@link Matrix44#determinant()} and assumes that
 	 * <code>this</code> matrix is an affine transformation matrix.
 	 * </p>
 	 * @return a float holding the result
-	 * @see Matrix4#determinant()
+	 * @see Matrix44#determinant()
 	 */
 	public float determinantAffine() {
 		return m00 * (m11 * m22 - m12 * m21)
@@ -669,8 +664,8 @@ public final class Matrix4 {
 	 * @return a new matrix holding the result
 	 * @throws IllegalStateException if the matrix is singular i.e. the determinant is zero
 	 */
-	public Matrix4 inverse() throws IllegalStateException {
-		Matrix4 result = new Matrix4();
+	public Matrix44 inverse() throws IllegalStateException {
+		Matrix44 result = new Matrix44();
 		float x0  = m00 * m11 - m01 * m10;
         float x1  = m00 * m12 - m02 * m10;
         float x2  = m00 * m13 - m03 * m10;
@@ -710,8 +705,8 @@ public final class Matrix4 {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Matrix4) {
-			Matrix4 mat = (Matrix4) obj;
+		if (obj instanceof Matrix44) {
+			Matrix44 mat = (Matrix44) obj;
 			if (m00 != mat.m00)
 				return false;
 			if (m01 != mat.m01)

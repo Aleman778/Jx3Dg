@@ -10,6 +10,9 @@ import jx3d.desktop.GlfwDisplay;
 import jx3d.desktop.LwjglGL30;
 import jx3d.graphics.*;
 import jx3d.graphics.opengl.*;
+import jx3d.math.Quaternion;
+import jx3d.math.Vector3D;
+
 /**
  * Test application.
  * @author Aleman778
@@ -22,6 +25,7 @@ public class TestApplication extends GlfwDisplay {
 	private Shader shader;
 	private Image image;
 	private Texture2D tex;
+	private Transform t;
 	
 	public TestApplication(String title, int width, int height) {
 		super(title, width, height);
@@ -29,18 +33,18 @@ public class TestApplication extends GlfwDisplay {
 	
 	@Override
 	public void setup() {
-//		float[] vertices = {
-//				-0.5f, -0.5f, 0.0f, 0.0f,
-//				 0.5f, -0.5f, 1.0f, 0.0f,
-//				 0.5f,  0.5f, 1.0f, 1.0f,
-//				-0.5f,  0.5f, 0.0f, 1.0f
-//		};
 		float[] vertices = {
-					-1.0f, -1.0f, 0.0f, 0.0f,
-					 1.0f, -1.0f, 4.0f, 0.0f,
-					 1.0f,  1.0f, 4.0f, 3.0f,
-					-1.0f,  1.0f, 0.0f, 3.0f
-				};
+				-0.5f, -0.5f, 0.0f, 0.0f,
+				 0.5f, -0.5f, 2.0f, 0.0f,
+				 0.5f,  0.5f, 2.0f, 1.0f,
+				-0.5f,  0.5f, 0.0f, 1.0f
+		};
+//		float[] vertices = {
+//					-1.0f, -1.0f, 0.0f, 0.0f,
+//					 1.0f, -1.0f, 4.0f, 0.0f,
+//					 1.0f,  1.0f, 4.0f, 3.0f,
+//					-1.0f,  1.0f, 0.0f, 3.0f
+//		};
 		
 		short[] indices = {
 			0, 1, 3,
@@ -105,15 +109,26 @@ public class TestApplication extends GlfwDisplay {
 		tex.setSample(POINT);
 		//tex.setWrapMode(REPEAT, S|T);
 		//tex.generateMipmaps();
+		
+		
+		//Transformation
+		t = new Transform();
+		//t.setPos(new Vector3D(5, 0, 0));
+		//t.scale(new Vector3D(0.1f, 0.6f, 0.5f));
+		//t.rotate(Quaternion.euler(0, 0, 0));
+		System.out.println(t.getMapping());
+		shader.set("transform", t.getMapping());
 	}
 
 	@Override
 	public void draw() {
+		t.rotate(Quaternion.euler(0, 0, 0.01f));
+		//t.scale(new Vector3D(1.01f, 1f, 1f));
+		shader.set("transform", t.getMapping());
 		graphics.background(0.0f, 0.5f, 1.0f, 1.0f);
 		shader.enable();
 		tex.bind();
 		graphics.render(TRIANGLES, vao, ibo);
-
 	}
 	
 	public static void main(String[] args) {

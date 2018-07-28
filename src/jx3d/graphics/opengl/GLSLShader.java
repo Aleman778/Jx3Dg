@@ -101,7 +101,7 @@ public class GLSLShader extends Shader {
 	}
 
 	@Override
-	public void set(String name, Vector2 value) {
+	public void set(String name, Vector2D value) {
 		Uniform uniform = setImpl(name, value, VEC2);
 		if (uniform != null) {
 			gl.uniform2f(uniform.location, value.x, value.y);
@@ -109,7 +109,7 @@ public class GLSLShader extends Shader {
 	}
 
 	@Override
-	public void set(String name, Vector3 value) {
+	public void set(String name, Vector3D value) {
 		Uniform uniform = setImpl(name, value, VEC3);
 		if (uniform != null) {
 			gl.uniform3f(uniform.location, value.x, value.y, value.z);
@@ -117,7 +117,7 @@ public class GLSLShader extends Shader {
 	}
 
 	@Override
-	public void set(String name, Vector4 value) {
+	public void set(String name, Vector4D value) {
 		Uniform uniform = setImpl(name, value, VEC4);
 		if (uniform != null) {
 			gl.uniform4f(uniform.location, value.x, value.y, value.z, value.w);
@@ -141,7 +141,7 @@ public class GLSLShader extends Shader {
 	}
 
 	@Override
-	public void set(String name, Matrix2 value) {
+	public void set(String name, Matrix22 value) {
 		Uniform uniform = setImpl(name, value, MAT2);
 		if (uniform != null) {
 			gl.uniformMatrix2fv(uniform.location, 4, false, value.toFloatBuffer());
@@ -149,7 +149,7 @@ public class GLSLShader extends Shader {
 	}
 
 	@Override
-	public void set(String name, Matrix3 value) {
+	public void set(String name, Matrix33 value) {
 		Uniform uniform = setImpl(name, value, MAT3);
 		if (uniform != null) {
 			gl.uniformMatrix3fv(uniform.location, 12, false, value.toFloatBuffer());
@@ -157,7 +157,7 @@ public class GLSLShader extends Shader {
 	}
 
 	@Override
-	public void set(String name, Matrix4 value) {
+	public void set(String name, Matrix44 value) {
 		Uniform uniform = setImpl(name, value, MAT4);
 		if (uniform != null) {
 			gl.uniformMatrix4fv(uniform.location, 16, false, value.toFloatBuffer());
@@ -168,7 +168,6 @@ public class GLSLShader extends Shader {
 		Uniform uniform = uniforms.get(name);
 		if (uniform == null) {
 			int location = gl.getUniformLocation(program, name);
-			System.out.println(location);
 			if (location != -1) {
 				uniform = new Uniform(type, location, value);
 				uniforms.put(name, uniform);

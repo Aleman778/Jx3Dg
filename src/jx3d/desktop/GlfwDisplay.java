@@ -108,7 +108,12 @@ public class GlfwDisplay extends Display implements Runnable {
 		}
 		
 		while (!shouldClose()) {
-			glfwWaitEvents();
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			glfwPollEvents();
 			glfwSwapBuffers(window);
 			draw();
 		}

@@ -109,7 +109,7 @@ public class Quaternion {
         return result;
     }
     
-    public static Quaternion rotation(Vector3 axis, float angle) {
+    public static Quaternion rotation(Vector3D axis, float angle) {
     	return null;
     }
 	
@@ -152,8 +152,8 @@ public class Quaternion {
 	 * Convert this quaternion into a 4 by 4 matrix.
 	 * @return a new matrix holding the result.
 	 */
-    public Matrix4 toMatrix4() {
-    	Matrix4 result = new Matrix4();
+    public Matrix44 toMatrix4() {
+    	Matrix44 result = new Matrix44();
     	float invLen = 1.0f / (float) Math.sqrt(x * x + y * y + z * z + w * w);
     	float qx = x * invLen;
     	float qy = y * invLen;

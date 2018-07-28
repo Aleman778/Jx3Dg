@@ -57,7 +57,7 @@ public class AxisAngle {
 		return this;
 	}
 	
-	public AxisAngle set(Matrix4 m) {
+	public AxisAngle set(Matrix44 m) {
 		return this;
 	}
 	
@@ -66,7 +66,7 @@ public class AxisAngle {
 		return null;
 	}
 	
-	public Matrix4 get(Matrix4 m) {
+	public Matrix44 get(Matrix44 m) {
 
 		return null;
 	}
@@ -93,11 +93,11 @@ public class AxisAngle {
 		return this;
 	}
 	
-	public Vector3 transform(Vector3 v) {
+	public Vector3D transform(Vector3D v) {
 		return null;
 	}
 	
-	public Vector4 transform(Vector4 v) {
+	public Vector4D transform(Vector4D v) {
 		return null;
 	}
 }

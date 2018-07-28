@@ -84,21 +84,21 @@ public abstract class Shader implements Disposable {
      * @param name the variable name
      * @param value the value of the uniform
      */
-    public abstract void set(String name, Vector2 value);
+    public abstract void set(String name, Vector2D value);
     
     /**
      * Set shader uniform variable value.
      * @param name the variable name
      * @param value the value of the uniform
      */
-    public abstract void set(String name, Vector3 value);
+    public abstract void set(String name, Vector3D value);
     
     /**
      * Set shader uniform variable value.
      * @param name the variable name
      * @param value the value of the uniform
      */
-    public abstract void set(String name, Vector4 value);
+    public abstract void set(String name, Vector4D value);
 
     /**
      * Set shader uniform variable value.
@@ -119,19 +119,19 @@ public abstract class Shader implements Disposable {
      * @param name the variable name
      * @param value the value of the uniform
      */
-    public abstract void set(String name, Matrix2 value);
+    public abstract void set(String name, Matrix22 value);
     
     /**
      * Set shader uniform variable value.
      * @param name the variable name
      * @param value the value of the uniform
      */
-    public abstract void set(String name, Matrix3 value);
+    public abstract void set(String name, Matrix33 value);
     
     /**
      * Set shader uniform variable value.
      * @param name the variable name
      * @param value the value of the uniform
      */
-    public abstract void set(String name, Matrix4 value);
+    public abstract void set(String name, Matrix44 value);
 }

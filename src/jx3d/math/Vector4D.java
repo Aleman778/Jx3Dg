@@ -12,7 +12,7 @@ import jx3d.util.BufferUtils;
  * @since 1.0
  * @author Aleman778
  */
-public class Vector4 {
+public class Vector4D {
 
 	/**
 	 * The x component of the four dimensional vector.
@@ -38,7 +38,7 @@ public class Vector4 {
 	 * Default Constructor.
 	 * Creates an empty vector with all four values set to zero.
 	 */
-	public Vector4() {
+	public Vector4D() {
 		this(0, 0, 0, 0);
 	}
 	
@@ -49,7 +49,7 @@ public class Vector4 {
 	 * @param z the value of the z component of the vector
 	 * @param w the value of the w component of the vector
 	 */
-	public Vector4(float x, float y, float z, float w) {
+	public Vector4D(float x, float y, float z, float w) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -60,7 +60,7 @@ public class Vector4 {
 	 * Constructor used to create a new copy of the provided vector.
 	 * @param copy the vector to copy from
 	 */
-	public Vector4(Vector4 copy) {
+	public Vector4D(Vector4D copy) {
 		this.x = copy.x;
 		this.y = copy.y;
 		this.z = copy.z;
@@ -72,7 +72,7 @@ public class Vector4 {
 	 * @param d the value of all four entries
 	 * @return this vector
 	 */
-	public Vector4 set(float d) {
+	public Vector4D set(float d) {
 		return set(d, d, d, d);
 	}
 	
@@ -84,7 +84,7 @@ public class Vector4 {
 	 * @param w the value of the w component to set
 	 * @return this vector
 	 */
-	public Vector4 set(float x, float y, float z, float w) {
+	public Vector4D set(float x, float y, float z, float w) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -97,7 +97,7 @@ public class Vector4 {
 	 * @param v the vector to copy from
 	 * @return this vector
 	 */
-	public Vector4 set(Vector4 v) {
+	public Vector4D set(Vector4D v) {
 		return set(v.x, v.y, v.z, v.w);
 	}
 
@@ -109,8 +109,8 @@ public class Vector4 {
 	 * @param w the w component to add
 	 * @return a new vector holding the result
 	 */
-	public Vector4 add(float x, float y, float z, float w) {
-		return new Vector4(this.x + x, this.y + y, this.z + z, this.w + w);
+	public Vector4D add(float x, float y, float z, float w) {
+		return new Vector4D(this.x + x, this.y + y, this.z + z, this.w + w);
 	}
 	
 	/**
@@ -118,8 +118,8 @@ public class Vector4 {
 	 * @param v the vector to add
 	 * @return a new vector holding the result
 	 */
-	public Vector4 add(Vector4 v) {
-		return new Vector4(x + v.x, y + v.y, z + v.z, w + v.w);
+	public Vector4D add(Vector4D v) {
+		return new Vector4D(x + v.x, y + v.y, z + v.z, w + v.w);
 	}
 	
 
@@ -131,8 +131,8 @@ public class Vector4 {
 	 * @param w the w component to subtract
 	 * @return a new vector holding the result
 	 */
-	public Vector4 sub(float x, float y, float z, float w) {
-		return new Vector4(this.x - x, this.y - y, this.z - z, this.w - w);
+	public Vector4D sub(float x, float y, float z, float w) {
+		return new Vector4D(this.x - x, this.y - y, this.z - z, this.w - w);
 	}
 	
 	/**
@@ -140,8 +140,8 @@ public class Vector4 {
 	 * @param v the vector to subtract
 	 * @return a new vector holding the result
 	 */
-	public Vector4 sub(Vector4 v) {
-		return new Vector4(x - v.x, y - v.y, z - v.z, w - v.w);
+	public Vector4D sub(Vector4D v) {
+		return new Vector4D(x - v.x, y - v.y, z - v.z, w - v.w);
 	}
 	
 	/**
@@ -149,8 +149,8 @@ public class Vector4 {
 	 * @param s the scalar to multiply
 	 * @return a new vector holding the result
 	 */
-	public Vector4 mul(float s) {
-		return new Vector4(x * s, y * s, z * s, w * s);
+	public Vector4D mul(float s) {
+		return new Vector4D(x * s, y * s, z * s, w * s);
 	}
 	
 	/**
@@ -161,8 +161,8 @@ public class Vector4 {
 	 * @param w the w component to multiply
 	 * @return a new vector holding the result
 	 */
-	public Vector4 mul(float x, float y, float z, float w) {
-		return new Vector4(this.x * x, this.y * y, this.z * z, this.w * w);
+	public Vector4D mul(float x, float y, float z, float w) {
+		return new Vector4D(this.x * x, this.y * y, this.z * z, this.w * w);
 	}
 	
 	/**
@@ -170,16 +170,16 @@ public class Vector4 {
 	 * @param v the vector to multiply
 	 * @return a new vector holding the result
 	 */
-	public Vector4 mul(Vector4 v) {
-		return new Vector4(x * v.x, y * v.y, z * v.z, w * v.w);
+	public Vector4D mul(Vector4D v) {
+		return new Vector4D(x * v.x, y * v.y, z * v.z, w * v.w);
 	}
 	
 	/**
 	 * Inverts (or negates) each component in this vector.
 	 * @return a new vector holding the result
 	 */
-	public Vector4 inverse() {
-		return new Vector4(-x, -y, -z, -w);
+	public Vector4D inverse() {
+		return new Vector4D(-x, -y, -z, -w);
 	}
 	
 	/**
@@ -199,14 +199,14 @@ public class Vector4 {
 	 * @param v the vector to multiply
 	 * @return the dot product of the the to vectors
 	 */
-	public float dot(Vector4 v) {
+	public float dot(Vector4D v) {
 		return x * v.x + y * v.y + z * v.z + w * v.w;	
 	}
 	
 	/**
 	 * Get the length (or magnitude) of the vector.
 	 * @return the length of the vector
-	 * @see Vector4#lengthSquared()
+	 * @see Vector4D#lengthSquared()
 	 */
 	public float length() {
 		return (float) Math.sqrt(x * x + y * y + z * z + w * w);
@@ -216,7 +216,7 @@ public class Vector4 {
 	 * Computes the length (or magnitude) of the vector squared.
 	 * This function is faster when comparing two lengths.
 	 * @return the length of the vector squared
-	 * @see Vector4#length()
+	 * @see Vector4D#length()
 	 */
 	public float lengthSquared() {
 		return x * x + y * y + z * z + w * w;
@@ -259,7 +259,7 @@ public class Vector4 {
 	 * @param v the point of the vector
 	 * @return the distance between the two vectors points
 	 */
-	public float distance(Vector4 v) {
+	public float distance(Vector4D v) {
 		return distance(v.x, v.y, v.z, v.w);
 	}
 
@@ -269,7 +269,7 @@ public class Vector4 {
 	 * @param v the point of the vector
 	 * @return the distance between the two vectors points
 	 */
-	public float distanceSquared(Vector4 v) {
+	public float distanceSquared(Vector4D v) {
 		return distanceSquared(v.x, v.y, v.z, v.w);
 	}
 	
@@ -278,7 +278,7 @@ public class Vector4 {
 	 * @return this vector
 	 * @throws IllegalStateException if this vector is a zero vector i.e. length is zero
 	 */
-	public Vector4 normalize() throws IllegalStateException {
+	public Vector4D normalize() throws IllegalStateException {
 		float invLength = (float) Math.sqrt(x * x + y * y + z * z + w * w);
 		if (invLength > 0.0f) {
 			invLength = 1.0f / invLength;
@@ -300,7 +300,7 @@ public class Vector4 {
 	 * @param dest the vector to hold the result in
 	 * @return the dest vector
 	 */
-	public Vector4 lerp(Vector4 v, float t, Vector4 dest) {
+	public Vector4D lerp(Vector4D v, float t, Vector4D dest) {
 		dest.x = x + (v.x - x) * t;
 		dest.y = y + (v.y - y) * t;
 		dest.z = z + (v.z - z) * t;
@@ -315,7 +315,7 @@ public class Vector4 {
 	 * @param t the time from [0..1]
 	 * @return this vector
 	 */
-	public Vector4 lerp(Vector4 v, float t) {
+	public Vector4D lerp(Vector4D v, float t) {
 		return lerp(v, t, this);
 	}
 	

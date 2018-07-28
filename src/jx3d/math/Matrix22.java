@@ -16,7 +16,7 @@ import jx3d.util.BufferUtils;
  * @since 1.0
  * @author Aleman778
  */
-public final class Matrix2 {
+public final class Matrix22 {
 
 	public float m00, m01;
 	public float m10, m11;
@@ -24,7 +24,7 @@ public final class Matrix2 {
 	/**
 	 * Default Constructor. The matrix is an identity matrix as default.
 	 */
-	public Matrix2() {
+	public Matrix22() {
 		m00 = 1;
 		m11 = 1;
 	}
@@ -36,7 +36,7 @@ public final class Matrix2 {
 	 * @param m10 matrix entry row 2, column 1
 	 * @param m11 matrix entry row 2, column 2
 	 */
-	public Matrix2(float m00, float m01, float m10, float m11) {
+	public Matrix22(float m00, float m01, float m10, float m11) {
 		this.m00 = m00;
 		this.m01 = m01;
 		this.m10 = m10;
@@ -47,7 +47,7 @@ public final class Matrix2 {
 	 * Constructor used to create a new copy of the provided matrix.
 	 * @param copy the matrix to copy from
 	 */
-	public Matrix2(Matrix2 copy) {
+	public Matrix22(Matrix22 copy) {
 		this.m00 = copy.m00;
 		this.m01 = copy.m01;
 		this.m10 = copy.m10;
@@ -60,8 +60,8 @@ public final class Matrix2 {
 	 * @param a the angle of the rotation (in radians)
 	 * @return a new matrix holding the transformation
 	 */
-	public static final Matrix2 createRotation(float a) {
-		Matrix2 result = new Matrix2();
+	public static final Matrix22 createRotation(float a) {
+		Matrix22 result = new Matrix22();
 		result.m00 = (float)  Math.cos(a);
 		result.m01 = (float) -Math.sin(a);
 		result.m10 = (float)  Math.sin(a);
@@ -76,8 +76,8 @@ public final class Matrix2 {
 	 * @param y the y component of the scaling
 	 * @return a new matrix holding the transformation
 	 */
-	public static final Matrix2 createScale(float x, float y) {
-		Matrix2 result = new Matrix2();
+	public static final Matrix22 createScale(float x, float y) {
+		Matrix22 result = new Matrix22();
 		result.m00 = x;
 		result.m11 = y;
 		return result;
@@ -88,8 +88,8 @@ public final class Matrix2 {
 	 * @param m the matrix to add
 	 * @return a new matrix holding the result
 	 */
-	public Matrix2 add(Matrix2 m) {
-		Matrix2 result = new Matrix2();
+	public Matrix22 add(Matrix22 m) {
+		Matrix22 result = new Matrix22();
 		result.m00 = m00 + m.m00;
 		result.m01 = m01 + m.m01;
 		result.m10 = m10 + m.m10;
@@ -102,8 +102,8 @@ public final class Matrix2 {
 	 * @param m the matrix to subtract
 	 * @return a new matrix holding the result
 	 */
-	public Matrix2 sub(Matrix2 m) {
-		Matrix2 result = new Matrix2();
+	public Matrix22 sub(Matrix22 m) {
+		Matrix22 result = new Matrix22();
 		result.m00 = m00 - m.m00;
 		result.m01 = m01 - m.m01;
 		result.m10 = m10 - m.m10;
@@ -117,8 +117,8 @@ public final class Matrix2 {
 	 * @param m the matrix to multiply on the right hand
 	 * @return a new matrix holding the result
 	 */
-	public Matrix2 mul(Matrix2 m) {
-		Matrix2 result = new Matrix2();
+	public Matrix22 mul(Matrix22 m) {
+		Matrix22 result = new Matrix22();
 		result.m00 = m00 * m.m00 + m10 * m.m01;
 		result.m01 = m01 * m.m00 + m11 * m.m01;
 		result.m10 = m00 * m.m10 + m10 * m.m11;
@@ -131,8 +131,8 @@ public final class Matrix2 {
 	 * @param v the vector to multiply
 	 * @return a new matrix holding the result
 	 */
-	public Vector2 mul(Vector2 v) {
-		Vector2 result = new Vector2();
+	public Vector2D mul(Vector2D v) {
+		Vector2D result = new Vector2D();
 		result.x = m00 * v.x + m01 * v.y;
 		result.y = m10 * v.x + m11 * v.y;
 		return result;
@@ -143,8 +143,8 @@ public final class Matrix2 {
 	 * @param s the scalar to multiply with
 	 * @return a new matrix holding the result
 	 */
-	public Matrix2 mul(float s) {
-		Matrix2 result = new Matrix2();
+	public Matrix22 mul(float s) {
+		Matrix22 result = new Matrix22();
 		result.m00 = m00 * s;
 		result.m01 = m01 * s;
 		result.m10 = m10 * s;
@@ -156,8 +156,8 @@ public final class Matrix2 {
 	 * Get the transpose of this matrix.
 	 * @return a new matrix holding the result
 	 */
-	public Matrix2 transpose() {
-		Matrix2 result = new Matrix2();
+	public Matrix22 transpose() {
+		Matrix22 result = new Matrix22();
 		result.m00 = m00;
 		result.m01 = m10;
 		result.m10 = m01;
@@ -178,8 +178,8 @@ public final class Matrix2 {
 	 * @return a new matrix holding the result
 	 * @throws IllegalStateException if the matrix is singular i.e. the determinant is zero.
 	 */
-	public Matrix2 inverse() throws IllegalStateException {
-		Matrix2 result = new Matrix2();
+	public Matrix22 inverse() throws IllegalStateException {
+		Matrix22 result = new Matrix22();
 		float det = determinant();
 		if (det == 0f) {
 			throw new IllegalStateException("Cannot compute the inverse of a singular matrix.");
@@ -197,8 +197,8 @@ public final class Matrix2 {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Matrix2) {
-			Matrix2 mat = (Matrix2) obj;
+		if (obj instanceof Matrix22) {
+			Matrix22 mat = (Matrix22) obj;
 			if (m00 != mat.m00)
 				return false;
 			if (m01 != mat.m01)

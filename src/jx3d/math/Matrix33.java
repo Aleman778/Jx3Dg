@@ -17,7 +17,7 @@ import jx3d.util.BufferUtils;
  * @since 1.0
  * @author Aleman778
  */
-public final class Matrix3 {
+public final class Matrix33 {
 
 	public float m00, m01, m02;
 	public float m10, m11, m12;
@@ -26,7 +26,7 @@ public final class Matrix3 {
 	/**
 	 * Default Constructor. The matrix is an identity matrix as default.
 	 */
-	public Matrix3() {
+	public Matrix33() {
 		m00 = 1;
 		m11 = 1;
 		m22 = 1;
@@ -44,7 +44,7 @@ public final class Matrix3 {
 	 * @param m21 matrix entry row 3, column 2
 	 * @param m22 matrix entry row 3, column 3
 	 */
-	public Matrix3(float m00, float m01, float m02,
+	public Matrix33(float m00, float m01, float m02,
 				   float m10, float m11, float m12,
 				   float m20, float m21, float m22) {
 		this.m00 = m00;
@@ -62,7 +62,7 @@ public final class Matrix3 {
 	 * Constructor used to create a new copy of the provided matrix.
 	 * @param copy the matrix to copy from
 	 */
-	public Matrix3(Matrix3 copy) {
+	public Matrix33(Matrix33 copy) {
 		this.m00 = copy.m00;
 		this.m01 = copy.m01;
 		this.m02 = copy.m02;
@@ -78,7 +78,7 @@ public final class Matrix3 {
 	 * Constructor.
 	 * @param entries float array containing at least 9 elements
 	 */
-	public Matrix3(float[] entries) {
+	public Matrix33(float[] entries) {
 		if (entries.length < 9) {
 			throw new IllegalArgumentException("A 3x3 matrix requires at least 9 elements as an argument (Found: " + entries.length + ").");
 		}
@@ -99,7 +99,7 @@ public final class Matrix3 {
 	 * @param v the vector to translate to
 	 * @return a new matrix holding the result
 	 */
-	public static final Matrix3 createTranslation(Vector2 v) {
+	public static final Matrix33 createTranslation(Vector2D v) {
 		return createTranslation(v.x, v.y);
 	}
 	
@@ -109,8 +109,8 @@ public final class Matrix3 {
 	 * @param y the y component of the translation
 	 * @return a new matrix holding the result
 	 */
-	public static final Matrix3 createTranslation(float x, float y) {
-		Matrix3 result = new Matrix3();
+	public static final Matrix33 createTranslation(float x, float y) {
+		Matrix33 result = new Matrix33();
 		result.m02 = x;
 		result.m12 = y;
 		return result;
@@ -120,8 +120,8 @@ public final class Matrix3 {
 	 * Create a transformation matrix that performs a rotation in the XY-plane.
 	 * @return a new matrix holding the transformation
 	 */
-	public static final Matrix3 createRotationXY(float angle) {
-		Matrix3 result = new Matrix3();
+	public static final Matrix33 createRotationXY(float angle) {
+		Matrix33 result = new Matrix33();
 		result.m00 = (float)  Math.cos(angle);
 		result.m01 = (float) -Math.sin(angle);
 		result.m10 = (float)  Math.sin(angle);
@@ -133,8 +133,8 @@ public final class Matrix3 {
 	 * Create a transformation matrix that performs a rotation in the XZ-plane.
 	 * @return a new matrix holding the transformation
 	 */
-	public static final Matrix3 createRotationXZ(float angle) {
-		Matrix3 result = new Matrix3();
+	public static final Matrix33 createRotationXZ(float angle) {
+		Matrix33 result = new Matrix33();
 		result.m00 = (float)  Math.cos(angle);
 		result.m02 = (float)  Math.sin(angle);
 		result.m20 = (float) -Math.sin(angle);
@@ -146,8 +146,8 @@ public final class Matrix3 {
 	 * Create a transformation matrix that performs a rotation in the YZ-plane.
 	 * @return a new matrix holding the transformation
 	 */
-	public static final Matrix3 createRotationYZ(float angle) {
-		Matrix3 result = new Matrix3();
+	public static final Matrix33 createRotationYZ(float angle) {
+		Matrix33 result = new Matrix33();
 		result.m11 = (float)  Math.cos(angle);
 		result.m12 = (float) -Math.sin(angle);
 		result.m21 = (float)  Math.sin(angle);
@@ -162,8 +162,8 @@ public final class Matrix3 {
 	 * @param z the z component of the scaling
 	 * @return a new matrix holding the transformation
 	 */
-	public static final Matrix3 createScale(float x, float y, float z) {
-		Matrix3 result = new Matrix3();
+	public static final Matrix33 createScale(float x, float y, float z) {
+		Matrix33 result = new Matrix33();
 		result.m00 = x;
 		result.m11 = y;
 		result.m22 = z;
@@ -175,8 +175,8 @@ public final class Matrix3 {
 	 * @param m the matrix to add
 	 * @return a new matrix holding the result
 	 */
-	public Matrix3 add(Matrix3 mat) {
-		Matrix3 result = new Matrix3();
+	public Matrix33 add(Matrix33 mat) {
+		Matrix33 result = new Matrix33();
 		result.m00 = m00 + mat.m00;
 		result.m01 = m01 + mat.m01;
 		result.m02 = m02 + mat.m02;
@@ -194,8 +194,8 @@ public final class Matrix3 {
 	 * @param m the matrix to add
 	 * @return a new matrix holding the result
 	 */
-	public Matrix3 sub(Matrix3 mat) {
-		Matrix3 result = new Matrix3();
+	public Matrix33 sub(Matrix33 mat) {
+		Matrix33 result = new Matrix33();
 		result.m00 = m00 - mat.m00;
 		result.m01 = m01 - mat.m01;
 		result.m02 = m02 - mat.m02;
@@ -214,8 +214,8 @@ public final class Matrix3 {
 	 * @param m the matrix to multiply on the right hand
 	 * @return a new matrix holding the result 
 	 */
-	public Matrix3 mul(Matrix3 m) {
-		Matrix3 result = new Matrix3();
+	public Matrix33 mul(Matrix33 m) {
+		Matrix33 result = new Matrix33();
 		result.m00 = this.m00 * m.m00 + this.m10 * m.m01 + this.m20 * m.m02;
 		result.m01 = this.m01 * m.m00 + this.m11 * m.m01 + this.m21 * m.m02;                                                                            
 		result.m02 = this.m02 * m.m00 + this.m12 * m.m01 + this.m22 * m.m02;
@@ -234,8 +234,8 @@ public final class Matrix3 {
 	 * @param v the vector to multiply
 	 * @return a new vector holding the result 
 	 */
-	public Vector3 mul(Vector3 v) {
-		Vector3 result = new Vector3();
+	public Vector3D mul(Vector3D v) {
+		Vector3D result = new Vector3D();
 		result.x = this.m00 * v.x + this.m01 * v.y + this.m02 * v.z;
 		result.y = this.m10 * v.x + this.m11 * v.y + this.m12 * v.z;
 		result.z = this.m20 * v.x + this.m21 * v.y + this.m22 * v.z;
@@ -248,8 +248,8 @@ public final class Matrix3 {
 	 * @param s the scalar to multiply with
 	 * @return a new matrix holding the result
 	 */
-	public Matrix3 mul(float s) {
-		Matrix3 result = new Matrix3();
+	public Matrix33 mul(float s) {
+		Matrix33 result = new Matrix33();
 		result.m00 = m00 * s;
 		result.m01 = m01 * s;
 		result.m02 = m02 * s;
@@ -267,8 +267,8 @@ public final class Matrix3 {
 	 * Get the transpose of this matrix.
 	 * @return a new matrix holding the result
 	 */
-	public Matrix3 transpose() {
-		Matrix3 result = new Matrix3();
+	public Matrix33 transpose() {
+		Matrix33 result = new Matrix33();
 		result.m00 = m00;
 		result.m01 = m10;
 		result.m02 = m20;
@@ -297,8 +297,8 @@ public final class Matrix3 {
 	 * @return a new matrix holding the result
 	 * @throws IllegalStateException if the matrix is singular i.e. the determinant is zero.
 	 */
-	public Matrix3 inverse() throws IllegalStateException {
-		Matrix3 result = new Matrix3();
+	public Matrix33 inverse() throws IllegalStateException {
+		Matrix33 result = new Matrix33();
 		float det = determinant();
 		if (det == 0f) {
 			throw new IllegalStateException("Cannot compute the inverse of a singular matrix.");
@@ -321,8 +321,8 @@ public final class Matrix3 {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Matrix3) {
-			Matrix3 mat = (Matrix3) obj;
+		if (obj instanceof Matrix33) {
+			Matrix33 mat = (Matrix33) obj;
 			if (m00 != mat.m00)
 				return false;
 			if (m01 != mat.m01)
