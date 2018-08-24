@@ -49,6 +49,9 @@ public class GLGraphics extends Graphics {
 	 */
 	private GLCapabilities capabilities;
 	
+	/**
+	 * Debug process callback.
+	 */
 	private Callback debugProc;
 	
 	/**
@@ -71,8 +74,6 @@ public class GLGraphics extends Graphics {
 		
 		initialized = false;
 		capabilities = GL.createCapabilities();
-
-		debugProc = GLUtil.setupDebugMessageCallback();
 		
 		if (capabilities.OpenGL30) {
 			gl30 = new LwjglGL30();
@@ -83,7 +84,7 @@ public class GLGraphics extends Graphics {
 		}
 		
 		//DEBUG REMOVE LATER
-		Callback callback = GLUtil.setupDebugMessageCallback(System.out);
+		debugProc = GLUtil.setupDebugMessageCallback(System.out);
 	}
 
 	@Override
@@ -136,7 +137,6 @@ public class GLGraphics extends Graphics {
 		Shader shader = new GLSLShader(gl20);
 		shader.add(FRAGMENT_SHADER, source);
 		shader.setup();
-		
 		return shader;
 	}
 

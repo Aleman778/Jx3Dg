@@ -10,7 +10,12 @@ import jx3d.desktop.GlfwDisplay;
 import jx3d.desktop.LwjglGL30;
 import jx3d.graphics.*;
 import jx3d.graphics.opengl.*;
+import jx3d.math.Matrix33;
+import jx3d.math.Matrix44;
 import jx3d.math.Quaternion;
+import jx3d.math.Transform;
+import jx3d.math.Transform2D;
+import jx3d.math.Vector2D;
 import jx3d.math.Vector3D;
 
 /**
@@ -26,6 +31,7 @@ public class TestApplication extends GlfwDisplay {
 	private Image image;
 	private Texture2D tex;
 	private Transform t;
+	private Transform2D t2d;
 	
 	public TestApplication(String title, int width, int height) {
 		super(title, width, height);
@@ -34,10 +40,10 @@ public class TestApplication extends GlfwDisplay {
 	@Override
 	public void setup() {
 		float[] vertices = {
-				-0.5f, -0.5f, 0.0f, 0.0f,
-				 0.5f, -0.5f, 2.0f, 0.0f,
-				 0.5f,  0.5f, 2.0f, 1.0f,
-				-0.5f,  0.5f, 0.0f, 1.0f
+				0,   0,   0, 0,
+				418, 0,   1, 0,
+				418, 418, 1, 1,
+				0,   418, 0, 1
 		};
 //		float[] vertices = {
 //					-1.0f, -1.0f, 0.0f, 0.0f,
@@ -111,24 +117,79 @@ public class TestApplication extends GlfwDisplay {
 		//tex.generateMipmaps();
 		
 		
+		//Transformation in 2D
+		t2d = new Transform2D();
+		//t2d.translate(new Vector2D(618, 418));
+		t2d.setFix(new Vector2D(209, 209));
+		t2d.rotate(45);
+		System.out.println(t2d.getMapping());
+		
+		
 		//Transformation
 		t = new Transform();
-		//t.setPos(new Vector3D(5, 0, 0));
-		//t.scale(new Vector3D(0.1f, 0.6f, 0.5f));
-		//t.rotate(Quaternion.euler(0, 0, 0));
-		System.out.println(t.getMapping());
-		shader.set("transform", t.getMapping());
+		t.translate(new Vector3D(120, 120, 0));
+		
+		//Perspective matrix
+		Matrix44 perspective = new Matrix44();
+		perspective = perspective.perspective(90, getAspectRatio(), -1, 1000);
+		
+		//Orthographic matrix
+		Matrix44 ortho = new Matrix44();
+		ortho = ortho.orthographic(0, getWidth(), getHeight(), 0, -1000, 1000);
+		
+		//shader.set("projection", perspective);
+		shader.set("projection", ortho);
+		graphics.viewport(0, 0, getWidth(), getHeight());
+		
+		//APPLY TRANSFORMATION
+//		shader.set("transform", t.getMapping());
+		shader.set("transform", toMatrix44(t2d.getMapping())); //2d mapping
+		
+		
 	}
+	
+	public Matrix44 toMatrix44(Matrix33 mat) {
+		Matrix44 result = new Matrix44();
+		result.m00 = mat.m00;
+		result.m01 = mat.m01;
+		result.m10 = mat.m10;
+		result.m11 = mat.m11;
+		result.m20 = mat.m20;
+		result.m21 = mat.m21;
+		result.m22 = mat.m22;
+		result.m03 = mat.m02;
+		result.m13 = mat.m12;
+		return result;
+	}
+	
+	float x = 0;
 
 	@Override
 	public void draw() {
-		t.rotate(Quaternion.euler(0, 0, 0.01f));
-		//t.scale(new Vector3D(1.01f, 1f, 1f));
+		float scl = (float) Math.sin(x) * 2.0f;
+
+		Matrix44 ortho = new Matrix44().orthographic(0, getWidth(), getHeight(), 0, -1000, 1000);
+				
+	
+		x += 0.01f;
+		t.setScale(new Vector3D(scl, scl / 2.0f, 1));
+		t.rotate(Quaternion.euler(0.03f, 0.01f, 0.04f));
+		t.setPos(new Vector3D(getWidth() / 2, getHeight() / 2, 0));
+		//t.validate();
+		//shader.set("transform", t.getMapping());
+		//shader.set("transform", new Matrix44().translate(100, 200, 0));
+		
+		t2d.rotate(0.01f);
+		
+		shader.set("projection", ortho);
 		shader.set("transform", t.getMapping());
-		graphics.background(0.0f, 0.5f, 1.0f, 1.0f);
+
+
+		graphics.background(0.0f, 0.0f, 0.0f, 1.0f);
 		shader.enable();
 		tex.bind();
 		graphics.render(TRIANGLES, vao, ibo);
+
 	}
 	
 	public static void main(String[] args) {

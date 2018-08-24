@@ -1,10 +1,11 @@
-package jx3d.core;
+package test;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import jx3d.core.Constants;
 import jx3d.desktop.DesktopFiles;
 
 /**

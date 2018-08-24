@@ -14,6 +14,8 @@ import jx3d.util.BufferUtils;
  */
 public class Vector3D {
 
+	public static final Vector3D ZERO = new Vector3D(0, 0, 0);
+	
 	/**
 	 * The x component of the three dimensional vector.
 	 */

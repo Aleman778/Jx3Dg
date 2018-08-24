@@ -98,24 +98,36 @@ public class GlfwDisplay extends Display implements Runnable {
 	@Override
 	public void run() {
 		createWindow();
-		glfwMakeContextCurrent(window);
 		display = this;
-		graphics.init();
-		setup();
 		
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				glfwMakeContextCurrent(window);
+				graphics.init();
+
+				setup();
+				
+				while (!shouldClose()) {
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					//glfwPollEvents();
+					glfwSwapBuffers(window);
+					draw();
+				}
+			}
+		}).start();
+
 		synchronized (lock) {
 			lock.notify();
 		}
-		
+
 		while (!shouldClose()) {
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			glfwPollEvents();
-			glfwSwapBuffers(window);
-			draw();
+			glfwWaitEvents();
 		}
 	}
 	

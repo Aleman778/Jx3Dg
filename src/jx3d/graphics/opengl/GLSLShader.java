@@ -175,7 +175,7 @@ public class GLSLShader extends Shader {
 				return null;
 		} else {
 			if (!uniform.set(value))
-				return null;
+				return uniform;
 		}
 		return uniform;
 	}

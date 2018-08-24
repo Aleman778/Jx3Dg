@@ -8,10 +8,11 @@ out vs_out {
 	vec2 texcoord;
 } attr;
 
+uniform mat4 projection;
 uniform mat4 transform;
 
 void main() {
 	attr.position = position;
 	attr.texcoord = texcoord;
-	gl_Position = transform * vec4(position, 1.0f);
+	gl_Position = projection * transform * vec4(position, 1.0f);
 }

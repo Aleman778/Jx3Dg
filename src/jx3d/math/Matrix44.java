@@ -256,11 +256,9 @@ public final class Matrix44 {
      * @param top the position of the top frustum edge
      * @param near the near clipping plane distance
      * @param far the far clipping plane distance
-     * @param range when <code>true</code> the z range of <code>[0..+1]</code> is used (Vulkan and Direct3D) or
-     * 				when <code>false</code> the z range of <code>[-1..+1]</code> is used (OpenGL)
      * @return a new matrix holding the result
      */
-    public Matrix44 orthographic(float left, float right, float bottom, float top, float near, float far, boolean range) {
+    public final Matrix44 orthographic(float left, float right, float bottom, float top, float near, float far) {
         Matrix44 result = new Matrix44();
         result.m00 = 2.0f / (right - left);
         result.m11 = 2.0f / (top - bottom);
@@ -456,7 +454,6 @@ public final class Matrix44 {
 		result.m30 = m00 * m.m30 + m10 * m.m31 + m20 * m.m32;
 		result.m31 = m01 * m.m30 + m11 * m.m31 + m21 * m.m32;
 		result.m32 = m02 * m.m30 + m12 * m.m31 + m22 * m.m32;
-		result.m33 = m33;
 		return result;
 	}
 	
@@ -713,11 +710,15 @@ public final class Matrix44 {
 				return false;
 			if (m02 != mat.m02)
 				return false;
+			if (m03 != mat.m03)
+				return false;
 			if (m10 != mat.m10)
 				return false;
 			if (m11 != mat.m11)
 				return false;
 			if (m12 != mat.m12)
+				return false;
+			if (m13 != mat.m13)
 				return false;
 			if (m20 != mat.m20)
 				return false;
@@ -725,7 +726,17 @@ public final class Matrix44 {
 				return false;
 			if (m22 != mat.m22)
 				return false;
-
+			if (m23 != mat.m23)
+				return false;
+			if (m30 != mat.m30)
+				return false;
+			if (m31 != mat.m31)
+				return false;
+			if (m32 != mat.m32)
+				return false;
+			if (m33 != mat.m33)
+				return false;
+			
 			return true;
 		}
 		return false;

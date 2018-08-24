@@ -31,6 +31,7 @@ public final class Matrix22 {
 	
 	/**
 	 * Constructor,
+	 * 
 	 * @param m00 matrix entry row 1, column 1
 	 * @param m01 matrix entry row 1, column 2
 	 * @param m10 matrix entry row 2, column 1
@@ -57,112 +58,159 @@ public final class Matrix22 {
 	/**
 	 * Create a transformation matrix that performs a rotation
 	 * by the given angle <code>a</code>.
-	 * @param a the angle of the rotation (in radians)
-	 * @return a new matrix holding the transformation
+	 * @param angle the angle of the rotation (in radians)
+	 * @return a matrix holding the transformation
 	 */
-	public static final Matrix22 createRotation(float a) {
-		Matrix22 result = new Matrix22();
-		result.m00 = (float)  Math.cos(a);
-		result.m01 = (float) -Math.sin(a);
-		result.m10 = (float)  Math.sin(a);
-		result.m11 = (float)  Math.cos(a);
-		return result;
+	public Matrix22 rotate(float angle) {
+		return rotate(angle, this);
+	}
+	
+	/**
+	 * Create a transformation matrix that performs a rotation
+	 * by the given angle <code>a</code>.
+	 * Then the result is stored in the given <code>dest</code> matrix.
+	 * @param angle the angle of the rotation (in radians)
+	 * @param dest the destination matrix
+	 * @return a matrix holding the transformation
+	 */
+	public Matrix22 rotate(float angle, Matrix22 dest) {
+		dest.m00 = (float)  Math.cos(angle);
+		dest.m01 = (float) -Math.sin(angle);
+		dest.m10 = (float)  Math.sin(angle);
+		dest.m11 = (float)  Math.cos(angle);
+		return dest;
 	}
 	
 	/**
 	 * Create a transformation matrix that performs a scaling by the
 	 * given values <code>(x, y)</code>. 
-	 * @param x the x component of the scaling
-	 * @param y the y component of the scaling
-	 * @return a new matrix holding the transformation
+	 * @param v the scaling vector
+	 * @return a matrix holding the transformation
 	 */
-	public static final Matrix22 createScale(float x, float y) {
-		Matrix22 result = new Matrix22();
-		result.m00 = x;
-		result.m11 = y;
-		return result;
+	public Matrix22 scale(Vector2D v) {
+		return scale(v, this);
 	}
 	
 	/**
-	 * Add this matrix by the given matrix <code>m</code> component-wise.
-	 * @param m the matrix to add
-	 * @return a new matrix holding the result
+	 * Create a transformation matrix that performs a scaling by the
+	 * given values <code>(x, y)</code>. 
+	 * Then the result is stored in the given <code>dest</code> matrix.
+	 * @param v the scaling vector
+	 * @param dest the destination matrix
+	 * @return a matrix holding the transformation
 	 */
-	public Matrix22 add(Matrix22 m) {
-		Matrix22 result = new Matrix22();
-		result.m00 = m00 + m.m00;
-		result.m01 = m01 + m.m01;
-		result.m10 = m10 + m.m10;
-		result.m11 = m11 + m.m11;
-		return result;
+	public Matrix22 scale(Vector2D v, Matrix22 dest) {
+		dest.m00 = v.x;
+		dest.m11 = v.y;
+		return dest;
+	}
+	
+	/**
+	 * Add this matrix by the given matrix <code>other</code> component-wise.
+	 * @param other the other matrix to add
+	 * @return a matrix holding the result
+	 */
+	public Matrix22 add(Matrix22 other) {
+		return add(other, this);
+	}
+
+	/**
+	 * Add this matrix by the given matrix <code>other</code> component-wise
+	 * and then the result is stored in the given <code>dest</code> matrix.
+	 * @param other the other matrix to add
+	 * @param dest the destination matrix
+	 * @return a matrix holding the result
+	 */
+	public Matrix22 add(Matrix22 other, Matrix22 dest) {
+		dest.m00 = m00 + other.m00;
+		dest.m01 = m01 + other.m01;
+		dest.m10 = m10 + other.m10;
+		dest.m11 = m11 + other.m11;
+		return dest;
 	}
 	
 	/**
 	 * Subtract this matrix by the given matrix <code>m</code> component-wise.
-	 * @param m the matrix to subtract
-	 * @return a new matrix holding the result
+	 * @param other the matrix to subtract
+	 * @return a matrix holding the result
 	 */
-	public Matrix22 sub(Matrix22 m) {
-		Matrix22 result = new Matrix22();
-		result.m00 = m00 - m.m00;
-		result.m01 = m01 - m.m01;
-		result.m10 = m10 - m.m10;
-		result.m11 = m11 - m.m11;
-		return result;
+	public Matrix22 sub(Matrix22 other) {
+		return sub(other, this);
 	}
 	
 	/**
-	 * Multiply this matrix by the given matrix <code>m</code>.
-	 * This matrix will be on the left hand.
-	 * @param m the matrix to multiply on the right hand
-	 * @return a new matrix holding the result
+	 * Subtract this matrix by the given matrix <code>m</code> component-wise
+	 * and then the result is stored in the given <code>dest</code> matrix.
+	 * @param other the matrix to subtract
+	 * @param dest the destination matrix
+	 * @return a matrix holding the result
 	 */
-	public Matrix22 mul(Matrix22 m) {
-		Matrix22 result = new Matrix22();
-		result.m00 = m00 * m.m00 + m10 * m.m01;
-		result.m01 = m01 * m.m00 + m11 * m.m01;
-		result.m10 = m00 * m.m10 + m10 * m.m11;
-		result.m11 = m01 * m.m10 + m11 * m.m11;
-		return result;
-	}
-
-	/**
-	 * Multiply this matrix by the given vector <code>v</code>.
-	 * @param v the vector to multiply
-	 * @return a new matrix holding the result
-	 */
-	public Vector2D mul(Vector2D v) {
-		Vector2D result = new Vector2D();
-		result.x = m00 * v.x + m01 * v.y;
-		result.y = m10 * v.x + m11 * v.y;
-		return result;
+	public Matrix22 sub(Matrix22 other, Matrix22 dest) {
+		dest.m00 = m00 - other.m00;
+		dest.m01 = m01 - other.m01;
+		dest.m10 = m10 - other.m10;
+		dest.m11 = m11 - other.m11;
+		return dest;
 	}
 
 	/**
 	 * Multiply this matrix by the given scalar <code>s</code> component-wise.
 	 * @param s the scalar to multiply with
-	 * @return a new matrix holding the result
+	 * @return a matrix holding the result
 	 */
 	public Matrix22 mul(float s) {
+		return mul(s, this);
+	}
+	
+	/**
+	 * Multiply this matrix by the given scalar <code>s</code> component-wise
+	 * and then the result is stored in the given <code>dest</code> matrix.
+	 * @param s the scalar to multiply with
+	 * @param dest the destination matrix
+	 * @return a matrix holding the result
+	 */
+	public Matrix22 mul(float s, Matrix22 dest) {
+		dest.m00 = m00 * s;
+		dest.m01 = m01 * s;
+		dest.m10 = m10 * s;
+		dest.m11 = m11 * s;
+		return dest;
+	}
+	
+	/**
+	 * Multiply this matrix by the given matrix <code>m</code>.
+	 * This matrix will be on the left hand.
+	 * @param right the matrix to multiply on the right hand
+	 * @return a new matrix holding the result
+	 */
+	public Matrix22 mul(Matrix22 right) {
 		Matrix22 result = new Matrix22();
-		result.m00 = m00 * s;
-		result.m01 = m01 * s;
-		result.m10 = m10 * s;
-		result.m11 = m11 * s;
+		result.m00 = m00 * right.m00 + m10 * right.m01;
+		result.m01 = m01 * right.m00 + m11 * right.m01;
+		result.m10 = m00 * right.m10 + m10 * right.m11;
+		result.m11 = m01 * right.m10 + m11 * right.m11;
 		return result;
 	}
 	
 	/**
 	 * Get the transpose of this matrix.
-	 * @return a new matrix holding the result
+	 * @return a matrix holding the result
 	 */
 	public Matrix22 transpose() {
-		Matrix22 result = new Matrix22();
-		result.m00 = m00;
-		result.m01 = m10;
-		result.m10 = m01;
-		result.m11 = m11;
-		return result;
+		return transpose(this);
+	}
+	
+	/**
+	 * Get the transpose of this matrix
+	 * and then the result is stored in the given <code>dest</code> matrix.
+	 * @return a matrix holding the result
+	 */
+	public Matrix22 transpose(Matrix22 dest) {
+		dest.m00 = m00;
+		dest.m01 = m10;
+		dest.m10 = m01;
+		dest.m11 = m11;
+		return dest;
 	}
 	
 	/**
@@ -175,10 +223,11 @@ public final class Matrix22 {
 	
 	/**
 	 * Get the inverse of this matrix.
+	 * 
 	 * @return a new matrix holding the result
 	 * @throws IllegalStateException if the matrix is singular i.e. the determinant is zero.
 	 */
-	public Matrix22 inverse() throws IllegalStateException {
+	public Matrix22 inverse(Matrix22 dest) throws IllegalStateException {
 		Matrix22 result = new Matrix22();
 		float det = determinant();
 		if (det == 0f) {
@@ -197,21 +246,24 @@ public final class Matrix22 {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Matrix22) {
-			Matrix22 mat = (Matrix22) obj;
-			if (m00 != mat.m00)
-				return false;
-			if (m01 != mat.m01)
-				return false;
-			if (m10 != mat.m10)
-				return false;
-			if (m11 != mat.m11)
-				return false;
-			
+		if (obj == this)
 			return true;
-		}
+		if (obj == null)
+			return false;
+		if (!(obj instanceof Matrix22))
+			return false;
 		
-		return false;
+		Matrix22 mat = (Matrix22) obj;
+		if (Float.floatToIntBits(m00) != Float.floatToIntBits(mat.m00))
+			return false;
+		if (Float.floatToIntBits(m01) != Float.floatToIntBits(mat.m01))
+			return false;
+		if (Float.floatToIntBits(m10) != Float.floatToIntBits(mat.m10))
+			return false;
+		if (Float.floatToIntBits(m11) != Float.floatToIntBits(mat.m11))
+			return false;
+		
+		return true;
 	}
 	
 	/**
@@ -225,6 +277,6 @@ public final class Matrix22 {
 	
 	@Override
 	public String toString() {
-		return String.format("Matrix2: [%.3f %.3f]\n%9s[%.3f %.3f]", m00, m01, "", m10, m11);
+		return String.format("Matrix2: [%.1f %.1f]\n%9s[%.1f %.1f]", m00, m01, "", m10, m11);
 	}
 }

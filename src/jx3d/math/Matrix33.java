@@ -99,8 +99,8 @@ public final class Matrix33 {
 	 * @param v the vector to translate to
 	 * @return a new matrix holding the result
 	 */
-	public static final Matrix33 createTranslation(Vector2D v) {
-		return createTranslation(v.x, v.y);
+	public final Matrix33 translate(Vector2D v) {
+		return translate(v.x, v.y);
 	}
 	
 	/**
@@ -109,65 +109,73 @@ public final class Matrix33 {
 	 * @param y the y component of the translation
 	 * @return a new matrix holding the result
 	 */
-	public static final Matrix33 createTranslation(float x, float y) {
+	public final Matrix33 translate(float x, float y) {
 		Matrix33 result = new Matrix33();
 		result.m02 = x;
 		result.m12 = y;
-		return result;
+		return mul(result);
 	}
 	
 	/**
 	 * Create a transformation matrix that performs a rotation in the XY-plane.
 	 * @return a new matrix holding the transformation
 	 */
-	public static final Matrix33 createRotationXY(float angle) {
+	public final Matrix33 rotateXY(float angle) {
 		Matrix33 result = new Matrix33();
 		result.m00 = (float)  Math.cos(angle);
 		result.m01 = (float) -Math.sin(angle);
 		result.m10 = (float)  Math.sin(angle);
 		result.m11 = (float)  Math.cos(angle);
-		return result;
+		return mul(result);
 	}
 	
 	/**
 	 * Create a transformation matrix that performs a rotation in the XZ-plane.
 	 * @return a new matrix holding the transformation
 	 */
-	public static final Matrix33 createRotationXZ(float angle) {
+	public final Matrix33 rotateXZ(float angle) {
 		Matrix33 result = new Matrix33();
 		result.m00 = (float)  Math.cos(angle);
 		result.m02 = (float)  Math.sin(angle);
 		result.m20 = (float) -Math.sin(angle);
 		result.m22 = (float)  Math.cos(angle);
-		return result;
+		return mulAffine(result);
 	}
 	
 	/**
 	 * Create a transformation matrix that performs a rotation in the YZ-plane.
 	 * @return a new matrix holding the transformation
 	 */
-	public static final Matrix33 createRotationYZ(float angle) {
+	public final Matrix33 rotateYZ(float angle) {
 		Matrix33 result = new Matrix33();
 		result.m11 = (float)  Math.cos(angle);
 		result.m12 = (float) -Math.sin(angle);
 		result.m21 = (float)  Math.sin(angle);
 		result.m22 = (float)  Math.cos(angle);
-		return result;
+		return mulAffine(result);
+	}
+	
+	/**
+	 * Create a transformation matrix that performs a scaling by the given scaling vector.
+	 * @param v the scaling vector
+	 * @return a new matrix holding the transformation
+	 */
+	public final Matrix33 scale(Vector2D v) {
+		return scale(v.x, v.y);
 	}
 
 	/**
-	 * Create a transformation matrix that performs a scaling by the given values <code>(x, y, z)</code>. 
+	 * Create a transformation matrix that performs a scaling by the given values <code>(x, y)</code>. 
 	 * @param x the x component of the scaling
 	 * @param y the y component of the scaling
 	 * @param z the z component of the scaling
 	 * @return a new matrix holding the transformation
 	 */
-	public static final Matrix33 createScale(float x, float y, float z) {
+	public final Matrix33 scale(float x, float y) {
 		Matrix33 result = new Matrix33();
 		result.m00 = x;
 		result.m11 = y;
-		result.m22 = z;
-		return result;
+		return mulAffine(result);
 	}
 	
 	/**
@@ -225,7 +233,65 @@ public final class Matrix33 {
 		result.m20 = this.m00 * m.m20 + this.m10 * m.m21 + this.m20 * m.m22;
 		result.m21 = this.m01 * m.m20 + this.m11 * m.m21 + this.m21 * m.m22;
 		result.m22 = this.m02 * m.m20 + this.m11 * m.m21 + this.m22 * m.m22;
-		
+		return result;
+	}
+	
+	/**
+	 * Multiply this matrix by the given matrix <code>m</code>.
+	 * This matrix will be on the left hand.
+	 * <p>
+	 * This method is an optimized version of {@link #mul(Matrix33)} and assumes that
+	 * <code>this</code> and the given <code>m</code> matrix are both an affine
+	 * transformation matrix (i.e. their last rows are equal to <code>(0, 0, 1)</code>). 
+	 * </p>
+	 * <p>
+	 * The resulting matrix will also be an affine transformation matrix.
+	 * </p>
+	 * @param m the affine transformation matrix to multiply on the right hand
+	 * @return a new matrix holding the result
+	 * @see Matrix33#mul(Matrix33)
+	 */
+	public Matrix33 mulAffine(Matrix33 m) {
+		Matrix33 result = new Matrix33();
+		result.m00 = m00 * m.m00 + m10 * m.m01 + m20 * m.m02;
+		result.m01 = m01 * m.m00 + m11 * m.m01 + m21 * m.m02;
+		result.m02 = m02;
+		result.m10 = m00 * m.m10 + m10 * m.m11 + m20 * m.m12;
+		result.m11 = m01 * m.m10 + m11 * m.m11 + m21 * m.m12; 
+		result.m12 = m12; 
+		result.m20 = m00 * m.m20 + m10 * m.m21 + m20 * m.m22;
+		result.m21 = m01 * m.m20 + m11 * m.m21 + m21 * m.m22;
+		result.m22 = m22;
+		return result;
+	}
+	
+	/**
+	 * Multiply this matrix by the given matrix <code>m</code>.
+	 * This matrix will be on the left hand.
+	 * <p>
+	 * This method is an optimized version of {@link #mul(Matrix33)} and assumes that
+	 * <code>this</code> matrix is an affine transformation matrix (i.e. their last
+	 * rows are equal to <code>(0, 0, 1)</code>) and that the given matrix
+	 * <code>m</code> is a translation matrix.
+	 * </p>
+	 * <p>
+	 * The resulting matrix will also be an affine transformation matrix.
+	 * </p>
+	 * @param m the translation matrix to multiply on the right hand
+	 * @return a new matrix holding the result
+	 * @see Matrix33#mul(Matrix33)
+	 */
+	public Matrix33 mulTranslation(Matrix33 m) {
+		Matrix33 result = new Matrix33();
+		result.m00 = m00;
+		result.m01 = m01;
+		result.m10 = m10;
+		result.m11 = m11;
+		result.m20 = m20;
+		result.m21 = m21;
+		result.m22 = m22;
+		result.m02 = m.m02 + m02;
+		result.m12 = m.m12 + m12;
 		return result;
 	}
 	
@@ -239,7 +305,6 @@ public final class Matrix33 {
 		result.x = this.m00 * v.x + this.m01 * v.y + this.m02 * v.z;
 		result.y = this.m10 * v.x + this.m11 * v.y + this.m12 * v.z;
 		result.z = this.m20 * v.x + this.m21 * v.y + this.m22 * v.z;
-		
 		return result;
 	}
 
@@ -259,7 +324,6 @@ public final class Matrix33 {
 		result.m20 = m20 * s;
 		result.m21 = m21 * s;
 		result.m22 = m22 * s;
-		
 		return result;
 	}
 	
@@ -278,7 +342,6 @@ public final class Matrix33 {
 		result.m20 = m02;
 		result.m21 = m12;
 		result.m22 = m22;
-		
 		return result;
 	}
 	
