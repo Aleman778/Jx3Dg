@@ -18,7 +18,7 @@ public class Transform2D {
 	/**
 	 * The position vector.
 	 */
-	private Vector2D position;
+	private Vector2D pos;
 	
 	/**
 	 * The rotation value.
@@ -48,7 +48,7 @@ public class Transform2D {
 	 */
 	public Transform2D() {
 		fix = new Vector2D();
-		position = new Vector2D();
+		pos = new Vector2D();
 		rotation = 0.0f;
 		scale = new Vector2D(1.0f, 1.0f);
 		mapping = new Matrix33();
@@ -78,15 +78,15 @@ public class Transform2D {
 	 * @return the position vector
 	 */
 	public Vector2D getPos() {
-		return position;
+		return pos;
 	}
 
 	/**
 	 * Set the position of the transformation.
-	 * @param position the new position vector
+	 * @param pos the new position vector
 	 */
 	public void setPos(Vector2D v) {
-		position = v;
+		pos = v;
 		valid = false;
 	}
 	
@@ -95,7 +95,7 @@ public class Transform2D {
 	 * @param v the translation vector
 	 */
 	public void translate(Vector2D v) {
-		position = position.add(v);
+		pos = pos.add(v);
 		valid = false;
 	}
 
@@ -172,9 +172,6 @@ public class Transform2D {
 		if (valid)
 			return;
 		
-		mapping = new Matrix33().translate(fix)
-								.rotateXY(rotation)
-								.translate(fix.inverse());
 		valid = true;
 	}
 	

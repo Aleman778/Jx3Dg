@@ -42,4 +42,15 @@ public class Matrix22Test {
 		assertEquals(m3, m1);
 		assertEquals(m4, m2);
 	}
+	
+	public void testMultiplication() {
+		Matrix22 m1 = new Matrix22(1.0f, 1.5f,
+								   1.0f, 1.5f);
+		Matrix22 m2 = new Matrix22();
+		Matrix22 m3 = new Matrix22();
+		Matrix22 m4 = new Matrix22();
+		
+		m1.mul(2);
+		//m1.mul(2, m2)
+	}
 }
