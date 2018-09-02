@@ -34,7 +34,7 @@ public class OrthographicCamera extends Camera {
 		super(viewport);
 		this.far = far;
 		this.near = near;
-		this.projection = projection.orthographic(left, right, bottom, top, near, far);
+		this.projection = projection.ortho(left, right, bottom, top, near, far);
 		this.valid = false;
 	}
 }

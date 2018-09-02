@@ -2,14 +2,15 @@ package jx3d.graphics.opengl;
 
 import static jx3d.core.Constants.*;
 
-import java.util.HashMap;
-
-import org.lwjgl.opengl.GL11;
-
 import jx3d.graphics.Color;
 import jx3d.graphics.Shader;
 import jx3d.graphics.ShaderException;
-import jx3d.math.*;
+import jx3d.util.BufferUtils;
+
+import java.util.HashMap;
+
+import org.joml.*;
+
 
 /**
  * Represents a shader program written in the OpenGL Shading Language (or GLSL for short).
@@ -101,7 +102,7 @@ public class GLSLShader extends Shader {
 	}
 
 	@Override
-	public void set(String name, Vector2D value) {
+	public void set(String name, Vector2f value) {
 		Uniform uniform = setImpl(name, value, VEC2);
 		if (uniform != null) {
 			gl.uniform2f(uniform.location, value.x, value.y);
@@ -109,7 +110,7 @@ public class GLSLShader extends Shader {
 	}
 
 	@Override
-	public void set(String name, Vector3D value) {
+	public void set(String name, Vector3f value) {
 		Uniform uniform = setImpl(name, value, VEC3);
 		if (uniform != null) {
 			gl.uniform3f(uniform.location, value.x, value.y, value.z);
@@ -117,7 +118,7 @@ public class GLSLShader extends Shader {
 	}
 
 	@Override
-	public void set(String name, Vector4D value) {
+	public void set(String name, Vector4f value) {
 		Uniform uniform = setImpl(name, value, VEC4);
 		if (uniform != null) {
 			gl.uniform4f(uniform.location, value.x, value.y, value.z, value.w);
@@ -125,7 +126,7 @@ public class GLSLShader extends Shader {
 	}
 
 	@Override
-	public void set(String name, Quaternion value) {
+	public void set(String name, Quaternionf value) {
 		Uniform uniform = setImpl(name, value, QUAT);
 		if (uniform != null) {
 			gl.uniform4f(uniform.location, value.x, value.y, value.z, value.w);
@@ -141,26 +142,18 @@ public class GLSLShader extends Shader {
 	}
 
 	@Override
-	public void set(String name, Matrix22 value) {
-		Uniform uniform = setImpl(name, value, MAT2);
-		if (uniform != null) {
-			gl.uniformMatrix2fv(uniform.location, 4, false, value.toFloatBuffer());
-		}
-	}
-
-	@Override
-	public void set(String name, Matrix33 value) {
+	public void set(String name, Matrix3f value) {
 		Uniform uniform = setImpl(name, value, MAT3);
 		if (uniform != null) {
-			gl.uniformMatrix3fv(uniform.location, 12, false, value.toFloatBuffer());
+			gl.uniformMatrix3fv(uniform.location, 12, false, BufferUtils.toFloatBuffer(value));
 		}
 	}
 
 	@Override
-	public void set(String name, Matrix44 value) {
+	public void set(String name, Matrix4f value) {
 		Uniform uniform = setImpl(name, value, MAT4);
 		if (uniform != null) {
-			gl.uniformMatrix4fv(uniform.location, 16, false, value.toFloatBuffer());
+			gl.uniformMatrix4fv(uniform.location, 16, false, BufferUtils.toFloatBuffer(value));
 		}
 	}
 	

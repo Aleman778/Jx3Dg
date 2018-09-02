@@ -1,7 +1,8 @@
 package jx3d.graphics;
 
-import jx3d.math.*;
 import jx3d.util.Disposable;
+
+import org.joml.*;
 
 /**
  * Represents a shader program containing multiple sub shaders.
@@ -84,28 +85,28 @@ public abstract class Shader implements Disposable {
      * @param name the variable name
      * @param value the value of the uniform
      */
-    public abstract void set(String name, Vector2D value);
+    public abstract void set(String name, Vector2f value);
     
     /**
      * Set shader uniform variable value.
      * @param name the variable name
      * @param value the value of the uniform
      */
-    public abstract void set(String name, Vector3D value);
+    public abstract void set(String name, Vector3f value);
     
     /**
      * Set shader uniform variable value.
      * @param name the variable name
      * @param value the value of the uniform
      */
-    public abstract void set(String name, Vector4D value);
+    public abstract void set(String name, Vector4f value);
 
     /**
      * Set shader uniform variable value.
      * @param name the variable name
      * @param vector the value of the uniform
      */
-    public abstract void set(String name, Quaternion value);
+    public abstract void set(String name, Quaternionf value);
     
     /**
      * Set shader uniform variable value.
@@ -113,25 +114,18 @@ public abstract class Shader implements Disposable {
      * @param value the value of the uniform
      */
     public abstract void set(String name, Color value);
-
-    /**
-     * Set shader uniform variable value.
-     * @param name the variable name
-     * @param value the value of the uniform
-     */
-    public abstract void set(String name, Matrix22 value);
     
     /**
      * Set shader uniform variable value.
      * @param name the variable name
      * @param value the value of the uniform
      */
-    public abstract void set(String name, Matrix33 value);
+    public abstract void set(String name, Matrix3f value);
     
     /**
      * Set shader uniform variable value.
      * @param name the variable name
      * @param value the value of the uniform
      */
-    public abstract void set(String name, Matrix44 value);
+    public abstract void set(String name, Matrix4f value);
 }

@@ -8,6 +8,8 @@ import java.nio.IntBuffer;
 import java.nio.LongBuffer;
 import java.nio.ShortBuffer;
 
+import org.joml.*;
+
 /**
  * Buffer utilities is a helper class that create buffers. 
  * @since 1.0
@@ -144,5 +146,18 @@ public class BufferUtils {
         DoubleBuffer result = ByteBuffer.allocateDirect(data.length * Double.BYTES).order(ByteOrder.nativeOrder()).asDoubleBuffer();
         result.put(data).flip();
         return result;
+    }
+    
+    public static FloatBuffer toFloatBuffer(Matrix3f m) {
+    	return BufferUtils.createFloatBuffer(m.m00, m.m01, m.m02,
+    										 m.m10, m.m11, m.m12,
+									 		 m.m20, m.m21, m.m22);
+    }
+
+    public static FloatBuffer toFloatBuffer(Matrix4f m) {
+    	return BufferUtils.createFloatBuffer(m.m00(), m.m01(), m.m02(), m.m03(),
+    										 m.m10(), m.m11(), m.m12(), m.m13(),
+									 		 m.m20(), m.m21(), m.m22(), m.m23(),
+									 		 m.m30(), m.m31(), m.m32(), m.m33());
     }
 }

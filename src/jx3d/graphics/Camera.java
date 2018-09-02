@@ -1,7 +1,8 @@
 package jx3d.graphics;
 
+import org.joml.Matrix4f;
+
 import jx3d.math.Frustum;
-import jx3d.math.Matrix44;
 
 /**
  * Abstract camera class defines basic fields and methods that
@@ -24,17 +25,17 @@ public abstract class Camera {
 	/**
 	 * The view matrix is the cameras movement or rotation.
 	 */
-	protected Matrix44 view;
+	protected Matrix4f view;
 	
 	/**
 	 * The projection matrix is defines how all objects are mapped onto a 2D screen.
 	 */
-	protected Matrix44 projection;
+	protected Matrix4f projection;
 	
 	/**
 	 * The combined matrix is defined as <code>mapping = projection * view</code>.
 	 */
-	protected Matrix44 combined;
+	protected Matrix4f combined;
 	
 	/**
 	 * The far clipping plane distance.
@@ -64,9 +65,9 @@ public abstract class Camera {
 	 */
 	public Camera(Viewport viewport) {
 		 this.viewport = viewport;
-		 this.view = new Matrix44();
-		 this.projection = new Matrix44();
-		 this.combined = new Matrix44();
+		 this.view = new Matrix4f();
+		 this.projection = new Matrix4f();
+		 this.combined = new Matrix4f();
 		 this.valid = true;
 	}
 	
@@ -78,15 +79,15 @@ public abstract class Camera {
 		this.viewport = viewport;
 	}
 	
-	public Matrix44 getView() {
+	public Matrix4f getView() {
 		return view;
 	}
 	
-	public Matrix44 getProjection() {
+	public Matrix4f getProjection() {
 		return projection;
 	}
 	
-	public Matrix44 getMapping() {
+	public Matrix4f getMapping() {
 		validate();
 		return combined;
 	}
