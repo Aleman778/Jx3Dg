@@ -7,9 +7,7 @@ import java.io.InputStream;
 import javax.imageio.ImageIO;
 
 import org.joml.Matrix4f;
-import org.joml.Quaternionf;
 import org.joml.Matrix3f;
-import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import jx3d.desktop.GlfwDisplay;
@@ -31,7 +29,6 @@ public class TestApplication extends GlfwDisplay {
 	private Image image;
 	private Texture2D tex;
 	private Transform t;
-	private Transform2D t2d;
 	
 	public TestApplication(String title, int width, int height) {
 		super(title, width, height);
@@ -75,7 +72,7 @@ public class TestApplication extends GlfwDisplay {
 									 "test/shaders/basic_vertex.glsl");
 		shader.setup();
 		shader.enable();
-		String filename = "test/textures/tex_brick2.jpg";
+		String filename = "test/textures/tex_grass.jpg";
 		InputStream input = display.files.inputStream(filename);
 		
 		if (input == null)
@@ -95,7 +92,6 @@ public class TestApplication extends GlfwDisplay {
 	            int b = (pixels[i] & 0xFF);
 	
 	            pixels[i] = a << 24 | b << 16 | g << 8 | r;
-	            
 	        }
 		} catch (IOException e) {
 			throw new IllegalArgumentException("image " + filename + " is not found.");
@@ -110,21 +106,13 @@ public class TestApplication extends GlfwDisplay {
 		tex = new GLTexture2D(gl, false, false);
 		tex.image(image);
 		tex.setSample(POINT);
-		//tex.setWrapMode(REPEAT, S|T);
-		//tex.generateMipmaps();
-		
-		//Transformation in 2D
-		t2d = new Transform2D();
-		//t2d.translate(new Vector2D(618, 418));
-		t2d.setFix(new Vector2f(209, 209));
-		t2d.rotate(45);
-		
 		
 		//Transformation
 		t = new Transform();
-		t.setOrigin(new Vector3f(228, 228, 0));
-		t.translate(new Vector3f(120, 120, 0));
-		t.scale(new Vector3f(0.5f, 0.5f, 1.0f));
+		t.setOrigin(new Vector3f(209, 209, 0));
+		t.translate(new Vector3f(getWidth()/2.0f, getHeight()/2.0f, 0));
+		t.setScale(new Vector3f(2.0f, 0.1f, 1.0f));
+		//t.setScale(new Vector3f(0.1f, 1.0f, 1.0f));
 		
 		//Perspective projection matrix
 		Matrix4f perspective = new Matrix4f();
@@ -132,7 +120,7 @@ public class TestApplication extends GlfwDisplay {
 		
 		//Orthographic projection matrix
 		Matrix4f ortho = new Matrix4f();
-		ortho = ortho.ortho(0, getWidth(), getHeight(), 0, -1, 1);
+		ortho = ortho.ortho(0, getWidth(), getHeight(), 0, -1000, 1000);
 		
 		//shader.set("projection", perspective);
 		shader.set("projection", ortho);
@@ -158,8 +146,11 @@ public class TestApplication extends GlfwDisplay {
 
 	@Override
 	public void draw() {
-		t.rotate(new Quaternionf().rotateZ(0.01f));
+		//t.rotateXYZ(new Vector3f(0.01f, 0.02f, 0.05f));
+		t.rotateZ(0.01f);
 		shader.set("transform", t.getMapping());
+		shader.set("projection", new Matrix4f().ortho(0, getWidth(), getHeight(), 0, -1000, 1000));
+		graphics.viewport(0, 0, getWidth(), getHeight());
 
 		
 		graphics.background(0.0f, 0.5f, 1.0f, 1.0f);

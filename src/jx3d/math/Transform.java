@@ -44,7 +44,12 @@ public class Transform {
 	 * Valid flag is used to determine if the mapping is up to date
 	 * with the position, rotation and scale values.
 	 */
-	private boolean valid;
+	private boolean validf;
+	
+	/**
+	 * Origin not set flag is used to determine if the origin is changed or not.
+	 */
+	private boolean originf;
 	
 	/**
 	 * Constructor.
@@ -56,7 +61,8 @@ public class Transform {
 		rotation = new Quaternionf();
 		scale = new Vector3f(1.0f, 1.0f, 1.0f);
 		mapping = new Matrix4f();
-		valid = true;
+		validf = true;
+		originf = false;
 	}
 
 	/**
@@ -75,6 +81,7 @@ public class Transform {
 	 */
 	public void setOrigin(Vector3f origin) {
 		this.origin = origin;
+		this.originf = true;
 	}
 	
 	/**
@@ -91,7 +98,7 @@ public class Transform {
 	 */
 	public void setPos(Vector3f v) {
 		position = v;
-		valid = false;
+		validf = false;
 	}
 	
 	/**
@@ -100,7 +107,7 @@ public class Transform {
 	 */
 	public void translate(Vector3f v) {
 		position = position.add(v);
-		valid = false;
+		validf = false;
 	}
 
 	/**
@@ -117,7 +124,7 @@ public class Transform {
 	 */
 	public void setOrientation(Quaternionf q) {
 		rotation = q;
-		valid = false;
+		validf = false;
 	}
 	
 	/**
@@ -126,7 +133,37 @@ public class Transform {
 	 */
 	public void rotate(Quaternionf q) {
 		rotation = rotation.mul(q);
-		valid = false;
+		validf = false;
+	}
+	
+	public void rotateXYZ(Vector3f angles) {
+		rotation.rotateXYZ(angles.x, angles.y, angles.z);
+		validf = false;
+	}
+	
+	public void rotateYXZ(Vector3f angles) {
+		rotation.rotateYXZ(angles.x, angles.y, angles.z);
+		validf = false;
+	}
+	
+	public void rotateZXY(Vector3f angles) {
+		rotation.rotateZYX(angles.x, angles.y, angles.z);
+		validf = false;
+	}
+	
+	public void rotateX(float angle) {
+		rotation.rotateX(angle);
+		validf = false;
+	}
+	
+	public void rotateY(float angle) {
+		rotation.rotateY(angle);
+		validf = false;
+	}
+	
+	public void rotateZ(float angle) {
+		rotation.rotateZ(angle);
+		validf = false;
 	}
 
 	/**
@@ -143,7 +180,7 @@ public class Transform {
 	 */
 	public void setScale(Vector3f v) {
 		scale = v;
-		valid = false;
+		validf = false;
 	}
 	
 	/**
@@ -152,7 +189,7 @@ public class Transform {
 	 */
 	public void scale(Vector3f v) {
 		scale = scale.mul(v);
-		valid = false;
+		validf = false;
 	}
 
 	/**
@@ -162,27 +199,27 @@ public class Transform {
 	 */
 	public Matrix4f getMapping() {
 		validate();
-		return mapping;
+		return new Matrix4f(mapping);
 	}
 	
 	/**
-	 * Validate the transformation matrix if any changes has
+	 * Validate the transformation (mapping) matrix if any changes has
 	 * been made to the transformation.
-	 * <i>Note: </i> the method <code>getMapping()</code> is the 
-	 * validated matrix.
 	 */
-	public void validate() {
-		if (valid)
+	private void validate() {
+		if (validf)
 			return;
 		
-		Vector3f invOrigin = new Vector3f();
-		origin.negate(invOrigin);
-		mapping = new Matrix4f().scale(scale)
-								.translate(origin)
+		Vector3f invOrigin = new Vector3f(origin);
+		invOrigin.mul(scale);
+		invOrigin.negate();
+		System.out.println(invOrigin);
+		mapping = new Matrix4f().translate(position)
 								.rotate(rotation)
 								.translate(invOrigin)
-								.translate(position);
-		valid = true;
+								.scale(scale);
+		//mapping = new Matrix4f().translationRotateScale(position, rotation, scale);
+		validf = true;
 	}
 	
 	@Override

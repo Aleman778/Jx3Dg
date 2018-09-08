@@ -1,7 +1,7 @@
 package jx3d.graphics;
 
 import jx3d.math.Frustum;
-import jx3d.math.Transform2D;
+import jx3d.math.Transform;
 
 /**
  * Camera with an orthographic projection.
@@ -14,7 +14,7 @@ public class OrthographicCamera extends Camera {
 	
 	private Frustum frustum;
 	
-	private Transform2D t;
+	private Transform t;
 	
 	public OrthographicCamera() {
 		this(new Viewport());
