@@ -476,7 +476,7 @@ public class Constants extends Module {
 	/**
 	 * OpenGL profile for version 3.x with the core profile.
 	 */
-	public static final int GL30_PROFILE = 3;
+	public static final int GL30_CORE_PROFILE = 3;
 	
 	/**
 	 * OpenGL profile for version 3.x with the compatibility profile.
@@ -488,7 +488,7 @@ public class Constants extends Module {
 	/**
 	 * OpenGL profile for version 4.x with the core profile.
 	 */
-	public static final int GL40_PROFILE = 5;
+	public static final int GL40_CORE_PROFILE = 5;
 
 	/**
 	 * OpenGL profile for version 4.x with the compatibility profile.

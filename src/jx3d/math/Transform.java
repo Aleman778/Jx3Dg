@@ -1,5 +1,6 @@
 package jx3d.math;
 
+import org.joml.AxisAngle4f;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -136,31 +137,58 @@ public class Transform {
 		validf = false;
 	}
 	
+	/**
+	 * Apply a rotation to <code>this</code> transform rotating the given radians about
+	 * the cartesian base unit axes,called the euler angles using rotation sequence <code>XYZ</code>. 
+	 * @param angles a vector holding all the euler angles in radians
+	 */
 	public void rotateXYZ(Vector3f angles) {
 		rotation.rotateXYZ(angles.x, angles.y, angles.z);
 		validf = false;
 	}
-	
+
+	/**
+	 * Apply a rotation to <code>this</code> transform rotating the given radians about
+	 * the cartesian base unit axes,called the euler angles using rotation sequence <code>YXZ</code>. 
+	 * @param angles a vector holding all the euler angles in radians
+	 */
 	public void rotateYXZ(Vector3f angles) {
 		rotation.rotateYXZ(angles.x, angles.y, angles.z);
 		validf = false;
 	}
-	
+
+	/**
+	 * Apply a rotation to <code>this</code> transform rotating the given radians about
+	 * the cartesian base unit axes,called the euler angles using rotation sequence <code>ZXY</code>. 
+	 * @param angles a vector holding all the euler angles in radians
+	 */
 	public void rotateZXY(Vector3f angles) {
 		rotation.rotateZYX(angles.x, angles.y, angles.z);
 		validf = false;
 	}
-	
+
+	/**
+	 * Apply a rotation to <code>this</code> transform rotating the given radians about the x axis
+	 * @param angle the angle in radians to rotate
+	 */
 	public void rotateX(float angle) {
 		rotation.rotateX(angle);
 		validf = false;
 	}
-	
+
+	/**
+	 * Apply a rotation to <code>this</code> transform rotating the given radians about the y axis
+	 * @param angle the angle in radians to rotate
+	 */
 	public void rotateY(float angle) {
 		rotation.rotateY(angle);
 		validf = false;
 	}
-	
+
+	/**
+	 * Apply a rotation to <code>this</code> transform rotating the given radians about the z axis
+	 * @param angle the angle in radians to rotate
+	 */
 	public void rotateZ(float angle) {
 		rotation.rotateZ(angle);
 		validf = false;
@@ -210,15 +238,17 @@ public class Transform {
 		if (validf)
 			return;
 		
-		Vector3f invOrigin = new Vector3f(origin);
-		invOrigin.mul(scale);
-		invOrigin.negate();
-		System.out.println(invOrigin);
-		mapping = new Matrix4f().translate(position)
-								.rotate(rotation)
-								.translate(invOrigin)
-								.scale(scale);
-		//mapping = new Matrix4f().translationRotateScale(position, rotation, scale);
+		if (originf) {
+			Vector3f invOrigin = new Vector3f(origin);
+			invOrigin.mul(scale);
+			invOrigin.negate();
+			mapping = new Matrix4f().translate(position)
+									.rotate(rotation)
+									.translate(invOrigin)
+									.scale(scale);
+		} else {
+			mapping = new Matrix4f().translationRotateScale(position, rotation, scale);	
+		}
 		validf = true;
 	}
 	

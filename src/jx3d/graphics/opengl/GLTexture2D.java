@@ -151,7 +151,6 @@ public class GLTexture2D extends Texture2D {
 			setMagFilter(GL20.NEAREST);
 			break;
 		case Constants.LINEAR:
-			System.out.println("LINEAR FILTERING");
 			setMinFilter(mipmapping ? GL20.LINEAR_MIPMAP_NEAREST : GL20.LINEAR);
 			setMagFilter(GL20.NEAREST);
 			break;

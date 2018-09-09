@@ -6,10 +6,6 @@ import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
-import org.joml.Matrix4f;
-import org.joml.Matrix3f;
-import org.joml.Vector3f;
-
 import jx3d.desktop.GlfwDisplay;
 import jx3d.desktop.LwjglGL30;
 import jx3d.graphics.*;
@@ -29,6 +25,8 @@ public class TestApplication extends GlfwDisplay {
 	private Image image;
 	private Texture2D tex;
 	private Transform t;
+	private OrthographicCamera camera2D;
+	private PerspectiveCamera camera3D;
 	
 	public TestApplication(String title, int width, int height) {
 		super(title, width, height);
@@ -38,9 +36,9 @@ public class TestApplication extends GlfwDisplay {
 	public void setup() {
 		float[] vertices = {
 				0,   0,   0, 0,
-				418, 0,   1, 0,
-				418, 418, 1, 1,
-				0,   418, 0, 1
+				1, 0,   1, 0,
+				1, 1, 1, 1,
+				0,   1, 0, 1
 		};
 //		float[] vertices = {
 //					-1.0f, -1.0f, 0.0f, 0.0f,
@@ -72,7 +70,7 @@ public class TestApplication extends GlfwDisplay {
 									 "test/shaders/basic_vertex.glsl");
 		shader.setup();
 		shader.enable();
-		String filename = "test/textures/tex_grass.jpg";
+		String filename = "test/textures/tex_brick2.jpg";
 		InputStream input = display.files.inputStream(filename);
 		
 		if (input == null)
@@ -105,53 +103,37 @@ public class TestApplication extends GlfwDisplay {
 
 		tex = new GLTexture2D(gl, false, false);
 		tex.image(image);
-		tex.setSample(POINT);
+		tex.setSample(LINEAR);
 		
 		//Transformation
 		t = new Transform();
-		t.setOrigin(new Vector3f(209, 209, 0));
-		t.translate(new Vector3f(getWidth()/2.0f, getHeight()/2.0f, 0));
-		t.setScale(new Vector3f(2.0f, 0.1f, 1.0f));
+		//t.setOrigin(new Vector3f(209, 209, 0));
+		//t.translate(new Vector3f(getWidth()/2.0f, getHeight()/2.0f, 0));
 		//t.setScale(new Vector3f(0.1f, 1.0f, 1.0f));
 		
 		//Perspective projection matrix
-		Matrix4f perspective = new Matrix4f();
-		perspective = perspective.perspective(90, getAspectRatio(), -1, 1000);
+		camera3D = new PerspectiveCamera();
+		camera3D.setFov(90);
+		camera3D.setAspectRatio((float) getWidth()/(float) getHeight());
+		System.out.println("ar: " + (float) getWidth()/(float) getHeight());
 		
 		//Orthographic projection matrix
-		Matrix4f ortho = new Matrix4f();
-		ortho = ortho.ortho(0, getWidth(), getHeight(), 0, -1000, 1000);
-		
+		camera2D = new OrthographicCamera();
+		camera2D.setOrtho(0, getWidth(), getHeight(), 0);
+
 		//shader.set("projection", perspective);
-		shader.set("projection", ortho);
+		shader.set("projection", camera2D.getMapping());
 		graphics.viewport(0, 0, getWidth(), getHeight());
 		
 		//APPLY TRANSFORMATION
 		shader.set("transform", t.getMapping());
 	}
-	
-	public Matrix4f toMatrix44(Matrix3f mat) {
-		Matrix4f result = new Matrix4f();
-		result._m00(mat.m00);
-		result._m01(mat.m01);
-		result._m10(mat.m10);
-		result._m11(mat.m11);
-		result._m20(mat.m20);
-		result._m21(mat.m21);
-		result._m22(mat.m22);
-		result._m03(mat.m02);
-		result._m13(mat.m12);
-		return result;
-	}
 
 	@Override
 	public void draw() {
-		//t.rotateXYZ(new Vector3f(0.01f, 0.02f, 0.05f));
-		t.rotateZ(0.01f);
+		
 		shader.set("transform", t.getMapping());
-		shader.set("projection", new Matrix4f().ortho(0, getWidth(), getHeight(), 0, -1000, 1000));
-		graphics.viewport(0, 0, getWidth(), getHeight());
-
+		shader.set("projection", camera2D.getMapping());
 		
 		graphics.background(0.0f, 0.5f, 1.0f, 1.0f);
 		shader.enable();
@@ -162,7 +144,7 @@ public class TestApplication extends GlfwDisplay {
 	
 	public static void main(String[] args) {
 		TestApplication display = new TestApplication("jx3D Application", 1280, 720);
-		display.setRenderer(OPENGL_DEBUG); 
+		display.setRenderer(OPENGL_DEBUG, GL30_CORE_PROFILE); 
 		display.setVisible(true);
 	}
 

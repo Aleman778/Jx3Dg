@@ -48,9 +48,14 @@ public abstract class Camera {
 	protected float near;
 	
 	/**
-	 * Valid flag is set if there are any changes to the view or projection matrices.
+	 * Valid Projection flag is set if there are any changes specifically to the projection matrix. 
 	 */
-	protected boolean valid;
+	protected boolean validProj;
+
+	/**
+	 * Valid Projection flag is set if there are any changes specifically to the view matrix. 
+	 */
+	protected boolean validView;
 	
 	/**
 	 * Default constructor.
@@ -61,41 +66,119 @@ public abstract class Camera {
 	
 	/**
 	 * Constructor.
-	 * @param viewport the 
+	 * @param viewport the viewing angle
 	 */
 	public Camera(Viewport viewport) {
 		 this.viewport = viewport;
 		 this.view = new Matrix4f();
 		 this.projection = new Matrix4f();
 		 this.combined = new Matrix4f();
-		 this.valid = true;
+		 this.validView = true;
+		 this.validProj = true;
+		 this.near = -100000;
+		 this.far = 100000;
 	}
 	
+	/**
+	 * Get the viewport used by this camera.
+	 * @return a viewport
+	 */
 	public Viewport getViewport() {
-		return viewport;
+		return new Viewport(viewport);
 	}
 	
+	/**
+	 * Set the viewport to be used by this camera.
+	 * @param viewport the viewport to set
+	 */
 	public void setViewport(Viewport viewport) {
 		this.viewport = viewport;
 	}
 	
-	public Matrix4f getView() {
-		return view;
+	/**
+	 * Get the nearest viewing distance.
+	 * @return the near distance
+	 */
+	public float getNear() {
+		return near;
 	}
 	
+	/**
+	 * Set the nearest viewing distance
+	 * @param near the near distance to set
+	 */
+	public void setNear(float near) {
+		this.near = near;
+		this.validProj = false;
+	}
+	
+	/**
+	 * Get the farthest viewing distance.
+	 * @return the far
+	 */
+	public float getFar() {
+		return far;
+	}
+	
+	/**
+	 * Set the farthest viewing distance
+	 * @param far the far distance to set
+	 */
+	public void setFar(float far) {
+		this.far = far;
+		this.validProj = false;
+	}
+	
+	/**
+	 * Get the view matrix.
+	 * @return a view matrix
+	 */
+	public Matrix4f getView() {
+		return new Matrix4f(view);
+	}
+	
+	/**
+	 * Get the projection matrix.
+	 * @return a projection matrix
+	 */
 	public Matrix4f getProjection() {
 		return projection;
 	}
 	
+	/**
+	 * Get the mapping matrix.
+	 * This is the view and projection matrices combined.
+	 * @return a mapping matrix 
+	 */
 	public Matrix4f getMapping() {
 		validate();
-		return combined;
+		return new Matrix4f(combined);
 	}
 	
-	public void validate() {
-		if (valid)
-			return;
+	/**
+	 * Validate the combined matrix.
+	 */
+	protected void validate() {
+		if (!validProj)
+			validateProjection();
 		
-		combined = projection.mul(view);
+		if (!validView)
+			validateView();
+		
+		if (!validProj || !validView)
+			projection.mul(view, combined);
+		
+		validProj = true;
+		validView = true;
 	}
+	
+	/**
+	 * Validates the view matrix.
+	 */
+	protected abstract void validateProjection();
+	
+	/**
+	 * Validates the projection matrix.
+	 */
+	protected abstract void validateView();
 }
