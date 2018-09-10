@@ -13,7 +13,7 @@ public abstract class Module {
 	/**
 	 * The handle to the display that this module lives in.
 	 */
-	public Display display;
+	public Window display;
 	
 	/**
 	 * The handle to the rendering engine that is being used by this display.

@@ -3,7 +3,7 @@ package jx3d.graphics;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
-import jx3d.core.Display;
+import jx3d.core.Window;
 
 import static jx3d.core.Constants.*;
 
@@ -18,7 +18,7 @@ import static jx3d.core.Constants.*;
 public abstract class Graphics {
 
 	//Parent display
-	protected final Display display;
+	protected final Window display;
 
 	//Color buffer
 	protected boolean redMask 	= true;
@@ -41,7 +41,7 @@ public abstract class Graphics {
 	 * Creates a new graphics object.
 	 * @param display the parent display
 	 */
-	public Graphics(Display display) {
+	public Graphics(Window display) {
 		this.display = display;
 	}
 	

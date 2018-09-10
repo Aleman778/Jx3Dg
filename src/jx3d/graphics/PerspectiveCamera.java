@@ -4,6 +4,8 @@ import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
+import jx3d.core.Constants;
+
 /**
  * Camera with a perspective projection
  * The projection is two dimensional and
@@ -55,9 +57,10 @@ public class PerspectiveCamera extends Camera {
 		position = new Vector3f();
 		rotation = new Quaternionf();
 		aspect = -1;
-		near = -1;
-		fov = 90;
+		near = 0.1f;
+		fov = Constants.HALF_PI;
 		validProj = false;
+		validView = false;
 	}
 	
 	/**
@@ -101,13 +104,12 @@ public class PerspectiveCamera extends Camera {
 	
 	@Override
 	protected void validateProjection() {
-		projection.perspective(fov, aspect, near, far);
+		projection.setPerspective(fov, aspect, near, far, true);
 	}
 
 	@Override
 	protected void validateView() {
-		view = new Matrix4f().rotate(rotation)
-							 .translate(position);
+		view = new Matrix4f()//.rotate(rotation)
+							 .translate(0, 0, -2f);
 	}
-	
 }

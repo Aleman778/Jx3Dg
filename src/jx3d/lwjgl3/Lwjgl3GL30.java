@@ -1,4 +1,4 @@
-package jx3d.desktop;
+package jx3d.lwjgl3;
 
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
@@ -26,7 +26,7 @@ import org.lwjgl.opengl.GL43;
  * @since 1.0
  * @author Aleman778
  */
-public class LwjglGL30 extends LwjglGL20 implements jx3d.graphics.opengl.GL30 {
+public class Lwjgl3GL30 extends Lwjgl3GL20 implements jx3d.graphics.opengl.GL30 {
 
 	@Override
 	public void beginQuery(int target, int id) {

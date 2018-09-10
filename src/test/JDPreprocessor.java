@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import jx3d.core.Constants;
-import jx3d.desktop.DesktopFiles;
+import jx3d.lwjgl3.Lwjgl3Files;
 
 /**
  * Javadoc preprocessor for inheriting documentation from other methods.
@@ -18,7 +18,7 @@ import jx3d.desktop.DesktopFiles;
 public class JDPreprocessor {
 	
 	public static final String LOCAL_DIR = new File("").getAbsolutePath() + File.separator;
-	public static final DesktopFiles df = new DesktopFiles(null);
+	public static final Lwjgl3Files df = new Lwjgl3Files(null);
 	public static File[] entries;
 
 	public static int numLines;

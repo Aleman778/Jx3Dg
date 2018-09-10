@@ -1,4 +1,4 @@
-package jx3d.desktop;
+package jx3d.lwjgl3;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -10,9 +10,9 @@ import jx3d.core.Screen;
  * Screen class designed specifically for use with GLFW displays.
  * @since 1.0
  * @author Aleman778
- * @see GlfwDisplay
+ * @see Lwjgl3Window
  */
-public class GlfwScreen implements Screen {
+public class Lwjgl3Screen implements Screen {
 
 	private GLFWVidMode mode;
 	private long monitor;
@@ -21,7 +21,7 @@ public class GlfwScreen implements Screen {
 	 * Constructor.
 	 * @param monitor the monitor reference
 	 */
-	public GlfwScreen(long monitor) {
+	public Lwjgl3Screen(long monitor) {
 		this.mode = glfwGetVideoMode(monitor);
 		this.monitor = monitor;
 	}
@@ -71,8 +71,8 @@ public class GlfwScreen implements Screen {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof GlfwScreen) {
-			GlfwScreen screen = (GlfwScreen) obj;
+		if (obj instanceof Lwjgl3Screen) {
+			Lwjgl3Screen screen = (Lwjgl3Screen) obj;
 			return (getMonitor() == screen.getMonitor());
 		}
 		

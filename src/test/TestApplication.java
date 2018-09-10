@@ -6,17 +6,19 @@ import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
-import jx3d.desktop.GlfwDisplay;
-import jx3d.desktop.LwjglGL30;
+import org.joml.Matrix4f;
+
 import jx3d.graphics.*;
 import jx3d.graphics.opengl.*;
+import jx3d.lwjgl3.Lwjgl3GL30;
+import jx3d.lwjgl3.Lwjgl3Window;
 import jx3d.math.*;
 
 /**
  * Test application.
  * @author Aleman778
  */
-public class TestApplication extends GlfwDisplay {
+public class TestApplication extends Lwjgl3Window {
 	
 	private VertexBuffer vbo;
 	private IndexBuffer ibo;
@@ -34,11 +36,53 @@ public class TestApplication extends GlfwDisplay {
 	
 	@Override
 	public void setup() {
+		float[] cube_vert = {
+	        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+	         0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+	         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+	        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+	        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+	         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+	        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+	        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+	        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	         0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	         0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+	         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+	        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+	         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,	
+		};
 		float[] vertices = {
-				0,   0,   0, 0,
-				1, 0,   1, 0,
-				1, 1, 1, 1,
-				0,   1, 0, 1
+				0, 0, 2, 0, 0,
+				1, 0, 2, 1, 0,
+				1, 1, 2, 1, 1,
+				0, 1, 2, 0, 1
 		};
 //		float[] vertices = {
 //					-1.0f, -1.0f, 0.0f, 0.0f,
@@ -53,16 +97,16 @@ public class TestApplication extends GlfwDisplay {
 		};
 		vbo = graphics.createVBO(STATIC_DRAW);
 		vbo.bind();
-		vbo.insert(vertices, 0);
+		vbo.insert(cube_vert, 0);
 		
-		ibo = graphics.createIBO(6, STATIC_DRAW);
+		ibo = graphics.createIBO(STATIC_DRAW);
 		ibo.bind();
 		ibo.insert(indices, 0);
 		
 		vao = graphics.createVAO();
 		
 		AttributeMap attribs = new AttributeMap();
-		attribs.putPosition(2);
+		attribs.putPosition(3);
 		attribs.putTexcoord(2);
 		vao.put(vbo, attribs);
 
@@ -95,7 +139,7 @@ public class TestApplication extends GlfwDisplay {
 			throw new IllegalArgumentException("image " + filename + " is not found.");
 		}
 
-		GL30 gl = new LwjglGL30();
+		GL30 gl = new Lwjgl3GL30();
 
 		gl.activeTexture(0);
 	
@@ -113,16 +157,14 @@ public class TestApplication extends GlfwDisplay {
 		
 		//Perspective projection matrix
 		camera3D = new PerspectiveCamera();
-		camera3D.setFov(90);
-		camera3D.setAspectRatio((float) getWidth()/(float) getHeight());
-		System.out.println("ar: " + (float) getWidth()/(float) getHeight());
+		camera3D.setAspectRatio(getAspectRatio());
 		
 		//Orthographic projection matrix
 		camera2D = new OrthographicCamera();
 		camera2D.setOrtho(0, getWidth(), getHeight(), 0);
 
 		//shader.set("projection", perspective);
-		shader.set("projection", camera2D.getMapping());
+		shader.set("projection", camera3D.getMapping());
 		graphics.viewport(0, 0, getWidth(), getHeight());
 		
 		//APPLY TRANSFORMATION
@@ -131,21 +173,23 @@ public class TestApplication extends GlfwDisplay {
 
 	@Override
 	public void draw() {
+		graphics.clear(GL20.COLOR_BUFFER_BIT | GL20.DEPTH_BUFFER_BIT);
 		
+		t.rotateY(0.01f);
+		t.rotateX(0.01f);
 		shader.set("transform", t.getMapping());
-		shader.set("projection", camera2D.getMapping());
+		//shader.set("projection", new Matrix4f().perspective);
 		
 		graphics.background(0.0f, 0.5f, 1.0f, 1.0f);
 		shader.enable();
 		tex.bind();
-		graphics.render(TRIANGLES, vao, ibo);
+		graphics.render(TRIANGLES, vao);
 
 	}
 	
 	public static void main(String[] args) {
 		TestApplication display = new TestApplication("jx3D Application", 1280, 720);
-		display.setRenderer(OPENGL_DEBUG, GL30_CORE_PROFILE); 
+		display.setRenderer(OPENGL_DEBUG); 
 		display.setVisible(true);
 	}
-
 }

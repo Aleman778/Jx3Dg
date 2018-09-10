@@ -19,9 +19,9 @@ import java.io.OutputStream;
  */
 public abstract class Files {
 
-	protected final Display display;
+	protected final Window display;
 	
-	public Files(Display display) {
+	public Files(Window display) {
 		this.display = display;
 	}
 	

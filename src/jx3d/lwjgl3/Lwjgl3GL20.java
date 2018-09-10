@@ -1,4 +1,4 @@
-package jx3d.desktop;
+package jx3d.lwjgl3;
 
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
@@ -22,7 +22,7 @@ import jx3d.util.BufferUtils;
  * @since 1.0
  * @author Aleman778
  */
-public class LwjglGL20 implements jx3d.graphics.opengl.GL20 {
+public class Lwjgl3GL20 implements jx3d.graphics.opengl.GL20 {
 
 	private ByteBuffer buffer = null;
 	private FloatBuffer floatBuffer = null;

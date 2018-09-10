@@ -1,12 +1,12 @@
-package jx3d.desktop;
+package jx3d.lwjgl3;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-import jx3d.core.Display;
+import jx3d.core.Window;
 import jx3d.core.Screen;
-import jx3d.desktop.GlfwScreen;
 import jx3d.graphics.opengl.GL20;
 import jx3d.graphics.opengl.GLGraphics;
+import jx3d.lwjgl3.Lwjgl3Screen;
 
 import java.nio.IntBuffer;
 
@@ -25,7 +25,7 @@ import org.lwjgl.glfw.GLFWErrorCallback;
  * @author Aleman778
  * @see <a href="http://www.glfw.org/">http://www.glfw.org/</a>
  */
-public class GlfwDisplay extends Display implements Runnable {
+public class Lwjgl3Window extends Window implements Runnable {
 
 	private static final IntBuffer xpos = BufferUtils.createIntBuffer(1);
 	private static final IntBuffer ypos = BufferUtils.createIntBuffer(1);
@@ -36,7 +36,7 @@ public class GlfwDisplay extends Display implements Runnable {
 
 	private Object lock = new Object();
 	private Thread mainThread;
-	private GlfwScreen screen;
+	private Lwjgl3Screen screen;
 	private String title;
 	
 	private long window = NULL;
@@ -59,7 +59,7 @@ public class GlfwDisplay extends Display implements Runnable {
 	/**
 	 * Default constructor.
 	 */
-	public GlfwDisplay() {
+	public Lwjgl3Window() {
 		this("");
 	}
 	
@@ -67,7 +67,7 @@ public class GlfwDisplay extends Display implements Runnable {
 	 * Constructor.
 	 * @param title the title of the window
 	 */
-	public GlfwDisplay(String title) {
+	public Lwjgl3Window(String title) {
 		this(title, 640, 480);
 	}
 	
@@ -76,7 +76,7 @@ public class GlfwDisplay extends Display implements Runnable {
 	 * @param width the width of the window
 	 * @param height the height of the window
 	 */
-	public GlfwDisplay(int width, int height) {
+	public Lwjgl3Window(int width, int height) {
 		this("", width, height);
 	}
 	
@@ -86,10 +86,10 @@ public class GlfwDisplay extends Display implements Runnable {
 	 * @param width the width of the window
 	 * @param height the height of the window
 	 */
-	public GlfwDisplay(String title, int width, int height) {
+	public Lwjgl3Window(String title, int width, int height) {
 		initialized();
 
-		this.files = new DesktopFiles(display);
+		this.files = new Lwjgl3Files(display);
 		this.title = title;
 		this.width = width;
 		this.height = height;
@@ -425,7 +425,7 @@ public class GlfwDisplay extends Display implements Runnable {
 	 * Sets the window in fullscreen mode on the provided screen.
 	 * @param screen the screen to use
 	 */
-	public final void setFullscreenMode(GlfwScreen screen) {
+	public final void setFullscreenMode(Lwjgl3Screen screen) {
 		if (this.fullscreen && this.screen.equals(screen)) {
 			return;
 		}
@@ -589,16 +589,16 @@ public class GlfwDisplay extends Display implements Runnable {
 	}
 
 	@Override
-	public final GlfwScreen getScreen() {
-		return new GlfwScreen(glfwGetPrimaryMonitor());
+	public final Lwjgl3Screen getScreen() {
+		return new Lwjgl3Screen(glfwGetPrimaryMonitor());
 	}
 
 	@Override
-	public final GlfwScreen[] getScreens() {
+	public final Lwjgl3Screen[] getScreens() {
 		PointerBuffer buff = glfwGetMonitors();
-		GlfwScreen[] result = new GlfwScreen[buff.limit()];
+		Lwjgl3Screen[] result = new Lwjgl3Screen[buff.limit()];
 		for (int i = 0; i < result.length; i++) {
-			result[i] = new GlfwScreen(buff.get(i));
+			result[i] = new Lwjgl3Screen(buff.get(i));
 		}
 		return result;
 	}

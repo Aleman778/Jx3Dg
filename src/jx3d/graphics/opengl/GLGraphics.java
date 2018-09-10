@@ -10,14 +10,14 @@ import org.lwjgl.system.Callback;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
-import jx3d.core.Display;
-import jx3d.desktop.LwjglGL20;
-import jx3d.desktop.LwjglGL30;
+import jx3d.core.Window;
 import jx3d.graphics.Graphics;
 import jx3d.graphics.IndexBuffer;
 import jx3d.graphics.Shader;
 import jx3d.graphics.VertexArray;
 import jx3d.graphics.VertexBuffer;
+import jx3d.lwjgl3.Lwjgl3GL20;
+import jx3d.lwjgl3.Lwjgl3GL30;
 
 /**
  * OpenGL graphics context.
@@ -63,7 +63,7 @@ public class GLGraphics extends Graphics {
 	 * Create a new OpenGL graphics context.
 	 * @param display
 	 */
-	public GLGraphics(Display display) {
+	public GLGraphics(Window display) {
 		super(display);
 	}
 
@@ -76,12 +76,17 @@ public class GLGraphics extends Graphics {
 		capabilities = GL.createCapabilities();
 		
 		if (capabilities.OpenGL30) {
-			gl30 = new LwjglGL30();
+			gl30 = new Lwjgl3GL30();
 			gl20 = (GL20) gl30;
 		} else {
 			gl30 = null;
-			gl20 = new LwjglGL20();
+			gl20 = new Lwjgl3GL20();
 		}
+		
+		//Setup backface culling, JUST TEST MOVE THIS LATER LATER
+		gl20.cullFace(GL20.BACK);
+		gl20.depthFunc(GL20.LESS);
+		gl20.enable(GL20.DEPTH_TEST);
 		
 		//DEBUG REMOVE LATER
 		debugProc = GLUtil.setupDebugMessageCallback(System.out);

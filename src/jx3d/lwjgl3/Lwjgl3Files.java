@@ -1,4 +1,4 @@
-package jx3d.desktop;
+package jx3d.lwjgl3;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -14,11 +14,11 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import jx3d.core.Constants;
-import jx3d.core.Display;
+import jx3d.core.Window;
 import jx3d.core.FileHandle;
 import jx3d.core.Files;
 
-public class DesktopFiles extends Files {
+public class Lwjgl3Files extends Files {
 
 	//public static final String EXTERNAL_DIR = new File("").getPath() + File.separator;
 	public static final String LOCAL_DIR = new File("").getAbsolutePath() + File.separator;
@@ -26,7 +26,7 @@ public class DesktopFiles extends Files {
 	private BufferedReader reader;
 	private BufferedWriter writer;
 	
-	public DesktopFiles(Display display) {
+	public Lwjgl3Files(Window display) {
 		super(display);
 	}
 
