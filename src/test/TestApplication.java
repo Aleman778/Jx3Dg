@@ -6,8 +6,6 @@ import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
-import org.joml.Matrix4f;
-
 import jx3d.graphics.*;
 import jx3d.graphics.opengl.*;
 import jx3d.lwjgl3.Lwjgl3GL30;
@@ -176,7 +174,6 @@ public class TestApplication extends Lwjgl3Window {
 		graphics.clear(GL20.COLOR_BUFFER_BIT | GL20.DEPTH_BUFFER_BIT);
 		
 		t.rotateY(0.01f);
-		t.rotateX(0.01f);
 		shader.set("transform", t.getMapping());
 		//shader.set("projection", new Matrix4f().perspective);
 		
@@ -188,7 +185,7 @@ public class TestApplication extends Lwjgl3Window {
 	}
 	
 	public static void main(String[] args) {
-		TestApplication display = new TestApplication("jx3D Application", 1280, 720);
+		TestApplication display = new TestApplication("help me", 1280, 720);
 		display.setRenderer(OPENGL_DEBUG); 
 		display.setVisible(true);
 	}

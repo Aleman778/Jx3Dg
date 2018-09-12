@@ -37,17 +37,24 @@ public class AttributeMap extends HashMap<String, Attribute> {
 	 */
 	public Attribute normal;
 	
+	/**
+	 * The total number of elements in one segment
+	 */
 	private int count = 0;
+	
+	/**
+	 * The current number of bytes in one segment
+	 */
 	private int stride = 0;
 	
 	/**
 	 * Create an attribute of the provided properties.
 	 * @param name the name of the attribute (this is used as the index)
 	 * @param type the type of the data e.g. INT, FLOAT, DOUBLE, etc.
-	 * @param size
-	 * @param count
-	 * @param offset
-	 * @param normalized
+	 * @param size the size of the type in bytes
+	 * @param count the number of items stored in buffer
+	 * @param offset the item offset where this data starts
+	 * @param normalized the data is normalized
 	 * @return
 	 */
 	public Attribute put(String name, int type, int size, int count, int offset, boolean normalized) {
