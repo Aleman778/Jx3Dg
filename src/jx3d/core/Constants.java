@@ -520,6 +520,33 @@ public class Constants extends Module {
 	public static final int DECR_WRAP = 6;
 	public static final int INVERT  = 7;
 	
+	//Stroke cap / join
+	/**
+	 * Stroke cap butt.
+	 */
+	public static final int BUTT = 0;
+	
+	/**
+	 * Stroke cap and join round.
+	 */
+	public static final int ROUND = 1;
+	
+	/**
+	 * Stroke cap square.
+	 */
+	public static final int SQUARE = 2;
+	
+	/**
+	 * Stroke join bevel.
+	 */
+	public static final int BEVEL = 3;
+	
+	/**
+	 * Stroke join miter.
+	 */
+	public static final int MITER = 4;
+	
+	
 	//Data types
 	/**
 	 * 4 byte <i>integer</i> type.

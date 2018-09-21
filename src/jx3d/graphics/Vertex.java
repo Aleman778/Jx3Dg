@@ -2,22 +2,39 @@ package jx3d.graphics;
 
 import org.joml.Vector3f;
 
+
 /**
- * Standard vertex holds the following data:<br>
- * <ul>
+ * <p>
+ * Standard vertex holds the following ordered data:<br>
+ * <ol>
  * 		<li><code>position</code> - the vertex location in 3D space.</li>
  * 		<li><code>normal</code> - the normal vector corresponding to this vertex.</li>
  * 		<li><code>texcoord</code> - the texture coordinates used by this vertex.</li>
- * </ul>
- * There is also a method {@link Vertex#data()} that is used to convert this vertex
- * from its variable vector format to a float array which is used to create vertex buffers.
- * 
+ * </ol>
+ * </p>
+ * <p>
+ * The method {@link Vertex#data()} is used to convert this vertex from its variable
+ * vector format to a float array which is then used to create vertex buffers.
+ * </p>
+ * <p>
+ * The method {@link Vertex#attributes()} returns the vertex attributes that are used
+ * i.e. the format of the vertex data. 
+ * </p>
  * This class can be inherited in order to change the vertex data.
  * @since 1.0
  * @author Aleman778
  */
 public class Vertex {
 
+	private static final VertexAttribute ATTRIBUTE;
+	
+	static {
+		ATTRIBUTE = new VertexAttribute();
+		ATTRIBUTE.add(0, 3, false, 8, 0);
+		ATTRIBUTE.add(1, 3, false, 8, 3);
+		ATTRIBUTE.add(2, 2, false, 8, 5);
+	}
+	
 	/**
 	 * The position vector of this vertex.
 	 */
@@ -43,5 +60,9 @@ public class Vertex {
 			normal.x, normal.y, normal.z,
 			texcoord.x, texcoord.y
 		};
+	}
+	
+	public VertexAttribute attributes() {
+		return ATTRIBUTE;
 	}
 }

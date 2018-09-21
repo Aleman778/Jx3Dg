@@ -103,9 +103,10 @@ public class TestApplication extends Lwjgl3Window {
 		
 		vao = graphics.createVAO();
 		
-		AttributeMap attribs = new AttributeMap();
-		attribs.putPosition(3);
-		attribs.putTexcoord(2);
+		VertexAttribute attribs = new VertexAttribute();
+		attribs.add(0, 3, false, 5, 0);
+		attribs.add(1, 2, false, 5, 3);
+		
 		vao.put(vbo, attribs);
 
 		shader = graphics.loadShader("test/shaders/basic_fragment.glsl",

@@ -1,11 +1,12 @@
 package jx3d.graphics.opengl;
 
-import jx3d.graphics.Attribute;
-import jx3d.graphics.AttributeMap;
 import jx3d.graphics.VertexArray;
+import jx3d.graphics.VertexAttribute;
+import jx3d.graphics.VertexAttribute.Attribute;
 import jx3d.graphics.VertexBuffer;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Represents an OpenGL implementation of a vertex array.
@@ -19,7 +20,6 @@ public class GLVertexArray extends VertexArray {
 	
 	private ArrayList<VertexBuffer> buffers;
 	private int object;
-	private int index;
 	
 	/**
 	 * Constructor. Create an empty vertex array.
@@ -28,25 +28,20 @@ public class GLVertexArray extends VertexArray {
 		gl = graphics;
 		object = gl.genVertexArray();
 		buffers = new ArrayList<>();
-		index = 0;
 	}
 	
 	@Override
 	public void bind() {
-		check();
 		gl.bindVertexArray(object);
 	}
 	
 	@Override
 	public void unbind() {
-		check();
-		
 		gl.bindVertexArray(0);
 	}
 	
 	@Override
-	public void put(VertexBuffer buf, AttributeMap attrib) {
-		check();
+	public void put(VertexBuffer buf, VertexAttribute attrib) {
 		if (attrib.empty())
 			throw new IllegalArgumentException("Provided buffer does not have any attributes attached.");
 		
@@ -57,30 +52,19 @@ public class GLVertexArray extends VertexArray {
 		buf.bind();
 		
 		//Apply layouts
-		for (int i = 0; i < attrib.size(); i++) {
-			Attribute e = attrib.getAt(i);
-			gl.enableVertexAttribArray(index);
-			gl.vertexAttribPointer(index, e.count, GLGraphics.glGetType(e.type),
-					e.normalized, attrib.stride(), e.offset * e.size);
-			index += 1;
-		}
+		Iterator<Attribute> it = attrib.iterator();
+		while (it.hasNext()) {
+			Attribute a = it.next();
+			gl.enableVertexAttribArray(a.location);
+			gl.vertexAttribPointer(a.location, a.size, GL20.FLOAT,
+					a.normalized, a.stride * 4, a.pointer * 4);
+		}		
 		
 		buffers.add(buf);
 	}
 	
 	@Override
-	public void clear() {
-		check();
-		for (int i = 0; i < index; i++) {
-			gl.disableVertexAttribArray(i);
-		}
-		index = 0;
-	}
-	
-	@Override
 	public void dispose() {
-		check();
-		
 		gl.deleteVertexArray(object);
 		object = -1;
 	}
@@ -92,9 +76,4 @@ public class GLVertexArray extends VertexArray {
 			count += buf.capacity();
 		return count;
 	}
-
-    private void check() {
-    	if (object == -1)
-    		throw new NullPointerException();
-    }
 }

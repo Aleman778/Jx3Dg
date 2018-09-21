@@ -25,17 +25,7 @@ public abstract class VertexArray implements Disposable {
 	 * @param buf the vertex buffer to add
 	 * @param attribs the attribute map that describes the vertex buffer
 	 */
-	public abstract void put(VertexBuffer buf, AttributeMap attribs);
-	
-	/**
-	 * Clear the vertex array.<br>
-	 * <i>Note</i>: this method may not remove the actual contents of this vertex array,
-	 * it depends on the implementation and graphics API. This method does not clear any
-	 * data that have been added to this array, this can be done manually by calling
-	 * {@link Buffer#clear()} for each buffer. In order to force the graphics API to 
-	 * remove the data then use {@link VertexArray#dispose()} instead.
-	 */
-	public abstract void clear();
+	public abstract void put(VertexBuffer buf, VertexAttribute attribs);
 	
 	/**
 	 * Get the number of elements in the vertex array.

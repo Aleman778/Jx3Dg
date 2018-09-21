@@ -1,8 +1,5 @@
 package jx3d.graphics;
 
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
-
 import jx3d.core.Window;
 
 import static jx3d.core.Constants.*;
@@ -17,23 +14,64 @@ import static jx3d.core.Constants.*;
  */
 public abstract class Graphics {
 
-	//Parent display
+	/**
+	 * The parent display.
+	 */
 	protected final Window display;
 
-	//Color buffer
-	protected boolean redMask 	= true;
-	protected boolean greenMask = true;
-	protected boolean blueMask 	= true;
-	protected boolean alphaMask = true;
+	/**
+	 * The currently used material.
+	 */
+	protected Material material;
 	
-	//Depth buffer
+	/**
+	 * Enable the red color channel.
+	 */
+	protected boolean redMask 	= true;
+	
+	/**
+	 * Enable the green color channel.
+	 */
+	protected boolean greenMask = true;
+	
+	/**
+	 * Enable the blue color channel.
+	 */
+	protected boolean blueMask 	= true;
+	
+	/**
+	 * Enable the alpha color channel.
+	 */
+	protected boolean alphaMask = true;
+
+	/**
+	 * Enable depth testing.
+	 */
 	protected boolean depthTest = false;
+	
+	/**
+	 * Enable writing to the depth buffer. 
+	 */
 	protected boolean depthMask = true;
+	
+	/**
+	 * Depth buffer comparison method.
+	 */
 	protected int depthFunc = LESS;
 	
-	//Stencil buffer
+	/**
+	 * Enable stencil testing.
+	 */
 	protected boolean stencilTest = false;
+	
+	/**
+	 * Stencil mask
+	 */
 	protected int stencilMask = 0xFFFFFFFF;
+	
+	/**
+	 * Stencil function
+	 */
 	protected int stencilFunc = KEEP;
 	
 	/**
