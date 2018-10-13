@@ -1,6 +1,6 @@
 package jx3d.graphics.opengl;
 
-import static jx3d.core.Constants.*;
+import static jx3d.core.Module.*;
 
 import jx3d.graphics.Color;
 import jx3d.graphics.Shader;

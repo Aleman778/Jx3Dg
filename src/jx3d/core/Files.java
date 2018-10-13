@@ -19,10 +19,18 @@ import java.io.OutputStream;
  */
 public abstract class Files {
 
-	protected final Window display;
+	/**
+	 * The window owner.
+	 */
+	protected final Window window;
 	
-	public Files(Window display) {
-		this.display = display;
+	/**
+	 * Constructor.
+	 * Creates a new file handler object.
+	 * @param window the window owner.
+	 */
+	public Files(Window window) {
+		this.window = window;
 	}
 	
 	/**

@@ -130,11 +130,11 @@ public abstract class Texture2D implements Disposable {
 	 * The axis to wrap can be <code>S</code>, <code>T</code> or both
 	 * @param wrap the wrap mode
 	 * @param axis the axis to wrap in
-	 * @see Constants#REPEAT
-	 * @see Constants#MIRRORED_REPEAT
-	 * @see Constants#CLAMP_TO_EDGE
-	 * @see Constants#CLAMP_TO_BORDER
-	 * @see Constants#MIRROR_CLAMP_TO_EDGE
+	 * @see Module#REPEAT
+	 * @see Module#MIRRORED_REPEAT
+	 * @see Module#CLAMP_TO_EDGE
+	 * @see Module#CLAMP_TO_BORDER
+	 * @see Module#MIRROR_CLAMP_TO_EDGE
 	 */
 	public abstract void setWrapMode(int wrap, int axis);
 	

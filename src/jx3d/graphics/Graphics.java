@@ -2,7 +2,7 @@ package jx3d.graphics;
 
 import jx3d.core.Window;
 
-import static jx3d.core.Constants.*;
+import static jx3d.core.Module.*;
 
 /**
  * Abstract graphics context class provides methods for
@@ -15,9 +15,9 @@ import static jx3d.core.Constants.*;
 public abstract class Graphics {
 
 	/**
-	 * The parent display.
+	 * The window owner.
 	 */
-	protected final Window display;
+	protected final Window window;
 
 	/**
 	 * The currently used material.
@@ -77,10 +77,10 @@ public abstract class Graphics {
 	/**
 	 * Constructor.
 	 * Creates a new graphics object.
-	 * @param display the parent display
+	 * @param window the window owner
 	 */
-	public Graphics(Window display) {
-		this.display = display;
+	public Graphics(Window window) {
+		this.window = window;
 	}
 	
 	//Rendering functions

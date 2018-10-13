@@ -1,6 +1,6 @@
 package jx3d.graphics;
 
-import static jx3d.core.Constants.*;
+import static jx3d.core.Module.*;
 
 /**
  * Shapes is the combination of a mesh with a material.

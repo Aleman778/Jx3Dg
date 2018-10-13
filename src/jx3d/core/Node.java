@@ -10,7 +10,7 @@ import java.util.HashSet;
  * @since 1.0
  * @author Aleman778
  */
-public abstract class Node extends NodeEvent {
+public abstract class Node extends Module {
 
 	private HashSet<Node> children;
 	private String name = getClass().getSimpleName();
@@ -36,7 +36,7 @@ public abstract class Node extends NodeEvent {
 	/**
 	 * Get an array of all the adjacent nodes (or children) to this node. 
 	 * @return an array of adjacent nodes
-	 */
+	 */ 
 	public final Node[] children() {
 		return children.toArray(new Node[children.size()]);
 	}

@@ -1,6 +1,6 @@
 package jx3d.graphics.opengl;
 
-import static jx3d.core.Constants.*;
+import static jx3d.core.Module.*;
 
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLCapabilities;
@@ -133,11 +133,11 @@ public class GLGraphics extends Graphics {
 	
 	@Override
 	public Shader loadShader(String fragment) {
-		if (!display.open(READ, fragment))
+		if (!window.open(READ, fragment))
 			return null;
 		
-		String source = display.read();
-		display.close();
+		String source = window.read();
+		window.close();
 		
 		Shader shader = new GLSLShader(gl20);
 		shader.add(FRAGMENT_SHADER, source);
@@ -147,16 +147,16 @@ public class GLGraphics extends Graphics {
 
 	@Override
 	public Shader loadShader(String fragment, String vertex) {
-		if (!display.open(READ, fragment))
+		if (!window.open(READ, fragment))
 			return null;
 		
-		String fsource = display.read();
+		String fsource = window.read();
 		
-		if (!display.open(READ, vertex))
+		if (!window.open(READ, vertex))
 			return null;
 		
-		String vsource = display.read();
-		display.close();
+		String vsource = window.read();
+		window.close();
 		
 		Shader shader = new GLSLShader(gl20);
 		shader.add(FRAGMENT_SHADER, fsource);

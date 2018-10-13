@@ -13,7 +13,7 @@ import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
-import jx3d.core.Constants;
+import jx3d.core.Module;
 import jx3d.core.Window;
 import jx3d.core.FileHandle;
 import jx3d.core.Files;
@@ -37,7 +37,7 @@ public class Lwjgl3Files extends Files {
 		writer = null;
 		
 		//Reader
-		if (access == Constants.READ) {
+		if (access == Module.READ) {
 			InputStream input = inputStream(file);
 			if (input == null)
 				return false;
@@ -49,7 +49,7 @@ public class Lwjgl3Files extends Files {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		} else if (access == Constants.WRITE) {
+		} else if (access == Module.WRITE) {
 			OutputStream output = outputStream(file);
 			if (output == null)
 				return false;

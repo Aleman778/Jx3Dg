@@ -10,7 +10,7 @@ import jx3d.core.Screen;
  * @since 1.0
  * @author Aleman778
  */
-public abstract class Window extends Node implements Disposable {
+public abstract class Window extends Module implements Disposable {
 	
 	/**
 	 * Get the title of the display.

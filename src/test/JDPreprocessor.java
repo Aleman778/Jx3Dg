@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import jx3d.core.Constants;
 import jx3d.lwjgl3.Lwjgl3Files;
 
 /**
@@ -22,6 +21,7 @@ public class JDPreprocessor {
 	public static File[] entries;
 
 	public static int numLines;
+	public static int numClasses;
 	
 	public static void main(String[] args) {
 		File projectFolder = new File(LOCAL_DIR + "src/");
@@ -31,11 +31,11 @@ public class JDPreprocessor {
 			//removeFile(s);
 			countNumLines(s);
 		}
-		System.out.println("No. Lines: " + numLines);
+		System.out.println("# Lines: " + numLines + ", # Classes: " + numClasses);
 	}
 	
 	public static void preprocess(File f) {
-		df.open(Constants.READ, f.getAbsolutePath());
+		df.open(jx3d.core.Module.READ, f.getAbsolutePath());
 		String file = df.read(); 
 		df.close();
 		
@@ -72,7 +72,7 @@ public class JDPreprocessor {
 	
 	public static void countNumLines(File f) {
 		if (f.getAbsolutePath().contains(".java")) {
-			if (df.open(Constants.READ, f.getAbsolutePath())) {
+			if (df.open(jx3d.core.Module.READ, f.getAbsolutePath())) {
 				String line = "";
 				while ((line = df.readln()) != null) {
 					if (!line.equals(""))
@@ -80,8 +80,9 @@ public class JDPreprocessor {
 				}
 				df.close();
 			}
+			numClasses++;
+			System.out.println("Counting: " + f.getAbsolutePath() + "(so far: " + numLines +")");
 		}
-		System.out.println("Counting: " + f.getAbsolutePath() + "(so far: " + numLines +")");
 	}
 	
 	public static String retreiveDoc(File f, String method) {

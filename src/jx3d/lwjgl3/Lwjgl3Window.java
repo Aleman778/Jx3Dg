@@ -13,6 +13,7 @@ import java.nio.IntBuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWKeyCallback;
 
 /**
  * Desktop window implementation using the <i>GLFW</i>.
@@ -39,7 +40,7 @@ public class Lwjgl3Window extends Window implements Runnable {
 	private Lwjgl3Screen screen;
 	private String title;
 	
-	private long window = NULL;
+	private long object = NULL;
 	private boolean visible = false;
 	private boolean disposed = false;
 	private boolean gldebug = false;
@@ -89,7 +90,8 @@ public class Lwjgl3Window extends Window implements Runnable {
 	public Lwjgl3Window(String title, int width, int height) {
 		initialized();
 
-		this.files = new Lwjgl3Files(display);
+		this.files = new Lwjgl3Files(this);
+		this.input = new Lwjgl3Input(this);
 		this.title = title;
 		this.width = width;
 		this.height = height;
@@ -98,13 +100,13 @@ public class Lwjgl3Window extends Window implements Runnable {
 	@Override
 	public void run() {
 		createWindow();
-		display = this;
+		window = this;
 		
 		new Thread(new Runnable() {
 			
 			@Override
 			public void run() {
-				glfwMakeContextCurrent(window);
+				glfwMakeContextCurrent(object);
 				graphics.init();
 
 				setup();
@@ -116,7 +118,7 @@ public class Lwjgl3Window extends Window implements Runnable {
 						e.printStackTrace();
 					}
 					//glfwPollEvents();
-					glfwSwapBuffers(window);
+					glfwSwapBuffers(object);
 					draw();
 				}
 			}
@@ -133,7 +135,7 @@ public class Lwjgl3Window extends Window implements Runnable {
 	
 	@Override
 	public void dispose() {
-		glfwDestroyWindow(window);
+		glfwDestroyWindow(object);
 	}
 	
 	/**
@@ -159,7 +161,7 @@ public class Lwjgl3Window extends Window implements Runnable {
 	public void setTitle(String title) {
 		this.title = title;
 		if (isCreated()) {
-			glfwSetWindowTitle(window, title);
+			glfwSetWindowTitle(object, title);
 		}
 	}
 	
@@ -288,7 +290,7 @@ public class Lwjgl3Window extends Window implements Runnable {
 		this.height = height;
 		
 		if (isCreated()) {
-			glfwSetWindowSize(window, width, height);
+			glfwSetWindowSize(object, width, height);
 		}
 	}
 	
@@ -316,7 +318,7 @@ public class Lwjgl3Window extends Window implements Runnable {
 		this.maxHeight = maxHeight;
 		
 		if (isCreated()) {
-			glfwSetWindowSizeLimits(window, minWidth, minHeight, maxWidth, maxHeight);
+			glfwSetWindowSizeLimits(object, minWidth, minHeight, maxWidth, maxHeight);
 		}
 	}
 
@@ -361,7 +363,7 @@ public class Lwjgl3Window extends Window implements Runnable {
 		this.y = y;
 		
 		if (isCreated()) {
-			glfwSetWindowPos(window, x, y);
+			glfwSetWindowPos(object, x, y);
 		}
 	}
 	
@@ -434,7 +436,7 @@ public class Lwjgl3Window extends Window implements Runnable {
 		this.screen = screen;
 
 		if (isCreated()) {
-			glfwSetWindowMonitor(window, screen.getMonitor(), 0, 0,
+			glfwSetWindowMonitor(object, screen.getMonitor(), 0, 0,
 					screen.getWidth(), screen.getHeight(), (int) screen.getRefreshRate());
 		}
 	}
@@ -457,7 +459,7 @@ public class Lwjgl3Window extends Window implements Runnable {
 		this.screen = null;
 		
 		if (isCreated()) {
-			glfwSetWindowMonitor(window, NULL, x, y, width, height, GLFW_DONT_CARE);
+			glfwSetWindowMonitor(object, NULL, x, y, width, height, GLFW_DONT_CARE);
 		}
 	}
 	
@@ -492,9 +494,9 @@ public class Lwjgl3Window extends Window implements Runnable {
 		
 		if (hasReference()) {
 			if (visible) {
-				glfwShowWindow(window);
+				glfwShowWindow(object);
 			} else {
-				glfwHideWindow(window);
+				glfwHideWindow(object);
 			}
 		}
 	}
@@ -504,7 +506,7 @@ public class Lwjgl3Window extends Window implements Runnable {
 	 * @return floating attribute
 	 */
 	public final boolean isDecorated() {
-		return glfwGetWindowAttrib(window, GLFW_DECORATED) == GLFW_TRUE;
+		return glfwGetWindowAttrib(object, GLFW_DECORATED) == GLFW_TRUE;
 	}
 
 	/**
@@ -514,7 +516,7 @@ public class Lwjgl3Window extends Window implements Runnable {
 	public final void setDecorated(boolean decorated) {
 		this.decorated = decorated;
 		if (isCreated()) {
-			glfwSetWindowAttrib(window, GLFW_DECORATED, decorated ? GLFW_TRUE : GLFW_FALSE);
+			glfwSetWindowAttrib(object, GLFW_DECORATED, decorated ? GLFW_TRUE : GLFW_FALSE);
 		}
 	}
 	
@@ -523,7 +525,7 @@ public class Lwjgl3Window extends Window implements Runnable {
 	 * @return floating attribute
 	 */
 	public final boolean isFloating() {
-		return glfwGetWindowAttrib(window, GLFW_FLOATING) == GLFW_TRUE;
+		return glfwGetWindowAttrib(object, GLFW_FLOATING) == GLFW_TRUE;
 	}
 	
 	/**
@@ -533,7 +535,7 @@ public class Lwjgl3Window extends Window implements Runnable {
 	public final void setFloating(boolean floating) {
 		this.floating = floating;
 		if (isCreated()) {
-			glfwSetWindowAttrib(window, GLFW_FLOATING, floating ? GLFW_TRUE : GLFW_FALSE);
+			glfwSetWindowAttrib(object, GLFW_FLOATING, floating ? GLFW_TRUE : GLFW_FALSE);
 		}
 	}
 
@@ -542,7 +544,7 @@ public class Lwjgl3Window extends Window implements Runnable {
 	 * @return floating attribute
 	 */
 	public final boolean isResizable() {
-		return glfwGetWindowAttrib(window, GLFW_RESIZABLE) == GLFW_TRUE;
+		return glfwGetWindowAttrib(object, GLFW_RESIZABLE) == GLFW_TRUE;
 	}
 	
 	/**
@@ -552,7 +554,7 @@ public class Lwjgl3Window extends Window implements Runnable {
 	public final void setResizeable(boolean resizable) {
 		this.resizable = resizable;
 		if (isCreated()) {
-			glfwSetWindowAttrib(window, GLFW_RESIZABLE, resizable ? GLFW_TRUE : GLFW_FALSE);
+			glfwSetWindowAttrib(object, GLFW_RESIZABLE, resizable ? GLFW_TRUE : GLFW_FALSE);
 		}
 	}
 
@@ -561,7 +563,7 @@ public class Lwjgl3Window extends Window implements Runnable {
 	 * @return iconified attribute
 	 */
 	public final boolean isIconified() {
-		return glfwGetWindowAttrib(window, GLFW_ICONIFIED) == GLFW_TRUE;
+		return glfwGetWindowAttrib(object, GLFW_ICONIFIED) == GLFW_TRUE;
 	}
 	
 	/**
@@ -569,7 +571,7 @@ public class Lwjgl3Window extends Window implements Runnable {
 	 * @param iconified flag
 	 */
 	public final void setIconified() {
-		glfwIconifyWindow(window);
+		glfwIconifyWindow(object);
 	}
 	
 	/**
@@ -577,7 +579,7 @@ public class Lwjgl3Window extends Window implements Runnable {
 	 * @return floating attribute
 	 */
 	public final boolean isMaximized() {
-		return glfwGetWindowAttrib(window, GLFW_MAXIMIZED) == GLFW_TRUE;
+		return glfwGetWindowAttrib(object, GLFW_MAXIMIZED) == GLFW_TRUE;
 	}
 
 	/**
@@ -585,7 +587,7 @@ public class Lwjgl3Window extends Window implements Runnable {
 	 * @param maximized flag
 	 */
 	public final void setMaximized() {
-		glfwMaximizeWindow(window);
+		glfwMaximizeWindow(object);
 	}
 
 	@Override
@@ -609,23 +611,23 @@ public class Lwjgl3Window extends Window implements Runnable {
 			return true;
 		}
 		
-		return glfwWindowShouldClose(window);
+		return glfwWindowShouldClose(object);
 	}
 	
 	private boolean hasReference() {
-		return window != NULL;
+		return object != NULL;
 	}
 	
 	private boolean isCreated() {
-		return (window != NULL) && (!disposed);
+		return (object != NULL) && (!disposed);
 	}
 
 	private void createWindow() {
 		if (fullscreen) {
 			glfwWindowHint(GLFW_REFRESH_RATE, (int) screen.getRefreshRate());
-			window = glfwCreateWindow(screen.getWidth(), screen.getHeight(), title, screen.getMonitor(), NULL);
+			object = glfwCreateWindow(screen.getWidth(), screen.getHeight(), title, screen.getMonitor(), NULL);
 		} else {
-			window = glfwCreateWindow(width, height, title, NULL, NULL);
+			object = glfwCreateWindow(width, height, title, NULL, NULL);
 		}
 		
 		setupAttributes();
@@ -633,27 +635,54 @@ public class Lwjgl3Window extends Window implements Runnable {
 	}
 	
 	private void setupCallbacks() {
-		glfwSetWindowRefreshCallback(window, (long window) -> {
+		glfwSetWindowRefreshCallback(object, (long window) -> {
 			//glfwSwapBuffers(window);
+		});
+		
+		glfwSetKeyCallback(object, (long window, int key, int scancode, int action, int mods) -> {
+			if (action == GLFW_PRESS)
+				keyDown(key);
+			else if (action == GLFW_RELEASE)
+				keyUp(key);
+			else if (action == GLFW_REPEAT)
+				keyRepeat(key);
+		});
+		
+		glfwSetMouseButtonCallback(object, (long window, int button, int action, int mods) -> {
+			if (action == GLFW_PRESS)
+				mousePressed(button);
+			else if (action == GLFW_RELEASE)
+				mouseReleased(button);
+		});
+		
+		glfwSetCursorPosCallback(object, (long window, double xpos, double ypos) -> {
+			//mouseMoved();
+		});
+		
+		glfwSetCursorEnterCallback(object, (long window, boolean entered) -> {
+			if (entered)
+				mouseEntered();
+			else
+				mouseExited();
 		});
 	}
 	
 	private void setupAttributes() {
 		if (x == -1 && y == -1) {
-			glfwGetWindowPos(window, xpos, ypos);
+			glfwGetWindowPos(object, xpos, ypos);
 			x = xpos.get(0);
 			y = ypos.get(0);	
 		} else {
-			glfwSetWindowPos(window, x, y);
+			glfwSetWindowPos(object, x, y);
 		}
 
-		glfwSetWindowSizeLimits(window, minWidth, minHeight, maxWidth, maxHeight);
-		glfwSetWindowAttrib(window, GLFW_DECORATED, decorated ? 1 : 0);
-		glfwSetWindowAttrib(window, GLFW_FLOATING, floating ? 1 : 0);
-		glfwSetWindowAttrib(window, GLFW_RESIZABLE, resizable? 1 : 0);
+		glfwSetWindowSizeLimits(object, minWidth, minHeight, maxWidth, maxHeight);
+		glfwSetWindowAttrib(object, GLFW_DECORATED, decorated ? 1 : 0);
+		glfwSetWindowAttrib(object, GLFW_FLOATING, floating ? 1 : 0);
+		glfwSetWindowAttrib(object, GLFW_RESIZABLE, resizable? 1 : 0);
 
 		if (iconified)
-			glfwIconifyWindow(window);
+			glfwIconifyWindow(object);
 		
 		//OpenGL debug mode
 		if (gldebug)

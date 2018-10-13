@@ -4,7 +4,7 @@ import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-import jx3d.core.Constants;
+import jx3d.core.Module;
 
 /**
  * Camera with a perspective projection
@@ -58,7 +58,7 @@ public class PerspectiveCamera extends Camera {
 		rotation = new Quaternionf();
 		aspect = -1;
 		near = 0.1f;
-		fov = Constants.HALF_PI;
+		fov = Module.HALF_PI;
 		validProj = false;
 		validView = false;
 	}

@@ -6,7 +6,7 @@ import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL14;
 
-import jx3d.core.Constants;
+import jx3d.core.Module;
 import jx3d.graphics.Image;
 import jx3d.graphics.Texture2D;
 import jx3d.util.BufferUtils;
@@ -137,28 +137,28 @@ public class GLTexture2D extends Texture2D {
 	public void setWrapMode(int wrap, int axis) {
 		bind();	
 		int glwrap = GLGraphics.glGetTextureWrapMode(wrap);
-		if ((axis & Constants.S) == Constants.S)
+		if ((axis & Module.S) == Module.S)
 			gl.texParameteri(GL20.TEXTURE_2D, GL20.TEXTURE_WRAP_S, glwrap);
-		if ((axis & Constants.T) == Constants.T)
+		if ((axis & Module.T) == Module.T)
 			gl.texParameteri(GL20.TEXTURE_2D, GL20.TEXTURE_WRAP_T, glwrap);
 	}
 
 	@Override
 	public void setSample(int sample) {
 		switch (sample) {
-		case Constants.POINT:
+		case Module.POINT:
 			setMinFilter(mipmapping ? GL20.NEAREST_MIPMAP_NEAREST : GL20.NEAREST);
 			setMagFilter(GL20.NEAREST);
 			break;
-		case Constants.LINEAR:
+		case Module.LINEAR:
 			setMinFilter(mipmapping ? GL20.LINEAR_MIPMAP_NEAREST : GL20.LINEAR);
 			setMagFilter(GL20.NEAREST);
 			break;
-		case Constants.BILINEAR:
+		case Module.BILINEAR:
 			setMinFilter(mipmapping ? GL20.LINEAR_MIPMAP_NEAREST : GL20.LINEAR);
 			setMagFilter(GL20.LINEAR);
 			break;
-		case Constants.TRILINEAR:
+		case Module.TRILINEAR:
 			setMinFilter(mipmapping ? GL20.LINEAR_MIPMAP_LINEAR : GL20.LINEAR);
 			setMagFilter(GL20.LINEAR);
 			break;

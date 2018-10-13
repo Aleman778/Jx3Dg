@@ -28,6 +28,7 @@ public class TestApplication extends Lwjgl3Window {
 	private OrthographicCamera camera2D;
 	private PerspectiveCamera camera3D;
 	
+	
 	public TestApplication(String title, int width, int height) {
 		super(title, width, height);
 	}
@@ -114,7 +115,7 @@ public class TestApplication extends Lwjgl3Window {
 		shader.setup();
 		shader.enable();
 		String filename = "test/textures/tex_brick2.jpg";
-		InputStream input = display.files.inputStream(filename);
+		InputStream input = window.files.inputStream(filename);
 		
 		if (input == null)
 			throw new RuntimeException("Image file: " + filename + " could not be found.");
@@ -186,8 +187,28 @@ public class TestApplication extends Lwjgl3Window {
 	}
 	
 	public static void main(String[] args) {
-		TestApplication display = new TestApplication("help me", 1280, 720);
+		TestApplication display = new TestApplication("Test Application", 1280, 720);
 		display.setRenderer(OPENGL_DEBUG); 
 		display.setVisible(true);
+	}
+	
+	@Override
+	public void keyDown(int key) {
+		System.out.println("Pressed key " + key);
+	}
+	
+	@Override
+	public void mousePressed(int button) {
+		System.out.println("What's up button # " + button);
+	}
+	
+	@Override
+	public void mouseEntered() {
+		System.out.println("Mouse entered");
+	}
+	
+	@Override
+	public void mouseExited() {
+		System.out.println("Mouse exited");
 	}
 }
