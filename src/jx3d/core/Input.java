@@ -70,8 +70,8 @@ public class Input {
 		this.keyListeners = new HashSet<>();
 		this.mouseListeners = new HashSet<>();
 		this.windowListeners = new HashSet<>();
-		this.mouseState = new boolean[Module.MOUSE_BUTTON_LAST];
-		this.keyboardState = new boolean[Module.KEY_LAST];
+		this.mouseState = new boolean[Module.MOUSE_BUTTON_LAST + 1];
+		this.keyboardState = new boolean[Module.KEY_LAST + 1];
 	}
 	
 	public final void keyDownProc(int key, int mods) {
