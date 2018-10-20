@@ -1,5 +1,7 @@
 package jx3d.core;
 
+import static jx3d.core.Module.*;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,15 +37,27 @@ public class Input {
 	private Set<Node> dragging;
 	
 	/**
+	 * Mouse buttons that are being held down, every bit represents
+	 * one button where the first bit is button 1 and the last is button 8.
+	 */
+	private byte mouseButtons;
+	
+	/**
 	 * Mouse cursor position.
 	 */
 	private double mouseX, mouseY;
 	
 	/**
-	 * Array of mouse buttons states, if the value is true
-	 * then the specific button is being hold down. 
+	 * Array of mouse button states, if the value is true
+	 * then the specific button is being held down. 
 	 */
 	private boolean[] mouseState;
+	
+	/**
+	 * Array of keyboard button states if the value is true
+	 * then the specific button is being held down.
+	 */
+	private boolean[] keyboardState;
 	
 	
 	/**
@@ -57,13 +71,124 @@ public class Input {
 		this.mouseListeners = new HashSet<>();
 		this.windowListeners = new HashSet<>();
 		this.mouseState = new boolean[Module.MOUSE_BUTTON_LAST];
+		this.keyboardState = new boolean[Module.KEY_LAST];
+	}
+	
+	public final void keyDownProc(int key, int mods) {
+		if (key >= KEY_FIRST && key <= KEY_LAST) {
+			keyboardState[key] = true;
+		}
+		window.keyDown(key);
+		for (Node n : keyListeners) {
+			n.keyDown(key);
+		}
+	}
+	
+	public final void keyUpProc(int key, int mods) {
+		if (key >= KEY_FIRST && key <= KEY_LAST) {
+			keyboardState[key] = false;
+		}
+		window.keyUp(key);
+		for (Node n : keyListeners) {
+			n.keyUp(key);
+		}
+	}
+	
+	public final void keyRepeatProc(int key, int mods) {
+		window.keyRepeat(key);
+		for (Node n : keyListeners) {
+			n.keyDown(key);
+		}
+	}
+	
+	public final void mousePressedProc(int button, int mods) {
+		if (button >= MOUSE_BUTTON_FIRST && button <= MOUSE_BUTTON_LAST) {
+			mouseState[button] = true;
+			mouseButtons |= 0x1 << button;
+		}
+		window.mousePressed(button);
+		for (Node n : mouseListeners) {
+			n.mousePressed(button);
+		}
+	}
+	
+	public final void mouseReleasedProc(int button, int mods) {
+		if (button >= MOUSE_BUTTON_FIRST && button <= MOUSE_BUTTON_LAST) {
+			mouseState[button] = false;
+			mouseButtons &= ~(0x1 << button);
+		}
+		window.mouseReleased(button);
+		for (Node n : mouseListeners) {
+			n.mouseReleased(button);
+		}
+	}
+	
+	public final void mouseEnteredProc() {
+		window.mouseEntered();
+		for (Node n : mouseListeners) {
+			n.mouseEntered();
+		}
+	}
+	
+	public final void mouseExitedProc() {
+		window.mouseExited();
+		for (Node n : mouseListeners) {
+			n.mouseExited();
+		}
+	}
+	
+	public final void mouseMovedProc(double xpos, double ypos) {
+		double dx = xpos - mouseX;
+		double dy = ypos - mouseY;
+		mouseX = xpos;
+		mouseY = ypos;
+		
+		if (mouseButtons > 0) {
+			window.mouseDragged(dx, dy);
+		} else {
+			window.mouseMoved(dx, dy);
+		}
+		for (Node n : mouseListeners) {
+			n.mouseMoved(dx, dy);
+		}
+	}
+	
+	public final void mouseScrolledProc(double dx, double dy) {
+		window.mouseScrolled(dx, dy);
+		for (Node n : mouseListeners) {
+			n.mouseMoved(dx, dy);
+		}
+	}
+	
+	public final void windowResizedProc(int width, int height) {
+		window.windowResized(width, height);
+	}
+	
+	public final void windowMovedProc(int x, int y) {
+		window.windowMoved(x, y);
+	}
+	
+	public final void windowFocusProc(boolean focused) {
+		window.windowFocus(focused);
+	}
+	
+	public final void windowIconifyProc(boolean iconified) {
+		window.windowIconify(iconified);
+	}
+	
+	public final void windowMaximizeProc(boolean maximized) {
+		window.windowMaximize(maximized);
+	}
+	
+	public final void windowClosedProc() {
+		window.windowClosed();
 	}
 	
 	/**
 	 * Add a new key listener node.
 	 * @param node the key listener
 	 */
-	public void addKeyListener(Node node) {
+	public final void addKeyListener(Node node) {
 		keyListeners.add(node);
 	}
 
@@ -71,7 +196,7 @@ public class Input {
 	 * Add a new mouse listener node.
 	 * @param node the mouse listener
 	 */
-	public void addMouseListener(Node node) {
+	public final void addMouseListener(Node node) {
 		mouseListeners.add(node);
 	}
 
@@ -79,7 +204,7 @@ public class Input {
 	 * Add a new window listener node.
 	 * @param node the window listener
 	 */
-	public void addWindowListener(Node node) {
+	public final void addWindowListener(Node node) {
 		windowListeners.add(node);
 	}
 }

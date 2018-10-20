@@ -6,6 +6,8 @@ import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
+import org.joml.Vector3f;
+
 import jx3d.graphics.*;
 import jx3d.graphics.opengl.*;
 import jx3d.lwjgl3.Lwjgl3GL30;
@@ -210,5 +212,16 @@ public class TestApplication extends Lwjgl3Window {
 	@Override
 	public void mouseExited() {
 		System.out.println("Mouse exited");
+	}
+	
+	@Override
+	public void mouseDragged(double dx, double dy) {
+		System.out.println("Mouse drag offset " + dx + ", " + dy);
+		t.translate(new Vector3f(-(float) dx / 100.0f, (float) dy / 100.0f, 0.0f));
+	}
+	
+	@Override
+	public void windowClosed() {
+		System.out.println("The window is now closed!");
 	}
 }

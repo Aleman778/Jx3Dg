@@ -13,7 +13,6 @@ import java.nio.IntBuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.glfw.GLFWErrorCallback;
-import org.lwjgl.glfw.GLFWKeyCallback;
 
 /**
  * Desktop window implementation using the <i>GLFW</i>.
@@ -641,32 +640,60 @@ public class Lwjgl3Window extends Window implements Runnable {
 		
 		glfwSetKeyCallback(object, (long window, int key, int scancode, int action, int mods) -> {
 			if (action == GLFW_PRESS)
-				keyDown(key);
+				input.keyDownProc(key, mods);
 			else if (action == GLFW_RELEASE)
-				keyUp(key);
+				input.keyUpProc(key, mods);
 			else if (action == GLFW_REPEAT)
-				keyRepeat(key);
+				input.keyRepeatProc(key, mods);
 		});
 		
 		glfwSetMouseButtonCallback(object, (long window, int button, int action, int mods) -> {
 			if (action == GLFW_PRESS)
-				mousePressed(button);
+				input.mousePressedProc(button, mods);
 			else if (action == GLFW_RELEASE)
-				mouseReleased(button);
+				input.mouseReleasedProc(button, mods);
 		});
 		
 		glfwSetCursorPosCallback(object, (long window, double xpos, double ypos) -> {
-			//mouseMoved();
+			input.mouseMovedProc(xpos, ypos);
 		});
 		
 		glfwSetCursorEnterCallback(object, (long window, boolean entered) -> {
 			if (entered)
-				mouseEntered();
+				input.mouseEnteredProc();
 			else
-				mouseExited();
+				input.mouseExitedProc();
+		});
+		
+		glfwSetWindowSizeCallback(object, (long window, int width, int height) -> {
+			this.width = width;
+			this.height = height;
+			input.windowResizedProc(width, height);
+		});
+		
+		glfwSetWindowPosCallback(object, (long window, int xpos, int ypos) -> {
+			this.x = xpos;
+			this.y = ypos;
+			input.windowMovedProc(xpos, ypos);
+		});
+		
+		glfwSetWindowFocusCallback(object, (long window, boolean focused) -> {
+			input.windowFocusProc(focused);
+		});
+
+		glfwSetWindowIconifyCallback(object, (long window, boolean iconified) -> {
+			input.windowIconifyProc(iconified);
+		});
+
+		glfwSetWindowMaximizeCallback(object, (long window, boolean maximized) -> {
+			input.windowMaximizeProc(maximized);
+		});
+		
+		glfwSetWindowCloseCallback(object, (long window) -> {
+			input.windowClosedProc();
 		});
 	}
-	
+
 	private void setupAttributes() {
 		if (x == -1 && y == -1) {
 			glfwGetWindowPos(object, xpos, ypos);

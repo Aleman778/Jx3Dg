@@ -568,9 +568,9 @@ public class Module {
 	public static final int TOUCH_EVENTS = 4;
 	
 	/**
-	 * Controller events.
+	 * Gamepad events.
 	 */
-	public static final int CONTROLLER_EVENTS = 8;
+	public static final int GAMEPAD_EVENTS = 8;
 	
 	/**
 	 * Window events. e.g. windowResized(), windowMoved() etc.
@@ -579,7 +579,7 @@ public class Module {
 	
 	//Input
 	/**
-	 * Printable keys
+	 * Printable keys.
 	 */
     public static final int
         KEY_SPACE         = 32,
@@ -706,25 +706,55 @@ public class Module {
         KEY_RIGHT_CONTROL = 345,
         KEY_RIGHT_ALT     = 346,
         KEY_RIGHT_SUPER   = 347,
-        KEY_MENU          = 348,
-    	KEY_LAST 		  = KEY_MENU;
+        KEY_MENU          = 348;
+        
+    /**
+     * The first key.
+     */
+    public static final int KEY_FIRST = 0;
+
+    /**
+     * The last key.
+     */
+    public static final int KEY_LAST = KEY_MENU;
     
-    public static final int MOD_SHIFT 	    = 1;
-    
-    public static final int MOD_CONTROL     = 2;
-    
-    public static final int MOD_ALT 	    = 4;
-    
-    public static final int MOD_SUPER 	    = 8;
-    
-    public static final int MOD_CAPS_LOCK   = 16;
-    
-    public static final int MOD_NUM_LOCK    = 32;
-    
+    /**
+     * MOD key shift bit flag.
+     */
+    public static final int MOD_SHIFT = 1;
+
+    /**
+     * MOD key control bit flag.
+     */
+    public static final int MOD_CONTROL = 2;
+
+    /**
+     * MOD key alt bit flag.
+     */
+    public static final int MOD_ALT = 4;
+
+    /**
+     * MOD key super (e.g. windows key) bit flag.
+     */
+    public static final int MOD_SUPER = 8;
+
+    /**
+     * MOD key caps lock bit flag.
+     */
+    public static final int MOD_CAPS_LOCK = 16;
+
+    /**
+     * MOD key num lock bit flag.
+     */
+    public static final int MOD_NUM_LOCK = 32;
+
+    /**
+     * MOD key scroll lock bit flag.
+     */
     public static final int MOD_SCROLL_LOCK = 64;
     
 	/**
-	 * Mouse button.
+	 * Mouse buttons.
 	 */
 	public static final int
 		MOUSE_BUTTON_1 = 0,
@@ -738,6 +768,7 @@ public class Module {
 		MOUSE_BUTTON_LEFT = 0,
 		MOUSE_BUTTON_RIGHT = 1,
 		MOUSE_BUTTON_MIDDLE = 2,
+		MOUSE_BUTTON_FIRST = MOUSE_BUTTON_1,
 		MOUSE_BUTTON_LAST = MOUSE_BUTTON_8;
 	
 	//Data types
@@ -881,7 +912,7 @@ public class Module {
 	 * a key on the keyboard.
 	 * <p>
 	 * <i>Note:</i> in order for this event to be used you need to call
-	 * install(KEY_EVENT) in the {@link #setup()} method.
+	 * <code>install(KEY_EVENT);</code> in the {@link #setup()} method.
 	 * </p>
 	 * @param key the pressed key
 	 */
@@ -892,7 +923,7 @@ public class Module {
 	 * a key on the keyboard.
 	 * <p>
 	 * <i>Note:</i> in order for this event to be used you need to call
-	 * install(KEY_EVENT) in the {@link #setup()} method.
+	 * <code>install(KEY_EVENT);</code> in the {@link #setup()} method.
 	 * </p>
 	 * @param key the released key
 	 */
@@ -903,7 +934,7 @@ public class Module {
 	 * down a key on the keyboard for some time.
 	 * <p>
 	 * <i>Note:</i> in order for this event to be used you need to call
-	 * install(KEY_EVENT) in the {@link #setup()} method.
+	 * <code>install(KEY_EVENT);</code> in the {@link #setup()} method.
 	 * </p>
 	 * @param key the repeating key
 	 */
@@ -914,7 +945,7 @@ public class Module {
 	 * a button on the mouse.
 	 * <p>
 	 * <i>Note:</i> in order for this event to be used you need to call
-	 * install(MOUSE_EVENT) in the {@link #setup()} method.
+	 * <code>install(MOUSE_EVENT);</code> in the {@link #setup()} method.
 	 * </p>
 	 * @param button the pressed mouse button
 	 */
@@ -925,7 +956,7 @@ public class Module {
 	 * a button on the mouse.
 	 * <p>
 	 * <i>Note:</i> in order for this event to be used you need to call
-	 * install(MOUSE_EVENT) in the {@link #setup()} method.
+	 * <code>install(MOUSE_EVENT);</code> in the {@link #setup()} method.
 	 * </p>
 	 * @param button the released mouse button
 	 */
@@ -936,7 +967,7 @@ public class Module {
 	 * a button on the mouse.
 	 * <p>
 	 * <i>Note:</i> in order for this event to be used you need to call
-	 * install(MOUSE_EVENT) in the {@link #setup()} method.
+	 * <code>install(MOUSE_EVENT);</code> in the {@link #setup()} method.
 	 * </p>
 	 * @param button the clicked mouse button
 	 */
@@ -947,7 +978,7 @@ public class Module {
 	 * cursor on this node.
 	 * <p>
 	 * <i>Note:</i> in order for this event to be used you need to call
-	 * install(MOUSE_EVENT) in the {@link #setup()} method.
+	 * <code>install(MOUSE_EVENT);</code> in the {@link #setup()} method.
 	 * </p>
 	 */
 	public void mouseEntered() { }
@@ -957,7 +988,7 @@ public class Module {
 	 * cursor away from this node.
 	 * <p>
 	 * <i>Note:</i> in order for this event to be used you need to call
-	 * install(MOUSE_EVENT) in the {@link #setup()} method.
+	 * <code>install(MOUSE_EVENT);</code> in the {@link #setup()} method.
 	 * </p>
 	 */
 	public void mouseExited() { }
@@ -969,7 +1000,7 @@ public class Module {
 	 * The change in position is provided as argument.
 	 * <p>
 	 * <i>Note:</i> in order for this event to be used you need to call
-	 * install(MOUSE_EVENT) in the {@link #setup()} method.
+	 * <code>install(MOUSE_EVENT);</code> in the {@link #setup()} method.
 	 * </p>
 	 * @param dx the movement in the x direction 
 	 * @param dy the movement in the y direction
@@ -983,13 +1014,13 @@ public class Module {
 	 * The mouse button and the change in position is provided as argument.
 	 * <p>
 	 * <i>Note:</i> in order for this event to be used you need to call
-	 * install(MOUSE_EVENT) in the {@link #setup()} method.
+	 * <code>install(MOUSE_EVENT);</code> in the {@link #setup()} method.
 	 * </p>
 	 * @param button the mouse button that is used to trigger the dragging
 	 * @param dx the movement in the x direction 
 	 * @param dy the movement in the y direction
 	 */
-	public void mouseDragged(int button, double dx, double dy) { }
+	public void mouseDragged(double dx, double dy) { }
 	
 	/**
 	 * <p>
@@ -999,7 +1030,7 @@ public class Module {
 	 * </p>
 	 * <p>
 	 * <i>Note:</i> in order for this event to be used you need to call
-	 * install(MOUSE_EVENT) in the {@link #setup()} method.
+	 * <code>install(MOUSE_EVENT);</code> in the {@link #setup()} method.
 	 * </p>
 	 * @param dx the scrolling in the x direction 
 	 * @param dy the scrolling in the y direction
@@ -1010,7 +1041,7 @@ public class Module {
 	 * Window resized event is triggered when the user resizes the window.
 	 * <p>
 	 * <i>Note:</i> in order for this event to be used you need to call
-	 * install(MOUSE_EVENT) in the {@link #setup()} method.
+	 * <code>install(WINDOW_EVENT);</code> in the {@link #setup()} method.
 	 * </p>
 	 * @param width the new width of the window
 	 * @param height the new height of the window
@@ -1021,27 +1052,53 @@ public class Module {
 	 * Window moved event is triggered when the user moves the window.
 	 * @param x the new x location of the window
 	 * @param y the new y location of the window
+	 * <p>
+	 * <i>Note:</i> in order for this event to be used you need to call
+	 * <code>install(WINDOW_EVENT);</code> in the {@link #setup()} method.
+	 * </p>
 	 */
 	public void windowMoved(int x, int y) { }
 	
 	/**
-	 * Window focused event is triggered when the window has lost focus
-	 * and then user interacts with the window and it regains the focus.
+	 * Window focus event is triggered when the window has lost focus
+	 * or when then user interacts with the window and it regains the focus.
+	 * The focused state is provided as argument.
+	 * <p>
+	 * <i>Note:</i> in order for this event to be used you need to call
+	 * <code>install(WINDOW_EVENT);</code> in the {@link #setup()} method.
+	 * </p>
+	 * @param focused true if the window is focused, false otherwise
 	 */
-	public void windowFocused() { }
+	public void windowFocus(boolean focused) { }
 	
 	/**
-	 * Window iconified event is triggered when the user iconify (minimize) the window.
+	 * Window iconify event is triggered when the user iconify (minimize) the window
+	 * or when the user restores the window.
+	 * <p>
+	 * <i>Note:</i> in order for this event to be used you need to call
+	 * <code>install(WINDOW_EVENT);</code> in the {@link #setup()} method.
+	 * </p>
+	 * @param iconified true if the window is iconified, false otherwise
 	 */
-	public void windowIconified() { }
+	public void windowIconify(boolean iconified) { }
 	
 	/**
-	 * Window maximized event is triggered when the user maximizes the window.
+	 * Window maximize event is triggered when the user maximizes the window
+	 * or when the user restores the window.
+	 * <p>
+	 * <i>Note:</i> in order for this event to be used you need to call
+	 * <code>install(WINDOW_EVENT);</code> in the {@link #setup()} method.
+	 * </p>
+	 * @param maximized true if the window is maximized, false otherwise
 	 */
-	public void windowMaximized() { }
+	public void windowMaximize(boolean maximized) { }
 	
 	/**
 	 * Window closed event is triggered when the user closes the window.
+	 * <p>
+	 * <i>Note:</i> in order for this event to be used you need to call
+	 * <code>install(WINDOW_EVENT);</code> in the {@link #setup()} method.
+	 * </p>
 	 */
 	public void windowClosed() { }
 	
@@ -1134,9 +1191,11 @@ public class Module {
 	}
 	
 	public void install(int events, Node node) {
+		if ((events & KEY_EVENTS) == KEY_EVENTS)
+			input.addKeyListener(node);
 		if ((events & MOUSE_EVENTS) == MOUSE_EVENTS)
 			input.addMouseListener(node);
-		if ((events & MOUSE_EVENTS) == MOUSE_EVENTS)
-			input.addMouseListener(node);
+		if ((events & WINDOW_EVENTS) == WINDOW_EVENTS)
+			input.addWindowListener(node);
 	}
 }

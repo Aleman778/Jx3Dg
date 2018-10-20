@@ -2,10 +2,6 @@ package jx3d.graphics.opengl;
 
 import java.nio.IntBuffer;
 
-import org.lwjgl.opengl.GL12;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL14;
-
 import jx3d.core.Module;
 import jx3d.graphics.Image;
 import jx3d.graphics.Texture2D;

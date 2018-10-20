@@ -1,6 +1,5 @@
 package jx3d.math;
 
-import org.joml.AxisAngle4f;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;

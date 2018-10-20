@@ -1,8 +1,5 @@
 package jx3d.graphics.opengl;
 
-import org.lwjgl.opengl.GL14;
-import org.lwjgl.opengl.GL13;
-
 /**
  * OpenGL constants used as arguments to functions.
  * @since 1.0

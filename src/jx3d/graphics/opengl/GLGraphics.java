@@ -7,9 +7,6 @@ import org.lwjgl.opengl.GLCapabilities;
 import org.lwjgl.opengl.GLUtil;
 import org.lwjgl.system.Callback;
 
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
-
 import jx3d.core.Window;
 import jx3d.graphics.Graphics;
 import jx3d.graphics.IndexBuffer;

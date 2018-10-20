@@ -1,8 +1,6 @@
 package jx3d.graphics;
 
-import static jx3d.core.Module.BUTT;
-import static jx3d.core.Module.MITER;
-import static jx3d.core.Module.TRIANGLES;
+import static jx3d.core.Module.*;
 
 /**
  * Basic material uses stroke, fill and tint.
