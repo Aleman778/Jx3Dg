@@ -157,28 +157,37 @@ public class TestApplication extends Lwjgl3Window {
 		//t.translate(new Vector3f(getWidth()/2.0f, getHeight()/2.0f, 0));
 		//t.setScale(new Vector3f(0.1f, 1.0f, 1.0f));
 		
-		//Perspective projection matrix
-		camera3D = new PerspectiveCamera();
-		camera3D.setAspectRatio(getAspectRatio());
+		//Free Moving 3D Camera
+		camera3D = new FreeMoving3DCamera();
 		
-		//Orthographic projection matrix
+		//camera3D.setAspectRatio(getAspectRatio());
+		//camera3D.useWindowAspectRatio();
+		
+		//Perspective camera
+		//camera3D = new PerspectiveCamera();
+		//camera3D.useWindowAspectRatio();
+		
+		//Orthographic camera
 		camera2D = new OrthographicCamera();
 		camera2D.setOrtho(0, getWidth(), getHeight(), 0);
 
 		//shader.set("projection", perspective);
-		shader.set("projection", camera3D.getMapping());
 		graphics.viewport(0, 0, getWidth(), getHeight());
 		
 		//APPLY TRANSFORMATION
 		shader.set("transform", t.getMapping());
+		
+		setRootNode(camera3D);
 	}
 
 	@Override
 	public void draw() {
+		graphics.viewport(0, 0, getWidth(), getHeight());
 		graphics.clear(GL20.COLOR_BUFFER_BIT | GL20.DEPTH_BUFFER_BIT);
 		
-		t.rotateY(0.01f);
+		//t.rotateY(0.01f);
 		shader.set("transform", t.getMapping());
+		shader.set("projection", camera3D.getMapping());
 		//shader.set("projection", new Matrix4f().perspective);
 		
 		graphics.background(0.0f, 0.5f, 1.0f, 1.0f);
@@ -215,13 +224,12 @@ public class TestApplication extends Lwjgl3Window {
 	}
 	
 	@Override
-	public void mouseDragged(double dx, double dy) {
-		System.out.println("Mouse drag offset " + dx + ", " + dy);
-		t.translate(new Vector3f(-(float) dx / 100.0f, (float) dy / 100.0f, 0.0f));
+	public void windowClosed() {
+		System.out.println("The window is now closed!");
 	}
 	
 	@Override
-	public void windowClosed() {
-		System.out.println("The window is now closed!");
+	public void windowResized(int width, int height) {
+		
 	}
 }

@@ -1,10 +1,12 @@
 package jx3d.core;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+
+import jx3d.math.Transform;
 
 /**
  * Node is an abstract class that is used to represent an object in the application.
- * Nodes can be combined to form a tree (to be specific a DAG or directed acyclic graph).
+ * Nodes can be combined to form a tree data structure (specifically a directed acyclic graph).
  * The root in the tree is generally the corresponding display. A node is a part of the application and can perform any
  * number of behaviors such as rendering, ai, physics or scripted.
  * @since 1.0
@@ -12,16 +14,35 @@ import java.util.HashSet;
  */
 public abstract class Node extends Module {
 
-	private HashSet<Node> children;
-	private String name = getClass().getSimpleName();
+	/**
+	 * The name of this node.
+	 */
+	private String name;
+	
+	/**
+	 * The parent node, if null then this is the root of the tree.
+	 */
 	private Node parent;
+	
+	/**
+	 * List of the children of this node.
+	 */
+	private ArrayList<Node> children;
+	
+	/**
+	 * The transform object used by this node.
+	 */
+	private Transform transform;
 	
 	/**
 	 * Constructor. Creates an empty node that has no connections.
 	 * @see Node#add(Node) 
 	 */
 	public Node() {
-		children = new HashSet<>();
+		name = getClass().getName() + "#" + Integer.toHexString(hashCode());;
+		parent = null;
+		children = new ArrayList<>();
+		transform = new Transform();
 	}
 	
 	/**
@@ -89,4 +110,5 @@ public abstract class Node extends Module {
 	public final String getName() {
 		return name;
 	}
+	
 }

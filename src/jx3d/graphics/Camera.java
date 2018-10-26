@@ -2,14 +2,16 @@ package jx3d.graphics;
 
 import org.joml.Matrix4f;
 
+import jx3d.core.Node;
 import jx3d.math.Frustum;
+import jx3d.math.Transform;
 
 /**
  * Abstract camera class defines basic fields and methods that
  * are implemented by a 2D-/ orthographic- and 3D/ perspective camera.
  * @author Aleman778
  */
-public abstract class Camera {
+public abstract class Camera extends Node {
 
 	/**
 	 * The cameras view frustum.
@@ -58,7 +60,14 @@ public abstract class Camera {
 	protected boolean validView;
 	
 	/**
+	 * Transformation object.
+	 */
+	protected Transform transform;
+	
+	/**
 	 * Default constructor.
+	 * The viewport will be set to <code>(x=0, y=0, w=1, h=1)</code>.
+	 * @see #Camera(Viewport)
 	 */
 	public Camera() {
 		this(new Viewport());
@@ -66,17 +75,29 @@ public abstract class Camera {
 	
 	/**
 	 * Constructor.
-	 * @param viewport the viewing angle
+	 * @param viewport an area of the window where the camera draws on (in screen space coordinates)
 	 */
 	public Camera(Viewport viewport) {
 		 this.viewport = viewport;
 		 this.view = new Matrix4f();
 		 this.projection = new Matrix4f();
 		 this.combined = new Matrix4f();
-		 this.validView = true;
-		 this.validProj = true;
+		 this.validView = false;
+		 this.validProj = false;
 		 this.near = -100000;
 		 this.far = 100000;
+		 this.transform = new Transform();
+	}
+	
+	@Override
+	public void setup() {
+		install(WINDOW_EVENTS);
+	}
+	
+	@Override
+	public void windowResized(int width, int height) {
+		System.out.println("Whats up!");
+		validProj = false;
 	}
 	
 	/**

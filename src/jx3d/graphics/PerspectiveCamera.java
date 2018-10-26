@@ -16,16 +16,6 @@ import jx3d.core.Module;
  * @author Aleman778
  */
 public class PerspectiveCamera extends Camera {
-
-	/**
-	 * The cameras position in 3d space.
-	 */
-	private Vector3f position;
-	
-	/**
-	 * The cameras orientation in 3d space.
-	 */
-	private Quaternionf rotation;
 	
 	/**
 	 * The cameras field of view.
@@ -34,10 +24,13 @@ public class PerspectiveCamera extends Camera {
 	
 	/**
 	 * The cameras aspect ratio.
-	 * If this value is set to anything less than 0
-	 * then the aspect ratio of the display will be used.
 	 */
 	private float aspect;
+	
+	/**
+	 * The cameras aspect ration is using the displays aspect ratio.
+	 */
+	private boolean windowAspect;
 	
 	/**
 	 * Default constructor.
@@ -54,13 +47,10 @@ public class PerspectiveCamera extends Camera {
 	 */
 	public PerspectiveCamera(Viewport viewport) {
 		super(viewport);
-		position = new Vector3f();
-		rotation = new Quaternionf();
 		aspect = -1;
 		near = 0.1f;
-		fov = Module.HALF_PI;
-		validProj = false;
-		validView = false;
+		fov = Module.QUARTER_PI;
+		windowAspect = true;
 	}
 	
 	/**
@@ -85,7 +75,10 @@ public class PerspectiveCamera extends Camera {
 	 * @return the aspect ratio
 	 */
 	public float getAspectRatio() {
-		return aspect;
+		if (windowAspect && window != null)
+			return window.getAspectRatio();
+		else
+			return aspect;
 	}
 	
 	/**
@@ -93,23 +86,32 @@ public class PerspectiveCamera extends Camera {
 	 */
 	public void setAspectRatio(float aspect) {
 		this.aspect = aspect;
+		this.windowAspect = false;
 		this.validProj = false;
 	}
 	
-	public void useDisplayAspectRatio() {
-		this.aspect = -1;
+	/**
+	 * Use the aspect ratio based on the window size instead of providing your own.
+	 * <i>Note:</i> when the window size changes the aspect ratio will respond to the these changes.
+	 */
+	public void useWindowAspectRatio() {
+		this.windowAspect = true;
 		this.validProj = false;
 	}
-	
 	
 	@Override
 	protected void validateProjection() {
-		projection.setPerspective(fov, aspect, near, far, true);
+		System.out.println(getAspectRatio());
+		projection.setPerspective(fov, getAspectRatio(), near, far, false);
 	}
 
 	@Override
 	protected void validateView() {
-		view = new Matrix4f()//.rotate(rotation)
-							 .translate(0, 0, -2f);
+		Vector3f pos = transform.getPos();
+		Vector3f rot = transform.getEulerAngles();
+		pos.negate();
+		rot.negate();
+		view = new Matrix4f().rotateXYZ(rot)
+							 .translate(pos);
 	}
 }

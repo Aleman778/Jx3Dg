@@ -45,19 +45,19 @@ public class Input {
 	/**
 	 * Mouse cursor position.
 	 */
-	private double mouseX, mouseY;
+	public double mouseX, mouseY;
 	
 	/**
 	 * Array of mouse button states, if the value is true
 	 * then the specific button is being held down. 
 	 */
-	private boolean[] mouseState;
+	public boolean[] mouseState;
 	
 	/**
 	 * Array of keyboard button states if the value is true
 	 * then the specific button is being held down.
 	 */
-	private boolean[] keyboardState;
+	public boolean[] keyboardState;
 	
 	
 	/**
@@ -149,39 +149,61 @@ public class Input {
 			window.mouseMoved(dx, dy);
 		}
 		for (Node n : mouseListeners) {
-			n.mouseMoved(dx, dy);
+			if (mouseButtons > 0) {
+				n.mouseDragged(dx, dy);
+			} else {
+				n.mouseMoved(dx, dy);
+			}
 		}
 	}
 	
 	public final void mouseScrolledProc(double dx, double dy) {
 		window.mouseScrolled(dx, dy);
 		for (Node n : mouseListeners) {
-			n.mouseMoved(dx, dy);
+			n.mouseScrolled(dx, dy);
 		}
 	}
 	
 	public final void windowResizedProc(int width, int height) {
 		window.windowResized(width, height);
+		for (Node n : windowListeners) {
+			n.windowResized(width, height);
+		}
 	}
 	
 	public final void windowMovedProc(int x, int y) {
 		window.windowMoved(x, y);
+		for (Node n : windowListeners) {
+			n.windowMoved(x, y);
+		}
 	}
 	
 	public final void windowFocusProc(boolean focused) {
 		window.windowFocus(focused);
+		for (Node n : windowListeners) {
+			n.windowFocus(focused);
+		}
 	}
 	
 	public final void windowIconifyProc(boolean iconified) {
 		window.windowIconify(iconified);
+		for (Node n : windowListeners) {
+			n.windowIconify(iconified);
+		}
 	}
 	
 	public final void windowMaximizeProc(boolean maximized) {
 		window.windowMaximize(maximized);
+		for (Node n : windowListeners) {
+			n.windowMaximize(maximized);
+		}
 	}
 	
 	public final void windowClosedProc() {
 		window.windowClosed();
+		for (Node n : windowListeners) {
+			n.windowClosed();
+		}
 	}
 	
 	/**

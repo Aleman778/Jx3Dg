@@ -13,6 +13,30 @@ import jx3d.core.Screen;
 public abstract class Window extends Module implements Disposable {
 	
 	/**
+	 * The root node used by this window.
+	 */
+	private Node root;
+	
+	public final void setRootNode(Node node) {
+		if (node == null)
+			root = null;
+		
+		if (!node.isRoot())
+			throw new IllegalArgumentException("The provided node is not a root node");
+		
+		root = node;
+		root.window = window;
+		root.files = files;
+		root.input = input;
+		root.graphics = graphics;
+		root.setup();
+	}
+	
+	public final Node getRootNode() {
+		return root;
+	}
+	
+	/**
 	 * Get the title of the display.
 	 * @return the title of the display
 	 */

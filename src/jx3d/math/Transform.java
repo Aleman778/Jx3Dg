@@ -25,6 +25,11 @@ public class Transform {
 	private Vector3f position;
 	
 	/**
+	 * The euler angles (in radians).
+	 */
+	private Vector3f eulerAngles;
+	
+	/**
 	 * The rotation quaternion.
 	 */
 	private Quaternionf rotation;
@@ -41,15 +46,27 @@ public class Transform {
 	private Matrix4f mapping;
 	
 	/**
-	 * Valid flag is used to determine if the mapping is up to date
-	 * with the position, rotation and scale values.
+	 * Valid flag for the quaternion rotation is used to determine if this
+	 * object holds the latest rotation update.
 	 */
-	private boolean validf;
+	private boolean validQuaternion;
+
+	/**
+	 * Valid flag for euler rotation is used to determine if this
+	 * object holds the latest rotation update.
+	 */
+	private boolean validEuler;
+	
+	/**
+	 * Valid flag for the mapping matrix is used to determine if the matrix is up to date
+	 * with changes to the the position, rotation, scale and origin.
+	 */
+	private boolean validMapping;
 	
 	/**
 	 * Origin not set flag is used to determine if the origin is changed or not.
 	 */
-	private boolean originf;
+	private boolean originChanged;
 	
 	/**
 	 * Constructor.
@@ -58,11 +75,14 @@ public class Transform {
 	public Transform() {
 		origin = new Vector3f();
 		position = new Vector3f();
+		eulerAngles = new Vector3f();
 		rotation = new Quaternionf();
 		scale = new Vector3f(1.0f, 1.0f, 1.0f);
 		mapping = new Matrix4f();
-		validf = true;
-		originf = false;
+		validEuler = true;
+		validQuaternion = true;
+		validMapping = true;
+		originChanged = false;
 	}
 
 	/**
@@ -81,7 +101,7 @@ public class Transform {
 	 */
 	public void setOrigin(Vector3f origin) {
 		this.origin = origin;
-		this.originf = true;
+		this.originChanged = true;
 	}
 	
 	/**
@@ -98,7 +118,7 @@ public class Transform {
 	 */
 	public void setPos(Vector3f v) {
 		position = v;
-		validf = false;
+		validMapping = false;
 	}
 	
 	/**
@@ -107,14 +127,15 @@ public class Transform {
 	 */
 	public void translate(Vector3f v) {
 		position = position.add(v);
-		validf = false;
+		validMapping = false;
 	}
 
 	/**
 	 * Get the current orientation of the transformation.
 	 * @return a {@link Quaternionf} holding the orientation 
 	 */
-	public Quaternionf getOrientation() {
+	public Quaternionf getRotation() {
+		validateQuaternion();
 		return new Quaternionf(rotation);
 	}
 
@@ -122,9 +143,11 @@ public class Transform {
 	 * Set the orientation of the transformation.
 	 * @param rotation the new orientation {@link Quaternionf}
 	 */
-	public void setOrientation(Quaternionf q) {
+	public void setRotation(Quaternionf q) {
 		rotation = q;
-		validf = false;
+		validQuaternion = true;
+		validEuler = false;
+		validMapping = false;
 	}
 	
 	/**
@@ -132,65 +155,75 @@ public class Transform {
 	 * @param q the orientation {@link Quaternionf}
 	 */
 	public void rotate(Quaternionf q) {
+		validateQuaternion();
 		rotation = rotation.mul(q);
-		validf = false;
+		validEuler = false;
+		validMapping = false;
 	}
 	
 	/**
-	 * Apply a rotation to <code>this</code> transform rotating the given radians about
+	 * Get the rotation of the transformation represented in euler angles.
+	 * @return a matrix holding the euler angles
+	 */
+	public Vector3f getEulerAngles() {
+		validateEuler();
+		return new Vector3f(eulerAngles);
+	}
+	
+	/**
+	 * Set the rotation of the transformation using euler angles (in radians).
+	 * @param angles euler angles (in radians)
+	 */
+	public void setEulerAngles(Vector3f angles) {
+		eulerAngles.set(angles);
+		validEuler = true;
+		validQuaternion = false;
+		validMapping = false;
+	}
+	
+	/**
+	 * Apply an euler rotation to <code>this</code> transform rotating the given radians about
 	 * the cartesian base unit axes,called the euler angles using rotation sequence <code>XYZ</code>. 
 	 * @param angles a vector holding all the euler angles in radians
 	 */
 	public void rotateXYZ(Vector3f angles) {
-		rotation.rotateXYZ(angles.x, angles.y, angles.z);
-		validf = false;
+		validateEuler();
+		eulerAngles.add(angles);
+		validQuaternion = false;
+		validMapping = false;
 	}
 
 	/**
-	 * Apply a rotation to <code>this</code> transform rotating the given radians about
-	 * the cartesian base unit axes,called the euler angles using rotation sequence <code>YXZ</code>. 
-	 * @param angles a vector holding all the euler angles in radians
-	 */
-	public void rotateYXZ(Vector3f angles) {
-		rotation.rotateYXZ(angles.x, angles.y, angles.z);
-		validf = false;
-	}
-
-	/**
-	 * Apply a rotation to <code>this</code> transform rotating the given radians about
-	 * the cartesian base unit axes,called the euler angles using rotation sequence <code>ZXY</code>. 
-	 * @param angles a vector holding all the euler angles in radians
-	 */
-	public void rotateZXY(Vector3f angles) {
-		rotation.rotateZYX(angles.x, angles.y, angles.z);
-		validf = false;
-	}
-
-	/**
-	 * Apply a rotation to <code>this</code> transform rotating the given radians about the x axis
+	 * Apply an euler rotation to <code>this</code> transform rotating the given radians about the x axis
 	 * @param angle the angle in radians to rotate
 	 */
 	public void rotateX(float angle) {
-		rotation.rotateX(angle);
-		validf = false;
+		validateEuler();
+		eulerAngles.x += angle;
+		validQuaternion = false;
+		validMapping = false;
 	}
 
 	/**
-	 * Apply a rotation to <code>this</code> transform rotating the given radians about the y axis
+	 * Apply an euler rotation to <code>this</code> transform rotating the given radians about the y axis
 	 * @param angle the angle in radians to rotate
 	 */
 	public void rotateY(float angle) {
-		rotation.rotateY(angle);
-		validf = false;
+		validateEuler();
+		eulerAngles.y += angle;
+		validQuaternion = false;
+		validMapping = false;
 	}
 
 	/**
-	 * Apply a rotation to <code>this</code> transform rotating the given radians about the z axis
+	 * Apply an euler rotation to <code>this</code> transform rotating the given radians about the z axis
 	 * @param angle the angle in radians to rotate
 	 */
 	public void rotateZ(float angle) {
-		rotation.rotateZ(angle);
-		validf = false;
+		validateEuler();
+		eulerAngles.z += angle;
+		validQuaternion = false;
+		validMapping = false;
 	}
 
 	/**
@@ -207,7 +240,7 @@ public class Transform {
 	 */
 	public void setScale(Vector3f v) {
 		scale = v;
-		validf = false;
+		validMapping = false;
 	}
 	
 	/**
@@ -216,7 +249,7 @@ public class Transform {
 	 */
 	public void scale(Vector3f v) {
 		scale = scale.mul(v);
-		validf = false;
+		validMapping = false;
 	}
 
 	/**
@@ -225,19 +258,42 @@ public class Transform {
 	 * @return a {@link Matrix4f} that performs the mapping
 	 */
 	public Matrix4f getMapping() {
-		validate();
+		validateMapping();
 		return new Matrix4f(mapping);
 	}
+	
+	/**
+	 * Validate the quaternion that holds the rotation.
+	 */
+	private void validateQuaternion() {
+		if (validQuaternion)
+			return;
+		if (validEuler)
+			rotation.rotationXYZ(eulerAngles.x, eulerAngles.y, eulerAngles.z);
+		validQuaternion = true;
+	}
+	
+	/**
+	 * Validate the euler angles.
+	 */
+	private void validateEuler() {
+		if (validEuler)
+			return;
+		if (validQuaternion)
+			rotation.getEulerAnglesXYZ(eulerAngles);
+		validEuler = true;
+	}
+	
 	
 	/**
 	 * Validate the transformation (mapping) matrix if any changes has
 	 * been made to the transformation.
 	 */
-	private void validate() {
-		if (validf)
+	private void validateMapping() {
+		if (validMapping)
 			return;
-		
-		if (originf) {
+		validateQuaternion();
+		if (originChanged) {
 			Vector3f invOrigin = new Vector3f(origin);
 			invOrigin.mul(scale);
 			invOrigin.negate();
@@ -248,7 +304,7 @@ public class Transform {
 		} else {
 			mapping = new Matrix4f().translationRotateScale(position, rotation, scale);	
 		}
-		validf = true;
+		validMapping = true;
 	}
 	
 	@Override
