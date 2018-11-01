@@ -39,7 +39,7 @@ public abstract class Node extends Module {
 	 * @see Node#add(Node) 
 	 */
 	public Node() {
-		name = getClass().getName() + "#" + Integer.toHexString(hashCode());;
+		name = getClass().getSimpleName() + "#" + Integer.toHexString(hashCode());;
 		parent = null;
 		children = new ArrayList<>();
 		transform = new Transform();
@@ -50,13 +50,20 @@ public abstract class Node extends Module {
 	 * @param node
 	 */
 	public final void add(Node node) {
+		if (node.parent != null) {
+			throw new IllegalStateException("This node already has a parent");
+		}
+		
 		children.add(node);
 		node.parent = this;
+		node.window = window;
+		node.setup();
 	}
 
 	/**
 	 * Get an array of all the adjacent nodes (or children) to this node. 
-	 * @return an array of adjacent nodes
+	 * @return an arr
+	 * ay of adjacent nodes
 	 */ 
 	public final Node[] children() {
 		return children.toArray(new Node[children.size()]);

@@ -101,7 +101,6 @@ public class PerspectiveCamera extends Camera {
 	
 	@Override
 	protected void validateProjection() {
-		System.out.println(getAspectRatio());
 		projection.setPerspective(fov, getAspectRatio(), near, far, false);
 	}
 
@@ -111,7 +110,7 @@ public class PerspectiveCamera extends Camera {
 		Vector3f rot = transform.getEulerAngles();
 		pos.negate();
 		rot.negate();
-		view = new Matrix4f().rotateXYZ(rot)
-							 .translate(pos);
+		view.rotateXYZ(rot);
+		view.translate(pos);
 	}
 }

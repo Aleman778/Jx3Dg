@@ -183,8 +183,10 @@ public abstract class Camera extends Node {
 		if (!validProj)
 			validateProjection();
 		
-		if (!validView)
+		if (!validView) {
+			view = new Matrix4f();
 			validateView();
+		}
 		
 		if (!validProj || !validView)
 			projection.mul(view, combined);

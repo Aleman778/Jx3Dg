@@ -1,40 +1,58 @@
 package jx3d.core;
 
-import jx3d.util.Disposable;
 import jx3d.core.Screen;
+import jx3d.graphics.Graphics;
+import jx3d.util.Disposable;
 
 /**
  * Abstract display interface provides required methods for working
- * with different display implementations.
- * 
+ * with different display implementations. The window is always the root
+ * of the scene graph.
  * @since 1.0
  * @author Aleman778
  */
 public abstract class Window extends Module implements Disposable {
+
+	/**
+	 * The handle to the rendering engine that is being used by this window.
+	 * @see #window
+	 */
+	public Graphics graphics;
 	
 	/**
-	 * The root node used by this window.
+	 * The handle to the file I/O handler that is being used by this window.
+	 * @see #window
 	 */
-	private Node root;
+	public Files files;
 	
-	public final void setRootNode(Node node) {
-		if (node == null)
-			root = null;
-		
-		if (!node.isRoot())
-			throw new IllegalArgumentException("The provided node is not a root node");
-		
-		root = node;
-		root.window = window;
-		root.files = files;
-		root.input = input;
-		root.graphics = graphics;
-		root.setup();
+	/**
+	 * The handle to the input handler that is being used by this window.
+	 * @see #window
+	 */
+	public Input input;
+	
+	/**
+	 * The root node that this window uses.
+	 */
+	private Node root = new Node() { };
+	
+	/**
+	 * Constructor.
+	 */
+	public Window() {
+		root.setName("Root Node");
+		root.window = this;
 	}
 	
-	public final Node getRootNode() {
-		return root;
+	
+	public final void add(Node node) {
+		root.add(node);
 	}
+	
+	public final void remove(Node node) {
+		
+	}
+	
 	
 	/**
 	 * Get the title of the display.

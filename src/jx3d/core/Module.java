@@ -1,5 +1,7 @@
 package jx3d.core;
 
+import org.joml.Vector2f;
+
 import jx3d.graphics.Graphics;
 import jx3d.graphics.Shader;
 import jx3d.graphics.Texture2D;
@@ -866,24 +868,6 @@ public class Module {
 	 */
 	public Window window;
 	
-	/**
-	 * The handle to the rendering engine that is being used by this window.
-	 * @see #window
-	 */
-	public Graphics graphics;
-	
-	/**
-	 * The handle to the file I/O handler that is being used by this window.
-	 * @see #window
-	 */
-	public Files files;
-	
-	/**
-	 * The handle to the input handler that is being used by this window.
-	 * @see #window
-	 */
-	public Input input;
-	
 	/*
 	 * Basic events
 	 */
@@ -1005,7 +989,7 @@ public class Module {
 	 * @param dx the movement in the x direction 
 	 * @param dy the movement in the y direction
 	 */
-	public void mouseMoved(double dx, double dy) { }
+	public void mouseMoved(float dx, float dy) { }
 
 	/**
 	 * Mouse dragged event is triggered when the user moves the cursor
@@ -1020,7 +1004,7 @@ public class Module {
 	 * @param dx the movement in the x direction 
 	 * @param dy the movement in the y direction
 	 */
-	public void mouseDragged(double dx, double dy) { }
+	public void mouseDragged(float dx, float dy) { }
 	
 	/**
 	 * <p>
@@ -1035,7 +1019,7 @@ public class Module {
 	 * @param dx the scrolling in the x direction 
 	 * @param dy the scrolling in the y direction
 	 */
-	public void mouseScrolled(double dx, double dy) { }
+	public void mouseScrolled(float dx, float dy) { }
 	
 	/**
 	 * Window resized event is triggered when the user resizes the window.
@@ -1115,7 +1099,7 @@ public class Module {
 	 * @param h the height of the viewport
 	 */
 	public final void viewport(int x, int y, int w, int h) {
-		graphics.viewport(x, y, w, h);
+		window.graphics.viewport(x, y, w, h);
 	}
            
 	/**
@@ -1125,7 +1109,7 @@ public class Module {
 	 * @return the loaded shader program
 	 */
 	public Shader loadShader(String fragment) {
-		return graphics.loadShader(fragment);
+		return window.graphics.loadShader(fragment);
 	}
 	       
 	/**
@@ -1136,7 +1120,7 @@ public class Module {
 	 * @return the loaded shader program
 	 */
 	public Shader loadShader(String fragment, String vertex) {
-		return graphics.loadShader(fragment, vertex);
+		return window.graphics.loadShader(fragment, vertex);
 	}
 	       
 	/**
@@ -1145,10 +1129,50 @@ public class Module {
 	 * @return the loaded shader program
 	 */
 	public Shader loadShader(int shader) {
-		return graphics.loadShader(shader);
+		return window.graphics.loadShader(shader);
 	}
 	
-	//File I/O
+	//Input functions
+	/**
+	 * The current location of the mouse in the x-axis.
+	 * @return a float holding the horizontal mouse location
+	 */
+	public float mouseX() {
+		return window.input.getMouseX();
+	}
+	
+	/**
+	 * The current location of the mouse in the y-axis.
+	 * @return a float holding the vertical mouse location
+	 */
+	public float mouseY() {
+		return window.input.getMouseY();
+	}
+
+	/**
+	 * The current mouse state, a byte holding the pressed = 1/ released = 0
+	 * state where each bit represents a mouse button. The first bit represents
+	 * {@link #MOUSE_BUTTON_1}, the second bit is {@link #MOUSE_BUTTON_2} etc.
+	 * @return a byte holding the current state of all the mouse buttons
+	 */
+	public byte mouseState() {
+		return window.input.getMouseButtons();
+	}
+	
+	/**
+	 * The current state
+	 * @param button
+	 * @return
+	 */
+	public boolean mouse(int button) {
+		return window.input.getMouseState(button);
+	}
+	
+	public boolean key(int key) {
+		return window.input.getKeyState(key);
+	}
+	
+	//File I/O functions
 	/**
 	 * Open a file with read and write access.
 	 * @param file the path to the file can be
@@ -1157,30 +1181,30 @@ public class Module {
 	 * @return
 	 */
 	public boolean open(String file) {
-		return files.open(READ_WRITE, file);
+		return window.files.open(READ_WRITE, file);
 	}
 	
 	/**
 	 * Open a file with a specific access
 	 */
 	public boolean open(int access, String file) {
-		return files.open(access, file);
+		return window.files.open(access, file);
 	}
 	
 	public void close() {
-		files.close();
+		window.files.close();
 	}
 	
 	public String read() {
-		return files.read();
+		return window.files.read();
 	}
 	
 	public String readln() {
-		return files.readln();
+		return window.files.readln();
 	}
 	
 	public boolean write(String data) {
-		return files.write(data);
+		return window.files.write(data);
 	}
 	
 	//Events
@@ -1192,10 +1216,10 @@ public class Module {
 	
 	public void install(int events, Node node) {
 		if ((events & KEY_EVENTS) == KEY_EVENTS)
-			input.addKeyListener(node);
+			window.input.addKeyListener(node);
 		if ((events & MOUSE_EVENTS) == MOUSE_EVENTS)
-			input.addMouseListener(node);
+			window.input.addMouseListener(node);
 		if ((events & WINDOW_EVENTS) == WINDOW_EVENTS)
-			input.addWindowListener(node);
+			window.input.addWindowListener(node);
 	}
 }

@@ -15,6 +15,21 @@ import org.joml.Vector3f;
 public class Transform {
 
 	/**
+	 * The forward vector.
+	 */
+	private Vector3f forward;
+
+	/**
+	 * The right vector.
+	 */
+	private Vector3f right;
+	
+	/**
+	 * The up vector.
+	 */
+	private Vector3f up;
+	
+	/**
 	 * The origin, fixed point or center of rotation.
 	 */
 	private Vector3f origin;

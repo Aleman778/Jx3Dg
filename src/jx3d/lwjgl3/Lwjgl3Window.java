@@ -654,8 +654,12 @@ public class Lwjgl3Window extends Window implements Runnable {
 				input.mouseReleasedProc(button, mods);
 		});
 		
+		glfwSetScrollCallback(object, (long window, double xoffset, double yoffset) -> {
+			input.mouseScrolledProc((float) xoffset, (float) yoffset);
+		});
+		
 		glfwSetCursorPosCallback(object, (long window, double xpos, double ypos) -> {
-			input.mouseMovedProc(xpos, ypos);
+			input.mouseMovedProc((float) xpos, (float) ypos);
 		});
 		
 		glfwSetCursorEnterCallback(object, (long window, boolean entered) -> {

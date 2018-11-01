@@ -38,46 +38,35 @@ public class TestApplication extends Lwjgl3Window {
 	@Override
 	public void setup() {
 		float[] cube_vert = {
-	        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-	         0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-	         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+			 0.5f, -0.5f,  0.5f, 1.0f, 0.0f,
+			 0.5f,  0.5f,  0.5f, 1.0f, 1.0f,
+			-0.5f,  0.5f,  0.5f, 0.0f, 1.0f,
+			-0.5f, -0.5f,  0.5f, 0.0f, 0.0f,
+			
+			 0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
+			 0.5f,  0.5f, -0.5f, 1.0f, 1.0f,
+			 0.5f,  0.5f,  0.5f, 0.0f, 1.0f,
+			 0.5f, -0.5f,  0.5f, 0.0f, 0.0f,
+			 
+			-0.5f, -0.5f,  0.5f, 1.0f, 0.0f,
+			-0.5f,  0.5f,  0.5f, 1.0f, 1.0f,
+			-0.5f,  0.5f, -0.5f, 0.0f, 1.0f,
+			-0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+			
+			 0.5f,  0.5f,  0.5f, 1.0f, 0.0f,
+			 0.5f,  0.5f, -0.5f, 1.0f, 1.0f,
+			-0.5f,  0.5f, -0.5f, 0.0f, 1.0f,
+			-0.5f,  0.5f,  0.5f, 0.0f, 0.0f,
+			
+			 0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
+			 0.5f, -0.5f,  0.5f, 1.0f, 1.0f,
+			-0.5f, -0.5f,  0.5f, 0.0f, 1.0f,
+			-0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
 
-	        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-	        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-	        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-	         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	         0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-	        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	         0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-	         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-	        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,	
+			 0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
+			 0.5f,  0.5f, -0.5f, 1.0f, 1.0f,
+			-0.5f,  0.5f, -0.5f, 0.0f, 1.0f,
+			-0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
 		};
 		float[] vertices = {
 				0, 0, 2, 0, 0,
@@ -177,7 +166,7 @@ public class TestApplication extends Lwjgl3Window {
 		//APPLY TRANSFORMATION
 		shader.set("transform", t.getMapping());
 		
-		setRootNode(camera3D);
+		add(camera3D);
 	}
 
 	@Override
@@ -193,7 +182,7 @@ public class TestApplication extends Lwjgl3Window {
 		graphics.background(0.0f, 0.5f, 1.0f, 1.0f);
 		shader.enable();
 		tex.bind();
-		graphics.render(TRIANGLES, vao);
+		graphics.render(QUADS, vao);
 
 	}
 	
@@ -201,6 +190,9 @@ public class TestApplication extends Lwjgl3Window {
 		TestApplication display = new TestApplication("Test Application", 1280, 720);
 		display.setRenderer(OPENGL_DEBUG); 
 		display.setVisible(true);
+//		TestApplication display2 = new TestApplication("Test Application 2", 1280, 720);
+//		display2.setRenderer(OPENGL_DEBUG); 
+//		display2.setVisible(true);
 	}
 	
 	@Override

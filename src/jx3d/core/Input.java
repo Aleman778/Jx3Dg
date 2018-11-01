@@ -45,19 +45,19 @@ public class Input {
 	/**
 	 * Mouse cursor position.
 	 */
-	public double mouseX, mouseY;
+	private float mouseX, mouseY;
 	
 	/**
 	 * Array of mouse button states, if the value is true
 	 * then the specific button is being held down. 
 	 */
-	public boolean[] mouseState;
+	private boolean[] mouseState;
 	
 	/**
 	 * Array of keyboard button states if the value is true
 	 * then the specific button is being held down.
 	 */
-	public boolean[] keyboardState;
+	private boolean[] keyboardState;
 	
 	
 	/**
@@ -137,9 +137,9 @@ public class Input {
 		}
 	}
 	
-	public final void mouseMovedProc(double xpos, double ypos) {
-		double dx = xpos - mouseX;
-		double dy = ypos - mouseY;
+	public final void mouseMovedProc(float xpos, float ypos) {
+		float dx = xpos - mouseX;
+		float dy = ypos - mouseY;
 		mouseX = xpos;
 		mouseY = ypos;
 		
@@ -157,7 +157,7 @@ public class Input {
 		}
 	}
 	
-	public final void mouseScrolledProc(double dx, double dy) {
+	public final void mouseScrolledProc(float dx, float dy) {
 		window.mouseScrolled(dx, dy);
 		for (Node n : mouseListeners) {
 			n.mouseScrolled(dx, dy);
@@ -228,5 +228,54 @@ public class Input {
 	 */
 	public final void addWindowListener(Node node) {
 		windowListeners.add(node);
+	}
+	
+	/**
+	 * The current mouse location in the x-axis.
+	 * @return the mouseX
+	 */
+	public float getMouseX() {
+		return mouseX;
+	}
+	
+	/**
+	 * The current mouse location in the y-axis.
+	 * @return the mouseY
+	 */
+	public float getMouseY() {
+		return mouseY;
+	}
+	
+	/**
+	 * The buttons that are currently being held down.
+	 * The each bit in the byte represents one of the 8 mouse buttons.
+	 * @return the mouse buttons byte
+	 */
+	public byte getMouseButtons() {
+		return mouseButtons;
+	}
+	
+	/**
+	 * Get the state of a specific key on the keyboard.
+	 * @param key the key to check
+	 * @return true if the key is being held down, false otherwise
+	 */
+	public boolean getKeyState(int key) {
+		if (key < KEY_FIRST || key > KEY_LAST)
+			throw new IllegalArgumentException("The provided key identifier (" + key + ") is out of the range of the defined standard keys.");
+			
+		return keyboardState[key];	
+	}
+
+	/**
+	 * Get the state of a specific mouse button.
+	 * @param button the button to check
+	 * @return true if the mouse button is being held down, false otherwise
+	 */
+	public boolean getMouseState(int button) {
+		if (button < MOUSE_BUTTON_FIRST || button > MOUSE_BUTTON_LAST)
+			throw new IllegalArgumentException("The provided mouse button identifier (" + button + ") is out of the range of 0 through 8.");
+		
+		return mouseState[button];
 	}
 }
