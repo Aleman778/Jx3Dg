@@ -1150,8 +1150,8 @@ public class Module {
 	}
 
 	/**
-	 * The current mouse state, a byte holding the pressed = 1/ released = 0
-	 * state where each bit represents a mouse button. The first bit represents
+	 * The current state of the mouse, a byte is used to represents all 8 mouse buttons where
+	 * each bit corresponds the button state pressed = 1/ released = 0. The first bit represents
 	 * {@link #MOUSE_BUTTON_1}, the second bit is {@link #MOUSE_BUTTON_2} etc.
 	 * @return a byte holding the current state of all the mouse buttons
 	 */
@@ -1160,14 +1160,19 @@ public class Module {
 	}
 	
 	/**
-	 * The current state
-	 * @param button
-	 * @return
+	 * Check if a specific mouse button is being held down or has been released.
+	 * @param button the specific button the check
+	 * @return true if the button is pressed down, false if the button has been released
 	 */
 	public boolean mouse(int button) {
 		return window.input.getMouseState(button);
 	}
 	
+	/**
+	 * Check if a specific keyboard key is being held down or has been released.
+	 * @param key the specific key the check
+	 * @return true if the key is pressed down, false if the key has been released
+	 */
 	public boolean key(int key) {
 		return window.input.getKeyState(key);
 	}
@@ -1208,18 +1213,37 @@ public class Module {
 	}
 	
 	//Events
-	public void install(int events) {
+	/**
+	 * Install a specific input listener to this node.
+	 * There are currently three types of listeners to install:
+	 * <ul>
+	 * 		<li><code>KEY_LISTENER</code> - includes keyboard related callbacks e.g. {@link Module#keyDown(int)}.</li>
+	 *	 	<li><code>MOUSE_LISTENER</code> - includes mouse related callbacks e.g. {@link Module#mousePressed(int)}.</li>
+	 *	 	<li><code>WINDOW_LISTENER</code> - includes window related callbacks e.g. {@link Module#windowClosed()}.</li>
+	 *		<li>with more to come later...</li>
+	 * </ul>
+	 * @param type can be any of these <code>KEY_LISTENER</code>,
+	 * 		       <code>MOUSE_LISTENER</code> or <code>WINDOW_LISTENER</code>
+	 */
+	public void install(int type) {
 		if (this instanceof Node) {
-			install(events, (Node) this);
+			install(type, (Node) this);
 		}
 	}
 	
-	public void install(int events, Node node) {
-		if ((events & KEY_EVENTS) == KEY_EVENTS)
+	/**
+	 * Install a specific input listener to a specific node.
+	 * @param type can be any of these <code>KEY_LISTENER</code>,
+	 * 		       <code>MOUSE_LISTENER</code> or <code>WINDOW_LISTENER</code>
+	 * @param node the specific node to add the listener to
+	 * @see Module#install(int)
+	 */
+	public void install(int type, Node node) {
+		if ((type & KEY_EVENTS) == KEY_EVENTS)
 			window.input.addKeyListener(node);
-		if ((events & MOUSE_EVENTS) == MOUSE_EVENTS)
+		if ((type & MOUSE_EVENTS) == MOUSE_EVENTS)
 			window.input.addMouseListener(node);
-		if ((events & WINDOW_EVENTS) == WINDOW_EVENTS)
+		if ((type & WINDOW_EVENTS) == WINDOW_EVENTS)
 			window.input.addWindowListener(node);
 	}
 }

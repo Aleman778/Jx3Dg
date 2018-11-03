@@ -2,14 +2,34 @@ package jx3d.core;
 
 import static jx3d.core.Module.*;
 
+import java.awt.event.KeyListener;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * <p>
+ * Input class is an abstract class that contains functions for handling input
+ * events from the windowing system. The window and nodes have their own input
+ * handling callback functions but only callbacks from the window will be 
+ * automatically triggered.
+ * </p>
+ * <p>
+ * In order to receive callbacks for a specific node
+ * you have to manually add it the set of listeners using the add listeners functions
+ * e.g. {@link Node#install(int)} where the <code>int</code> is the type of event listener.
+ * However your nodes will always have access to the current input state using functions
+ * like {@link Node#mouseX()} to get the location of the mouse in the x-axis.
+ * </p>
+ * <p>
+ * This basic class has a general implementation
+ * but because some platform have specific input handlers you should always implement
+ * this class for each windowing system. This class also contains states for
+ * some input devices such as the mouse, keyboard etc.
+ * </p>
  * @since 1.0
  * @author Aleman778
  */
-public class Input {
+public abstract class Input {
 
 	/**
 	 * The window owner.
@@ -74,7 +94,7 @@ public class Input {
 		this.keyboardState = new boolean[Module.KEY_LAST + 1];
 	}
 	
-	public final void keyDownProc(int key, int mods) {
+	public void keyDownProc(int key, int mods) {
 		if (key >= KEY_FIRST && key <= KEY_LAST) {
 			keyboardState[key] = true;
 		}
@@ -84,7 +104,7 @@ public class Input {
 		}
 	}
 	
-	public final void keyUpProc(int key, int mods) {
+	public void keyUpProc(int key, int mods) {
 		if (key >= KEY_FIRST && key <= KEY_LAST) {
 			keyboardState[key] = false;
 		}
@@ -94,14 +114,14 @@ public class Input {
 		}
 	}
 	
-	public final void keyRepeatProc(int key, int mods) {
+	public void keyRepeatProc(int key, int mods) {
 		window.keyRepeat(key);
 		for (Node n : keyListeners) {
 			n.keyDown(key);
 		}
 	}
 	
-	public final void mousePressedProc(int button, int mods) {
+	public void mousePressedProc(int button, int mods) {
 		if (button >= MOUSE_BUTTON_FIRST && button <= MOUSE_BUTTON_LAST) {
 			mouseState[button] = true;
 			mouseButtons |= 0x1 << button;
@@ -112,7 +132,7 @@ public class Input {
 		}
 	}
 	
-	public final void mouseReleasedProc(int button, int mods) {
+	public void mouseReleasedProc(int button, int mods) {
 		if (button >= MOUSE_BUTTON_FIRST && button <= MOUSE_BUTTON_LAST) {
 			mouseState[button] = false;
 			mouseButtons &= ~(0x1 << button);
@@ -123,21 +143,21 @@ public class Input {
 		}
 	}
 	
-	public final void mouseEnteredProc() {
+	public void mouseEnteredProc() {
 		window.mouseEntered();
 		for (Node n : mouseListeners) {
 			n.mouseEntered();
 		}
 	}
 	
-	public final void mouseExitedProc() {
+	public void mouseExitedProc() {
 		window.mouseExited();
 		for (Node n : mouseListeners) {
 			n.mouseExited();
 		}
 	}
 	
-	public final void mouseMovedProc(float xpos, float ypos) {
+	public void mouseMovedProc(float xpos, float ypos) {
 		float dx = xpos - mouseX;
 		float dy = ypos - mouseY;
 		mouseX = xpos;
@@ -157,49 +177,49 @@ public class Input {
 		}
 	}
 	
-	public final void mouseScrolledProc(float dx, float dy) {
+	public void mouseScrolledProc(float dx, float dy) {
 		window.mouseScrolled(dx, dy);
 		for (Node n : mouseListeners) {
 			n.mouseScrolled(dx, dy);
 		}
 	}
 	
-	public final void windowResizedProc(int width, int height) {
+	public void windowResizedProc(int width, int height) {
 		window.windowResized(width, height);
 		for (Node n : windowListeners) {
 			n.windowResized(width, height);
 		}
 	}
 	
-	public final void windowMovedProc(int x, int y) {
+	public void windowMovedProc(int x, int y) {
 		window.windowMoved(x, y);
 		for (Node n : windowListeners) {
 			n.windowMoved(x, y);
 		}
 	}
 	
-	public final void windowFocusProc(boolean focused) {
+	public void windowFocusProc(boolean focused) {
 		window.windowFocus(focused);
 		for (Node n : windowListeners) {
 			n.windowFocus(focused);
 		}
 	}
 	
-	public final void windowIconifyProc(boolean iconified) {
+	public void windowIconifyProc(boolean iconified) {
 		window.windowIconify(iconified);
 		for (Node n : windowListeners) {
 			n.windowIconify(iconified);
 		}
 	}
 	
-	public final void windowMaximizeProc(boolean maximized) {
+	public void windowMaximizeProc(boolean maximized) {
 		window.windowMaximize(maximized);
 		for (Node n : windowListeners) {
 			n.windowMaximize(maximized);
 		}
 	}
 	
-	public final void windowClosedProc() {
+	public void windowClosedProc() {
 		window.windowClosed();
 		for (Node n : windowListeners) {
 			n.windowClosed();
@@ -207,27 +227,54 @@ public class Input {
 	}
 	
 	/**
-	 * Add a new key listener node.
+	 * Add a key listener for a specific node.
 	 * @param node the key listener
 	 */
-	public final void addKeyListener(Node node) {
+	public void addKeyListener(Node node) {
 		keyListeners.add(node);
+	}
+	
+	/**
+	 * Remove the key listener of a specific node.
+	 * @param node the node to remove its key listener
+	 * @return false if the provided node has no key listener, true otherwise
+	 */
+	public boolean removeKeyListener(Node node) {
+		return keyListeners.remove(node);
 	}
 
 	/**
 	 * Add a new mouse listener node.
 	 * @param node the mouse listener
 	 */
-	public final void addMouseListener(Node node) {
+	public void addMouseListener(Node node) {
 		mouseListeners.add(node);
 	}
 
 	/**
+	 * Remove the mouse listener of a specific node.
+	 * @param node the node to remove its mouse listener
+	 * @return false if the provided node has no mouse listener, true otherwise
+	 */
+	public boolean removeMouseListener(Node node) {
+		return mouseListeners.remove(node);
+	}
+	
+	/**
 	 * Add a new window listener node.
 	 * @param node the window listener
 	 */
-	public final void addWindowListener(Node node) {
+	public void addWindowListener(Node node) {
 		windowListeners.add(node);
+	}
+	
+	/**
+	 * Remove the window listener of a specific node.
+	 * @param node the node to remove its window listener
+	 * @return false if the provided node has no window listener, true otherwise
+	 */
+	public boolean removeWindowListener(Node node) {
+		return windowListeners.remove(node);
 	}
 	
 	/**
