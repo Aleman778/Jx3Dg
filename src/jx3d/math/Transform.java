@@ -129,7 +129,7 @@ public class Transform {
 
 	/**
 	 * Set the position of the transformation.
-	 * @param position the new position {@link Vector3f}
+	 * @param vertices the new position {@link Vector3f}
 	 */
 	public void setPos(Vector3f v) {
 		position = v;

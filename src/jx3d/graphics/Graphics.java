@@ -100,6 +100,35 @@ public abstract class Graphics {
 	
 	public abstract void background(float red, float green, float blue, float alpha);
 	
+	//Primitive functions
+	public void rect(float x, float y, float w, float h) {
+		
+	}
+	
+	public void ellipse(float x, float y, float rx, float ry) {
+		
+	}
+	
+	public void arc(float x, float y, float rx, float ry, float a1, float a2, boolean ccw) {
+		
+	}
+	
+	public void quad(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) {
+		
+	}
+	
+	public void triangle(float x1, float y1, float x2, float y2, float x3, float y3) {
+		
+	}
+	
+	public void line(float x1, float y1, float x2, float y2) {
+		
+	}
+	
+	public void point(float x, float y) {
+		
+	}
+	
 	//Shader functions
 	public abstract Shader loadShader(String fragment);
 	

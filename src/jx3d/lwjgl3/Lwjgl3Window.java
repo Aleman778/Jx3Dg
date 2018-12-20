@@ -89,7 +89,7 @@ public class Lwjgl3Window extends Window implements Runnable {
 	public Lwjgl3Window(String title, int width, int height) {
 		initialized();
 
-		this.files = new Lwjgl3Files(this);
+		this.files = new Lwjgl3Files();
 		this.input = new Lwjgl3Input(this);
 		this.title = title;
 		this.width = width;

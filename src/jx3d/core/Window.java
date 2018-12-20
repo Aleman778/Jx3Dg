@@ -2,6 +2,7 @@ package jx3d.core;
 
 import jx3d.core.Screen;
 import jx3d.graphics.Graphics;
+import jx3d.io.Files;
 import jx3d.util.Disposable;
 
 /**

@@ -130,12 +130,7 @@ public class GLGraphics extends Graphics {
 	
 	@Override
 	public Shader loadShader(String fragment) {
-		if (!window.open(READ, fragment))
-			return null;
-		
-		String source = window.read();
-		window.close();
-		
+		String source = window.files.loadText(fragment);
 		Shader shader = new GLSLShader(gl20);
 		shader.add(FRAGMENT_SHADER, source);
 		shader.setup();
@@ -144,23 +139,15 @@ public class GLGraphics extends Graphics {
 
 	@Override
 	public Shader loadShader(String fragment, String vertex) {
-		if (!window.open(READ, fragment))
-			return null;
-		
-		String fsource = window.read();
-		
-		if (!window.open(READ, vertex))
-			return null;
-		
-		String vsource = window.read();
-		window.close();
-		
+		String fsource = window.files.loadText(fragment);
+		String vsource = window.files.loadText(vertex);
 		Shader shader = new GLSLShader(gl20);
 		shader.add(FRAGMENT_SHADER, fsource);
 		shader.add(VERTEX_SHADER, vsource);
 		shader.setup();
 		return shader;
 	}
+	
 
 	@Override
 	public Shader loadShader(int shader) {

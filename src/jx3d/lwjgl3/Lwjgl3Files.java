@@ -1,225 +1,155 @@
 package jx3d.lwjgl3;
 
+import static org.lwjgl.assimp.Assimp.*;
+
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.JarURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
+import java.nio.IntBuffer;
+import java.util.ArrayList;
 
-import jx3d.core.Module;
-import jx3d.core.Window;
-import jx3d.core.FileHandle;
-import jx3d.core.Files;
+import org.joml.Vector2f;
+import org.joml.Vector3f;
+import org.lwjgl.PointerBuffer;
+import org.lwjgl.assimp.AIFace;
+import org.lwjgl.assimp.AIMesh;
+import org.lwjgl.assimp.AIScene;
+import org.lwjgl.assimp.AIVector3D;
 
+import jx3d.graphics.Mesh;
+import jx3d.io.FileHandle;
+import jx3d.io.Files;
+
+/**
+ * Implementation 
+ * @since 1.0
+ * @author Aleman778
+ */
 public class Lwjgl3Files extends Files {
 
-	//public static final String EXTERNAL_DIR = new File("").getPath() + File.separator;
 	public static final String LOCAL_DIR = new File("").getAbsolutePath() + File.separator;
-
-	private BufferedReader reader;
-	private BufferedWriter writer;
+	public static final String EXTERNAL_DIR = new File("").getPath() + File.separator;
 	
-	public Lwjgl3Files(Window display) {
-		super(display);
+	@Override
+	public byte[] loadBytes(String file) {
+		return null;
 	}
 
 	@Override
-	public boolean open(int access, String file) {
-		close();
-		reader = null;
-		writer = null;
-		
-		//Reader
-		if (access == Module.READ) {
-			InputStream input = inputStream(file);
-			if (input == null)
-				return false;
-
-			InputStreamReader isr = new InputStreamReader(input);
-			reader = new BufferedReader(isr);
-			try {
-				reader.mark(0);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else if (access == Module.WRITE) {
-			OutputStream output = outputStream(file);
-			if (output == null)
-				return false;
-			
-			OutputStreamWriter osw = new OutputStreamWriter(output);
-			writer = new BufferedWriter(osw);
-		}
-		
-		return true;
+	public boolean saveBytes(String file, byte[] bytes) {
+		return false;
 	}
 	
 	@Override
-	public void close() {
+	public String loadText(String file) {
+		String result = "";
+		BufferedReader reader = createReader(file);
+		String line;
 		try {
-			if (reader != null)
-				reader.close();
-			if (writer != null)
-				writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public String read() {
-		if (reader == null)
-			throw new IllegalStateException("There is no opened reader to use.");
-
-		try {
-			reader.reset();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		String contents = "";
-		try {
-			String line;
 			while ((line = reader.readLine()) != null) {
-				contents += line + "\n";
+				result += line + "\n";
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-			return null;
 		}
-
-		return contents;
+		
+		return result;
 	}
 	
 	@Override
-	public String readln() {
-		if (reader == null)
-			throw new IllegalStateException("There is no opened reader to use.");
-		
-		try {
-			return reader.readLine();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	@Override
-	public boolean write(String data) {
-		if (writer == null)
-			throw new IllegalStateException("There is no opened writer to use.");
-		
-		try {
-			writer.write(data);
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
-		
+	public boolean saveText(String file, String text) {
 		return true;
 	}
 
 	@Override
-	public InputStream inputStream(String file) {
-		if (file == null)
-			return null;
-		
-		if (file.isEmpty())
-			return null;
-		
-		//HTTP URL file
-		InputStream input = null;
-		if (file.contains("http://") || file.contains("https://"))
-			input = inputFromURL(file);
-		
-		//Project resource
-		if (input == null)
-			input = inputFromResource(file);
-		
-		//Local directory
-		if (input == null)
-			input = local(file).toInputStream();
-		
-		//External directory
-		if (input == null)
-			input = external(file).toInputStream();
-		
-		return input;
-	}
-	
-	private InputStream inputFromURL(String file) {
-		try {
-			URL url = new URL(file);
-			URLConnection connection = url.openConnection();
-			
-			if (connection instanceof HttpURLConnection) {
-				HttpURLConnection httpConnection = (HttpURLConnection) connection;
-				httpConnection.setInstanceFollowRedirects(true);
-				
-				int response = httpConnection.getResponseCode();
-				if (response >= 300 && response < 400) {
-					inputFromURL(httpConnection.getHeaderField("Location"));
-				}
-				
-				return httpConnection.getInputStream();
-			} else if (connection instanceof JarURLConnection) {
-				return url.openStream();
-			}
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
-		
-		return null;
-	}
-	
-	private InputStream inputFromResource(String file) {
-		ClassLoader loader = getClass().getClassLoader();
-		InputStream input = loader.getResourceAsStream(file);
-		if (input != null) {
-			String clss = input.getClass().getName();
-			if (!clss.equals("sun.plugin.cache.EmptyInputStream")) {
-				return input;
-			}
-		}
+	public String[] loadStrings(String file) {
 		return null;
 	}
 
 	@Override
-	public OutputStream outputStream(String file) {
-		if (file == null)
-			return null;
+	public boolean saveStrings(String file, String[] strings) {
+		return false;
+	}
+
+	/*
+	 * TODO: DEBUG MOVE load sape and save shape into different class for ASSIMP loading.
+	 */
+	@Override
+	public Mesh loadShape(String file) {
+		AIScene scene = aiImportFile(file, aiProcess_Triangulate | aiProcess_FlipUVs);
 		
-		if (file.isEmpty())
-			return null;
+		ArrayList<Vector3f> verts = new ArrayList<>();
+		ArrayList<Vector2f> uvs = new ArrayList<>();
+		ArrayList<Short> inds = new ArrayList<>();
 		
-		//HTTP URL file
-		OutputStream output = null;
+		PointerBuffer meshes = scene.mMeshes();
+		while (meshes.hasRemaining()) {
+			AIMesh mesh = AIMesh.create(meshes.get());
+			processMesh(verts, uvs, inds, mesh);
+		}
 		
-		//Local directory
-		if (output == null)
-			output = local(file).toOutputStream();
-		
-		//External directory
-		if (output == null)
-			output = external(file).toOutputStream();
-		
-		return output;
+		Mesh result = new Mesh();
+		result.vertices = verts.toArray(new Vector3f[verts.size()]);
+		result.uv = uvs.toArray(new Vector2f[uvs.size()]);
+		result.indices = new short[inds.size()];
+		for (int i = 0; i < inds.size(); i++) {
+			result.indices[i] = inds.get(i);
+		}
+		return result;
+	}
+
+	@Override
+	public boolean saveShape(String file, Mesh mesh) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
+	private void processMesh(ArrayList<Vector3f> verts, ArrayList<Vector2f> uvs, ArrayList<Short> inds, AIMesh mesh) {
+		AIVector3D.Buffer aiVecBuffer = mesh.mVertices();
+		while (aiVecBuffer.hasRemaining()) {
+			AIVector3D aiVec = aiVecBuffer.get();
+			verts.add(new Vector3f(aiVec.x(), aiVec.y(), aiVec.z()));
+		}
+		
+		AIFace.Buffer aiFaceBuffer = mesh.mFaces();
+		while (aiFaceBuffer.hasRemaining()) {
+			if (aiFaceBuffer.hasRemaining()) {
+				AIFace face = aiFaceBuffer.get();
+				IntBuffer buf = face.mIndices();
+				while (buf.hasRemaining()) {
+					inds.add((short) buf.get());
+				}
+			}
+		}
+		
+		AIVector3D.Buffer aiUVBuffer = mesh.mTextureCoords(0);
+		if (aiUVBuffer != null) {
+			while (aiUVBuffer.hasRemaining()) {
+				AIVector3D aiVec = aiUVBuffer.get();
+				uvs.add(new Vector2f(aiVec.x(), aiVec.y()));
+			}
+		}
+	}
+
 	@Override
-	public FileHandle external(String file) {
-		return new FileHandle(file);
+	public File selectFolder(String title, String current, String filter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public File selectFile(String title, String current, int action, String filter) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public FileHandle local(String file) {
 		return new FileHandle(LOCAL_DIR + file);
+	}
+	
+	@Override
+	public FileHandle external(String file) {
+		return new FileHandle(EXTERNAL_DIR + file);
 	}
 }

@@ -6,11 +6,14 @@ import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import jx3d.graphics.*;
 import jx3d.graphics.opengl.*;
+import jx3d.io.Files;
 import jx3d.lwjgl3.Lwjgl3GL30;
+import jx3d.lwjgl3.Lwjgl3Files;
 import jx3d.lwjgl3.Lwjgl3Window;
 import jx3d.math.*;
 
@@ -85,13 +88,33 @@ public class TestApplication extends Lwjgl3Window {
 			0, 1, 3,
 			1, 2, 3
 		};
+		
+		Files files = new Lwjgl3Files();
+		Mesh mesh = files.loadShape("C:/Users/alexa/Documents/eclipse/jx3Dg/src/test/models/lamborghini/lambo.obj"); //
+		
+		
+		
 		vbo = graphics.createVBO(STATIC_DRAW);
 		vbo.bind();
-		vbo.insert(cube_vert, 0);
+		//vbo.insert(cube_vert, 0);
+		float[] vboData = new float[mesh.vertexCount() * 5];
+		for (int i = 0; i < mesh.vertexCount(); i++) {
+			Vector3f v = mesh.vertices[i];
+			vboData[i * 5] = v.x;
+			vboData[i * 5 + 1] = v.y;
+			vboData[i * 5 + 2] = v.z;
+		}
+		for (int i = 0; i < mesh.uv.length; i++) {
+			vboData[i * 5 + 3] = mesh.uv[i].x;
+			vboData[i * 5 + 4] = mesh.uv[i].y;
+		}
+		vbo.set(vboData);
+		
 		
 		ibo = graphics.createIBO(STATIC_DRAW);
 		ibo.bind();
-		ibo.insert(indices, 0);
+		//ibo.insert(indices, 0);
+		ibo.set(mesh.indices);
 		
 		vao = graphics.createVAO();
 		
@@ -105,8 +128,8 @@ public class TestApplication extends Lwjgl3Window {
 									 "test/shaders/basic_vertex.glsl");
 		shader.setup();
 		shader.enable();
-		String filename = "test/textures/tex_brick2.jpg";
-		InputStream input = window.files.inputStream(filename);
+		String filename = "test/models/lamborghini/lambo_diffuse.jpeg";
+		InputStream input = window.files.createInput(filename);
 		
 		if (input == null)
 			throw new RuntimeException("Image file: " + filename + " could not be found.");
@@ -142,6 +165,7 @@ public class TestApplication extends Lwjgl3Window {
 		
 		//Transformation
 		t = new Transform();
+		t.scale(new Vector3f(0.01f, 0.01f, 0.01f));
 		//t.setOrigin(new Vector3f(209, 209, 0));
 		//t.translate(new Vector3f(getWidth()/2.0f, getHeight()/2.0f, 0));
 		//t.setScale(new Vector3f(0.1f, 1.0f, 1.0f));
@@ -182,7 +206,7 @@ public class TestApplication extends Lwjgl3Window {
 		graphics.background(0.0f, 0.5f, 1.0f, 1.0f);
 		shader.enable();
 		tex.bind();
-		graphics.render(QUADS, vao);
+		graphics.render(TRIANGLES, vao);
 
 	}
 	

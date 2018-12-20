@@ -1,4 +1,4 @@
-package jx3d.core;
+package jx3d.io;
 
 import java.io.File;
 import java.io.FileFilter;

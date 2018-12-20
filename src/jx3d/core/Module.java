@@ -860,7 +860,7 @@ public class Module {
 	public static final int QUAT = 16;
 
 	/*
-	 * Basic variables 
+	 * State variable
 	 */
 	
 	/**
@@ -1089,6 +1089,19 @@ public class Module {
 	/*
 	 * Functions
 	 */
+	//Immediate primitive rendering
+	public final void rect(float x, float y, float w, float h) {
+		window.graphics.rect(x, y, w, h);
+	}
+	
+	public final void ellipse(float x, float y, float rx, float ry) {
+		window.graphics.ellipse(x, y, rx, ry);
+	}
+	
+	public final void arc(float x, float y, float rx, float ry, float sa, float ea, boolean ccw) {
+		window.graphics.arc(x, y, rx, ry, sa, ea, ccw);
+	}
+	
 	
 	//Rendering functions
 	/**
@@ -1178,41 +1191,27 @@ public class Module {
 	}
 	
 	//File I/O functions
-	/**
-	 * Open a file with read and write access.
-	 * @param file the path to the file can be
-	 * 		  relative to your project, a local file
-	 * 		  on your machine or an URL.
-	 * @return
-	 */
-	public boolean open(String file) {
-		return window.files.open(READ_WRITE, file);
+	public byte[] loadBytes(String file) {
+		return window.files.loadBytes(file);
 	}
 	
-	/**
-	 * Open a file with a specific access
-	 */
-	public boolean open(int access, String file) {
-		return window.files.open(access, file);
+	public boolean saveBytes(String file, byte[] bytes) {
+		return window.files.saveBytes(file, bytes);
 	}
 	
-	public void close() {
-		window.files.close();
+	public String[] loadStrings(String file) {
+		return window.files.loadStrings(file);
 	}
 	
-	public String read() {
-		return window.files.read();
+	public boolean saveStrings(String file, String[] strings) {
+		return window.files.saveStrings(file, strings);
 	}
 	
-	public String readln() {
-		return window.files.readln();
-	}
 	
-	public boolean write(String data) {
-		return window.files.write(data);
-	}
 	
-	//Events
+	
+	
+	//Input I/O functions
 	/**
 	 * Install a specific input listener to this node.
 	 * There are currently three types of listeners to install:
