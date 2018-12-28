@@ -1,7 +1,7 @@
 package jx3d.lwjgl3;
 
-import jx3d.core.Input;
 import jx3d.core.Window;
+import jx3d.io.Input;
 
 /**
  * @since 1.0

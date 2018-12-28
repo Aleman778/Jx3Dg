@@ -5,6 +5,7 @@ import static org.lwjgl.assimp.Assimp.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 
@@ -19,6 +20,7 @@ import org.lwjgl.assimp.AIVector3D;
 import jx3d.graphics.Mesh;
 import jx3d.io.FileHandle;
 import jx3d.io.Files;
+import jx3d.io.JavaIOSystem;
 
 /**
  * Implementation 
@@ -27,11 +29,19 @@ import jx3d.io.Files;
  */
 public class Lwjgl3Files extends Files {
 
-	public static final String LOCAL_DIR = new File("").getAbsolutePath() + File.separator;
-	public static final String EXTERNAL_DIR = new File("").getPath() + File.separator;
+	public Lwjgl3Files() {
+		super(new JavaIOSystem());
+	}
 	
 	@Override
 	public byte[] loadBytes(String file) {
+		try {
+			InputStream stream = io.createInput(file);
+			byte[] array = stream.readAllBytes();
+			stream.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 
@@ -42,18 +52,20 @@ public class Lwjgl3Files extends Files {
 	
 	@Override
 	public String loadText(String file) {
-		String result = "";
-		BufferedReader reader = createReader(file);
-		String line;
 		try {
+			String result = "";
+			BufferedReader reader = io.createReader(file);
+			String line;
 			while ((line = reader.readLine()) != null) {
 				result += line + "\n";
 			}
+			reader.close();
+			return result;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		return result;
+		return null;
 	}
 	
 	@Override
@@ -141,15 +153,5 @@ public class Lwjgl3Files extends Files {
 	public File selectFile(String title, String current, int action, String filter) {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public FileHandle local(String file) {
-		return new FileHandle(LOCAL_DIR + file);
-	}
-	
-	@Override
-	public FileHandle external(String file) {
-		return new FileHandle(EXTERNAL_DIR + file);
 	}
 }

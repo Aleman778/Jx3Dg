@@ -1,8 +1,13 @@
 package jx3d.core;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import org.joml.Vector2f;
 
 import jx3d.graphics.Graphics;
+import jx3d.graphics.Mesh;
 import jx3d.graphics.Shader;
 import jx3d.graphics.Texture2D;
 
@@ -1199,6 +1204,14 @@ public class Module {
 		return window.files.saveBytes(file, bytes);
 	}
 	
+	public String loadText(String file) {
+		return window.files.loadText(file);
+	}
+	
+	public boolean saveText(String file, String text) {
+		return window.files.saveText(file, text);
+	}
+	
 	public String[] loadStrings(String file) {
 		return window.files.loadStrings(file);
 	}
@@ -1207,7 +1220,31 @@ public class Module {
 		return window.files.saveStrings(file, strings);
 	}
 	
+	public Mesh loadShape(String file) {
+		return window.files.loadShape(file);
+	}
 	
+	public boolean saveShape(String file, Mesh shape) {
+		return window.files.saveShape(file, shape);
+	}
+	
+	public InputStream createInput(String file) {
+		try {
+			return window.files.io.createInput(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public OutputStream createOutput(String file) {
+		try {
+			return window.files.io.createOutput(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
 	
 	
