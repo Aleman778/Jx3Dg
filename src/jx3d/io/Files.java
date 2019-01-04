@@ -87,8 +87,25 @@ public abstract class Files {
 	 */
 	public abstract boolean saveShape(String file, Mesh shape);
 	
+	/**
+	 * Select a folder using the operating systems internal window UI.
+	 * <i>Note:</i> this function is not supported on all platforms.
+	 * @param title the title of the folder select window
+	 * @param current the folder to start with
+	 * @param filter filters
+	 * @return a new file object holding the path to the requested folder
+	 */
 	public abstract File selectFolder(String title, String current, String filter);
 	
+	/**
+	 * Select a file using the operating systems internal window UI.
+	 * <i>Note:</i> this function is not supported on all platforms.
+	 * @param title the title of the file select window
+	 * @param current the file to start with
+	 * @param action the type of action e.g. saving, loading
+	 * @param filter filter which files to select from
+	 * @return a new file object holding the path to the requested file
+	 */
 	public abstract File selectFile(String title, String current, int action, String filter);
 
 }

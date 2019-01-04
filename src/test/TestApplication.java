@@ -90,7 +90,7 @@ public class TestApplication extends Lwjgl3Window {
 		};
 		
 		Files files = new Lwjgl3Files();
-		Mesh mesh = files.loadShape("C:/Users/alexa/Documents/eclipse/jx3Dg/src/test/models/lamborghini/lambo.obj"); //
+		Mesh mesh = files.loadShape("C:/Users/alema/git/jx3DGraphics/src/test/models/bunny.obj"); //
 		
 		
 		
@@ -129,7 +129,7 @@ public class TestApplication extends Lwjgl3Window {
 		shader.setup();
 		shader.enable();
 		String filename = "test/models/lamborghini/lambo_diffuse.jpeg";
-		InputStream input = window.files.createInput(filename);
+		InputStream input = createInput(filename);
 		
 		if (input == null)
 			throw new RuntimeException("Image file: " + filename + " could not be found.");
@@ -165,7 +165,7 @@ public class TestApplication extends Lwjgl3Window {
 		
 		//Transformation
 		t = new Transform();
-		t.scale(new Vector3f(0.01f, 0.01f, 0.01f));
+		//t.scale(new Vector3f(0.01f, 0.01f, 0.01f));
 		//t.setOrigin(new Vector3f(209, 209, 0));
 		//t.translate(new Vector3f(getWidth()/2.0f, getHeight()/2.0f, 0));
 		//t.setScale(new Vector3f(0.1f, 1.0f, 1.0f));

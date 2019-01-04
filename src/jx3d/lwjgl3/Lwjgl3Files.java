@@ -37,7 +37,6 @@ public class Lwjgl3Files extends Files {
 	public byte[] loadBytes(String file) {
 		try {
 			InputStream stream = io.createInput(file);
-			byte[] array = stream.readAllBytes();
 			stream.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -84,7 +83,7 @@ public class Lwjgl3Files extends Files {
 	}
 
 	/*
-	 * TODO: DEBUG MOVE load sape and save shape into different class for ASSIMP loading.
+	 * TODO: DEBUG MOVE load shape and save shape into different class for ASSIMP loading.
 	 */
 	@Override
 	public Mesh loadShape(String file) {
