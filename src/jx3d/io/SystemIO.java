@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public abstract class IOSystem {
+public abstract class SystemIO {
 
 	/**
 	 * Creates a buffered reader object that can pull data

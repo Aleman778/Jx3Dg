@@ -12,7 +12,7 @@ import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class JavaIOSystem extends IOSystem {
+public class JavaSystemIO extends SystemIO {
 
 	public static final String LOCAL_DIR = new File("").getAbsolutePath() + File.separator;
 	public static final String EXTERNAL_DIR = new File("").getPath() + File.separator;

@@ -15,16 +15,32 @@ import jx3d.graphics.Mesh;
 public abstract class Files {
 	
 	/**
-	 * Reference to the io system to use.
+	 * Reference to the system io to use.
 	 */
-	public final IOSystem io;
+	public final SystemIO sys;
+
+	/**
+	 * Reference to the image io to use.
+	 */
+	public final ImageIO image;
+
+	/**
+	 * Reference to the shape io to use.
+	 */
+	public final ShapeIO shape;
 	
 	/**
 	 * Constructor.
-	 * @param io the io system to use
+	 * @param sys the system io to use
+	 * @param image the image io to use
+	 * @param shape the shape io to use
 	 */
-	public Files(IOSystem io) {
-		this.io = io;
+	public Files(SystemIO sys, ImageIO image, ShapeIO shape) {
+		this.sys   = sys;
+		this.image = image;
+		this.image.sys = sys;
+		this.shape = shape;
+		this.shape.sys = sys;
 	}
 
 	/**
@@ -71,21 +87,6 @@ public abstract class Files {
 	 * @return true if the data was saved successfully, false otherwise
 	 */
 	public abstract boolean saveStrings(String file, String[] strings);
-	
-	/**
-	 * Load shape from the specific file.
-	 * @param file the file to load from.
-	 * @return a new shape holding the result
-	 */
-	public abstract Mesh loadShape(String file);
-	
-	/**
-	 * Save shape from the specified file.
-	 * @param file the file to save to
-	 * @param shape the shape to save
-	 * @return true if the data was saved successfully, false otherwise
-	 */
-	public abstract boolean saveShape(String file, Mesh shape);
 	
 	/**
 	 * Select a folder using the operating systems internal window UI.

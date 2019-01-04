@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import org.joml.Vector2f;
 
 import jx3d.graphics.Graphics;
+import jx3d.graphics.Image;
 import jx3d.graphics.Mesh;
 import jx3d.graphics.Shader;
 import jx3d.graphics.Texture2D;
@@ -1220,17 +1221,25 @@ public class Module {
 		return window.files.saveStrings(file, strings);
 	}
 	
+	public Image loadImage(String file) {
+		return window.files.image.loadImage(file);
+	}
+	
+	public boolean saveImage(String file, Image image) {
+		return window.files.image.saveImage(file, image);
+	}
+	
 	public Mesh loadShape(String file) {
-		return window.files.loadShape(file);
+		return window.files.shape.loadShape(file);
 	}
 	
 	public boolean saveShape(String file, Mesh shape) {
-		return window.files.saveShape(file, shape);
+		return window.files.shape.saveShape(file, shape);
 	}
 	
 	public InputStream createInput(String file) {
 		try {
-			return window.files.io.createInput(file);
+			return window.files.sys.createInput(file);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -1239,7 +1248,7 @@ public class Module {
 	
 	public OutputStream createOutput(String file) {
 		try {
-			return window.files.io.createOutput(file);
+			return window.files.sys.createOutput(file);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

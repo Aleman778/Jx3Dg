@@ -1,19 +1,11 @@
 package test;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.io.InputStream;
-
-import javax.imageio.ImageIO;
-
-import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import jx3d.graphics.*;
 import jx3d.graphics.opengl.*;
-import jx3d.io.Files;
 import jx3d.lwjgl3.Lwjgl3GL30;
-import jx3d.lwjgl3.Lwjgl3Files;
 import jx3d.lwjgl3.Lwjgl3Window;
 import jx3d.math.*;
 
@@ -89,9 +81,8 @@ public class TestApplication extends Lwjgl3Window {
 			1, 2, 3
 		};
 		
-		Files files = new Lwjgl3Files();
-		Mesh mesh = files.loadShape("C:/Users/alema/git/jx3DGraphics/src/test/models/bunny.obj"); //
-		
+		Mesh mesh = loadShape("test/models/lamborghini/lambo.obj");
+		image = loadImage("test/models/lamborghini/lambo_diffuse.jpeg");
 		
 		
 		vbo = graphics.createVBO(STATIC_DRAW);
@@ -128,31 +119,6 @@ public class TestApplication extends Lwjgl3Window {
 									 "test/shaders/basic_vertex.glsl");
 		shader.setup();
 		shader.enable();
-		String filename = "test/models/lamborghini/lambo_diffuse.jpeg";
-		InputStream input = createInput(filename);
-		
-		if (input == null)
-			throw new RuntimeException("Image file: " + filename + " could not be found.");
-		
-		try {
-			BufferedImage bufimg = ImageIO.read(input);
-			image = new Image(bufimg.getWidth(), bufimg.getHeight());
-			
-			int[] pixels = image.getPixels();
-			bufimg.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
-			
-	    	for (int i = 0; i < image.getWidth() * image.getHeight(); i++) {
-	            int a = (pixels[i] & 0xFF000000) >> 24;
-	            int r = (pixels[i] & 0xFF0000) >> 16;
-	            int g = (pixels[i] & 0xFF00) >> 8;
-	            int b = (pixels[i] & 0xFF);
-	
-	            pixels[i] = a << 24 | b << 16 | g << 8 | r;
-	        }
-		} catch (IOException e) {
-			throw new IllegalArgumentException("image " + filename + " is not found.");
-		}
-
 		GL30 gl = new Lwjgl3GL30();
 
 		gl.activeTexture(0);
@@ -165,7 +131,7 @@ public class TestApplication extends Lwjgl3Window {
 		
 		//Transformation
 		t = new Transform();
-		//t.scale(new Vector3f(0.01f, 0.01f, 0.01f));
+		t.scale(new Vector3f(0.01f, 0.01f, 0.01f));
 		//t.setOrigin(new Vector3f(209, 209, 0));
 		//t.translate(new Vector3f(getWidth()/2.0f, getHeight()/2.0f, 0));
 		//t.setScale(new Vector3f(0.1f, 1.0f, 1.0f));
