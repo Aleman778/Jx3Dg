@@ -1222,37 +1222,27 @@ public class Module {
 	}
 	
 	public Image loadImage(String file) {
-		return window.files.image.loadImage(file);
+		return window.files.loadImage(file);
 	}
 	
 	public boolean saveImage(String file, Image image) {
-		return window.files.image.saveImage(file, image);
+		return window.files.saveImage(file, image);
 	}
 	
 	public Mesh loadShape(String file) {
-		return window.files.shape.loadShape(file);
+		return window.files.loadShape(file);
 	}
 	
 	public boolean saveShape(String file, Mesh shape) {
-		return window.files.shape.saveShape(file, shape);
+		return window.files.saveShape(file, shape);
 	}
 	
 	public InputStream createInput(String file) {
-		try {
-			return window.files.sys.createInput(file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
+		return window.files.createInput(file);
 	}
 	
 	public OutputStream createOutput(String file) {
-		try {
-			return window.files.sys.createOutput(file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
+		return window.files.createOutput(file);
 	}
 	
 	

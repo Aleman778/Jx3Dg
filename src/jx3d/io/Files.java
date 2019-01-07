@@ -1,7 +1,14 @@
 package jx3d.io;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
+import jx3d.graphics.Image;
 import jx3d.graphics.Mesh;
 
 /**
@@ -12,43 +19,14 @@ import jx3d.graphics.Mesh;
  * @since 1.0
  * @author Aleman778
  */
-public abstract class Files {
-	
-	/**
-	 * Reference to the system io to use.
-	 */
-	public final SystemIO sys;
-
-	/**
-	 * Reference to the image io to use.
-	 */
-	public final ImageIO image;
-
-	/**
-	 * Reference to the shape io to use.
-	 */
-	public final ShapeIO shape;
-	
-	/**
-	 * Constructor.
-	 * @param sys the system io to use
-	 * @param image the image io to use
-	 * @param shape the shape io to use
-	 */
-	public Files(SystemIO sys, ImageIO image, ShapeIO shape) {
-		this.sys   = sys;
-		this.image = image;
-		this.image.sys = sys;
-		this.shape = shape;
-		this.shape.sys = sys;
-	}
+public interface Files {
 
 	/**
 	 * Load bytes from the specific file.
 	 * @param file the file to load from
 	 * @return a new byte array holding the result
 	 */
-	public abstract byte[] loadBytes(String file);
+	public byte[] loadBytes(String file);
 	
 	/**
 	 * Save bytes onto the specific file.
@@ -56,14 +34,14 @@ public abstract class Files {
 	 * @param bytes the byte array data to store
 	 * @return true if the data was saved successfully, false otherwise
 	 */
-	public abstract boolean saveBytes(String file, byte[] bytes);
+	public boolean saveBytes(String file, byte[] bytes);
 	
 	/**
 	 * Load text from the specified file.
 	 * @param file the file to load from
 	 * @return a new string holding the contents of the file
 	 */
-	public abstract String loadText(String file);
+	public String loadText(String file);
 	
 	/**
 	 * Save text onto the specified file.
@@ -71,14 +49,14 @@ public abstract class Files {
 	 * @param text the text to store
 	 * @return true if the data was saved successfully, false otherwise
 	 */
-	public abstract boolean saveText(String file, String text);
+	public boolean saveText(String file, String text);
 	
 	/**
 	 * Load strings from the specific file.
 	 * @param file the file to load from
 	 * @return a new string array holding the result
 	 */
-	public abstract String[] loadStrings(String file);
+	public String[] loadStrings(String file);
 	
 	/**
 	 * Save strings onto the specific file.
@@ -86,7 +64,37 @@ public abstract class Files {
 	 * @param strings the string array to save
 	 * @return true if the data was saved successfully, false otherwise
 	 */
-	public abstract boolean saveStrings(String file, String[] strings);
+	public boolean saveStrings(String file, String[] strings);
+
+	/**
+	 * Load an image from the specific image file.
+	 * @param file the image file to load from 
+	 * @return a new image holding the result
+	 */
+	public abstract Image loadImage(String file);
+	
+	/**
+	 * Save an image onto the specific image file
+	 * @param file the image file to save to
+	 * @param image the image to save
+	 * @return true if the image was saved successfully, false otherwise
+	 */
+	public abstract boolean saveImage(String file, Image image);
+	
+	/**
+	 * Load shape from the specific file.
+	 * @param file the file to load from.
+	 * @return a new shape holding the result
+	 */
+	public abstract Mesh loadShape(String file);
+	
+	/**
+	 * Save shape from the specified file.
+	 * @param file the file to save to
+	 * @param shape the shape to save
+	 * @return true if the data was saved successfully, false otherwise
+	 */
+	public abstract boolean saveShape(String file, Mesh shape);
 	
 	/**
 	 * Select a folder using the operating systems internal window UI.
@@ -96,7 +104,7 @@ public abstract class Files {
 	 * @param filter filters
 	 * @return a new file object holding the path to the requested folder
 	 */
-	public abstract File selectFolder(String title, String current, String filter);
+	public File selectFolder(String title, String current, String filter);
 	
 	/**
 	 * Select a file using the operating systems internal window UI.
@@ -107,6 +115,41 @@ public abstract class Files {
 	 * @param filter filter which files to select from
 	 * @return a new file object holding the path to the requested file
 	 */
-	public abstract File selectFile(String title, String current, int action, String filter);
+	public File selectFile(String title, String current, int action, String filter);
+	
+	/**
+	 * Create an input stream to a specific file.
+	 * @param file the file locator string, can be an URL,
+	 * 			   relative or absolute file path
+	 * @return a new input stream
+	 */
+	public abstract InputStream createInput(String file);
 
+	/**
+	 * Create an output stream to a specific file.
+	 * @param file the file locator string, cannot be an URL,
+	 * 			   but can be either a relative or absolute file path
+	 * @return a new input stream
+	 */
+	public abstract OutputStream createOutput(String file);
+	
+	/**
+	 * Get a file handle from a local directory.
+	 * Local files are located in you project folder,
+	 * e.g. <br><code>res/images/test.png</code>.
+	 * @param file the local file path
+	 * @return a new file handle to the requested file
+	 */
+	public abstract FileHandle local(String file);
+
+	/**
+	 * Get a file handle from a external directory.
+	 * External files are located outside the project directory.
+	 * e.g. <br><code>C:/Users/name/Documents/test.png</code>.<br>
+	 * <i>Note:</i> an external file path is may not be
+	 * a valid path on different machines.
+	 * @param file the external file path
+	 * @return a new file handle to the requested file
+	 */
+	public abstract FileHandle external(String file);
 }
