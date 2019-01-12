@@ -1,5 +1,6 @@
 package jx3d.lwjgl3;
 
+import static org.lwjgl.util.nfd.NativeFileDialog.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,11 +12,11 @@ import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
-import jx3d.io.Files;
 import jx3d.io.IOUtils;
+import jx3d.io.Files;
+import jx3d.io.FileHandle;
 import jx3d.graphics.Image;
 import jx3d.graphics.Mesh;
-import jx3d.io.FileHandle;
 
 /**
  * Implementation 
@@ -29,50 +30,37 @@ public class Lwjgl3Files implements Files {
 	
 	@Override
 	public byte[] loadBytes(String file) {
-		return IOUtils.toByteArray(createInput(file));
+		return IOUtils.loadBytes(createInput(file));
 	}
 
 	@Override
 	public boolean saveBytes(String file, byte[] bytes) {
-		return false;
+		return IOUtils.saveBytes(createOutput(file), bytes);
 	}
 	
 	@Override
 	public String loadText(String file) {
-		try {
-			String result = "";
-			BufferedReader reader = null;//createReader(file);
-			String line;
-			while ((line = reader.readLine()) != null) {
-				result += line + "\n";
-			}
-			reader.close();
-			return result;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		return null;
+		return IOUtils.loadText(createInput(file));
 	}
 	
 	@Override
 	public boolean saveText(String file, String text) {
-		return true;
+		return IOUtils.saveText(createOutput(file), text);
 	}
 
 	@Override
 	public String[] loadStrings(String file) {
-		return null;
+		return IOUtils.loadStrings(createInput(file));
 	}
 
 	@Override
 	public boolean saveStrings(String file, String[] strings) {
-		return false;
+		return IOUtils.saveStrings(createOutput(file), strings);
 	}
 
 	@Override
 	public Image loadImage(String file) {
-		return IOUtils.toImage(createInput(file));
+		return IOUtils.loadImage(createInput(file));
 	}
 
 	@Override
@@ -87,7 +75,7 @@ public class Lwjgl3Files implements Files {
 
 	@Override
 	public boolean saveShape(String file, Mesh shape) {
-		return false;
+		return Lwjgl3Assimp.exportShape(createOutput(file));
 	}
 
 	@Override

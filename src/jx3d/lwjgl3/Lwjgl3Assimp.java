@@ -4,6 +4,7 @@ import static org.lwjgl.assimp.Assimp.*;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
@@ -27,37 +28,35 @@ import jx3d.io.IOUtils;
  */
 public class Lwjgl3Assimp {
 
-	public static Mesh importShape(InputStream file) {
-		try {
-			byte[] bytes = IOUtils.toByteArray(file);
-			ByteBuffer buffer = ByteBuffer.allocateDirect(bytes.length + 1).order(ByteOrder.nativeOrder());
-	        buffer.put(bytes).put((byte) 0).flip();
-	        
-			//AIScene scene = aiImportFile(buffer, aiProcess_Triangulate | aiProcess_FlipUVs);
-			AIScene scene = aiImportFileFromMemory(buffer, aiProcess_Triangulate | aiProcess_FlipUVs, "obj");
-			ArrayList<Vector3f> verts = new ArrayList<>();
-			ArrayList<Vector2f> uvs = new ArrayList<>();
-			ArrayList<Short> inds = new ArrayList<>();
-			
-			PointerBuffer meshes = scene.mMeshes();
-			while (meshes.hasRemaining()) {
-				AIMesh mesh = AIMesh.create(meshes.get());
-				processMesh(verts, uvs, inds, mesh);
-			}
-			
-			Mesh result = new Mesh();
-			result.vertices = verts.toArray(new Vector3f[verts.size()]);
-			result.uv = uvs.toArray(new Vector2f[uvs.size()]);
-			result.indices = new short[inds.size()];
-			for (int i = 0; i < inds.size(); i++) {
-				result.indices[i] = inds.get(i);
-			}
-			return result;
-		} catch (IOException e) {
-			e.printStackTrace();
+	public static Mesh importShape(InputStream input) {
+		byte[] bytes = IOUtils.loadBytes(input);
+		ByteBuffer buffer = ByteBuffer.allocateDirect(bytes.length + 1).order(ByteOrder.nativeOrder());
+		buffer.put(bytes).put((byte) 0).flip();
+		
+		AIScene scene = aiImportFileFromMemory(buffer, aiProcess_Triangulate | aiProcess_FlipUVs, "obj");
+		ArrayList<Vector3f> verts = new ArrayList<>();
+		ArrayList<Vector2f> uvs = new ArrayList<>();
+		ArrayList<Short> inds = new ArrayList<>();
+		
+		PointerBuffer meshes = scene.mMeshes();
+		while (meshes.hasRemaining()) {
+			AIMesh mesh = AIMesh.create(meshes.get());
+			processMesh(verts, uvs, inds, mesh);
 		}
 		
-		return null;
+		Mesh result = new Mesh();
+		result.vertices = verts.toArray(new Vector3f[verts.size()]);
+		result.uv = uvs.toArray(new Vector2f[uvs.size()]);
+		result.indices = new short[inds.size()];
+		for (int i = 0; i < inds.size(); i++) {
+			result.indices[i] = inds.get(i);
+		}
+		
+		return result;
+	}
+	
+	public static boolean exportShape(OutputStream output) {
+		return false;
 	}
 	
 	private static void processMesh(ArrayList<Vector3f> verts, ArrayList<Vector2f> uvs, ArrayList<Short> inds, AIMesh mesh) {

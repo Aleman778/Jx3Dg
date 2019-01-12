@@ -1,6 +1,5 @@
 package test;
 
-import java.io.InputStream;
 import org.joml.Vector3f;
 
 import jx3d.graphics.*;
