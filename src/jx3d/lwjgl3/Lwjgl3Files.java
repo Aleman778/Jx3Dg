@@ -2,8 +2,6 @@ package jx3d.lwjgl3;
 
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,8 +12,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import jx3d.io.Files;
-import jx3d.io.JavaSystemIO;
-import jx3d.io.JavaImageIO;
+import jx3d.io.IOUtils;
 import jx3d.graphics.Image;
 import jx3d.graphics.Mesh;
 import jx3d.io.FileHandle;
@@ -32,7 +29,7 @@ public class Lwjgl3Files implements Files {
 	
 	@Override
 	public byte[] loadBytes(String file) {
-		return null;
+		return IOUtils.toByteArray(createInput(file));
 	}
 
 	@Override
@@ -75,7 +72,7 @@ public class Lwjgl3Files implements Files {
 
 	@Override
 	public Image loadImage(String file) {
-		return null;
+		return IOUtils.toImage(createInput(file));
 	}
 
 	@Override
@@ -85,7 +82,7 @@ public class Lwjgl3Files implements Files {
 
 	@Override
 	public Mesh loadShape(String file) {
-		return null;
+		return Lwjgl3Assimp.importShape(createInput(file));
 	}
 
 	@Override

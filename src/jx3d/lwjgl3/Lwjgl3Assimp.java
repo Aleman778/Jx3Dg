@@ -2,10 +2,8 @@ package jx3d.lwjgl3;
 
 import static org.lwjgl.assimp.Assimp.*;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
@@ -20,23 +18,19 @@ import org.lwjgl.assimp.AIScene;
 import org.lwjgl.assimp.AIVector3D;
 
 import jx3d.graphics.Mesh;
+import jx3d.io.IOUtils;
 
 /**
  * Shape IO implementation using the Assimp Library.
  * @since 1.0
  * @author Aleman778
  */
-public class Lwjgl3Assimp extends ShapeIO {
+public class Lwjgl3Assimp {
 
-	@Override
-	public Mesh loadShape(String file) {
+	public static Mesh importShape(InputStream file) {
 		try {
-			InputStream input = sys.createInput(file);
-			byte[] bytes = new byte[1024 * 4];
-			final ByteArrayOutputStream output = new ByteArrayOutputStream();
-			int count = (int) copy(input, output, bytes);
-			bytes = output.toByteArray();
-			ByteBuffer buffer = ByteBuffer.allocateDirect(count + 1).order(ByteOrder.nativeOrder());
+			byte[] bytes = IOUtils.toByteArray(file);
+			ByteBuffer buffer = ByteBuffer.allocateDirect(bytes.length + 1).order(ByteOrder.nativeOrder());
 	        buffer.put(bytes).put((byte) 0).flip();
 	        
 			//AIScene scene = aiImportFile(buffer, aiProcess_Triangulate | aiProcess_FlipUVs);
@@ -65,18 +59,8 @@ public class Lwjgl3Assimp extends ShapeIO {
 		
 		return null;
 	}
-	public static long copy(final InputStream input, final OutputStream output, final byte[] buffer)
-            throws IOException {
-        long count = 0;
-        int n;
-        while (-1 != (n = input.read(buffer))) {
-            output.write(buffer, 0, n);
-            count += n;
-        }
-        return count;
-	}
 	
-	private void processMesh(ArrayList<Vector3f> verts, ArrayList<Vector2f> uvs, ArrayList<Short> inds, AIMesh mesh) {
+	private static void processMesh(ArrayList<Vector3f> verts, ArrayList<Vector2f> uvs, ArrayList<Short> inds, AIMesh mesh) {
 		AIVector3D.Buffer aiVecBuffer = mesh.mVertices();
 		while (aiVecBuffer.hasRemaining()) {
 			AIVector3D aiVec = aiVecBuffer.get();
@@ -102,10 +86,4 @@ public class Lwjgl3Assimp extends ShapeIO {
 			}
 		}
 	}
-
-	@Override
-	public boolean saveShape(String file, Mesh shape) {
-		return false;
-	}
-
 }
