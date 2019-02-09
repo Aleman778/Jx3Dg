@@ -1,5 +1,6 @@
 package test;
 
+import jx3d.core.Log;
 import org.joml.Vector3f;
 
 import jx3d.graphics.*;
@@ -7,6 +8,9 @@ import jx3d.graphics.opengl.*;
 import jx3d.lwjgl3.Lwjgl3GL30;
 import jx3d.lwjgl3.Lwjgl3Window;
 import jx3d.math.*;
+
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 /**
  * Test application.

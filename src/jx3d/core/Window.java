@@ -32,7 +32,7 @@ public abstract class Window extends Module implements Disposable {
 	 * @see #window
 	 */
 	public Input input;
-	
+
 	/**
 	 * The root node that this window uses.
 	 */

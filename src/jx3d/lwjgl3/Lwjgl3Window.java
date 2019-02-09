@@ -2,6 +2,7 @@ package jx3d.lwjgl3;
 
 import static org.lwjgl.glfw.GLFW.*;
 
+import jx3d.core.Log;
 import jx3d.core.Window;
 import jx3d.core.Screen;
 import jx3d.graphics.opengl.GL20;
@@ -34,7 +35,7 @@ public class Lwjgl3Window extends Window implements Runnable {
 	
 	private static boolean initialized = false;
 
-	private Object lock = new Object();
+	private final Object lock = new Object();
 	private Thread mainThread;
 	private Lwjgl3Screen screen;
 	private String title;
@@ -216,15 +217,15 @@ public class Lwjgl3Window extends Window implements Runnable {
 	 */
 	private void setRendererImpl(int renderer) {
 		switch (renderer) {
-		case OPENGL:
-			graphics = new GLGraphics(this);
-			break;
-		case OPENGL_DEBUG:
-			graphics = new GLGraphics(this);
-			gldebug = true;
-			break;
-		default:
-			throw new IllegalArgumentException("Invalid or unsupported renderer provided.");
+			case OPENGL:
+				graphics = new GLGraphics(this);
+				break;
+			case OPENGL_DEBUG:
+				graphics = new GLGraphics(this);
+				gldebug = true;
+				break;
+			default:
+				throw new IllegalArgumentException("Invalid or unsupported renderer provided.");
 		}
 	}
 	
@@ -234,9 +235,15 @@ public class Lwjgl3Window extends Window implements Runnable {
 	 */
 	private void setGLProfile(int profile) {
 		switch (profile) {
-		case GL20_PROFILE:
-			setProfileImpl(2, false);
-			break;
+			case GL20_PROFILE:
+				setProfileImpl(2, false);
+				break;
+			case GL30_COMPAT_PROFILE:
+				setProfileImpl(3, true);
+				break;
+			case GL30_CORE_PROFILE:
+				setProfileImpl(3, false);
+				break;
 		}
 	}
 	
@@ -510,7 +517,7 @@ public class Lwjgl3Window extends Window implements Runnable {
 
 	/**
 	 * Set the decorated attribute.
-	 * @param iconified flag
+	 * @param decorated flag
 	 */
 	public final void setDecorated(boolean decorated) {
 		this.decorated = decorated;
@@ -548,7 +555,7 @@ public class Lwjgl3Window extends Window implements Runnable {
 	
 	/**
 	 * Set the resizable attribute.
-	 * @param resizeable flag
+	 * @param resizable flag
 	 */
 	public final void setResizeable(boolean resizable) {
 		this.resizable = resizable;
@@ -567,7 +574,6 @@ public class Lwjgl3Window extends Window implements Runnable {
 	
 	/**
 	 * Set the minimized (iconified) attribute.
-	 * @param iconified flag
 	 */
 	public final void setIconified() {
 		glfwIconifyWindow(object);
@@ -583,7 +589,6 @@ public class Lwjgl3Window extends Window implements Runnable {
 
 	/**
 	 * Set the maximized attribute.
-	 * @param maximized flag
 	 */
 	public final void setMaximized() {
 		glfwMaximizeWindow(object);

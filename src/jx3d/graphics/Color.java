@@ -166,9 +166,9 @@ public class Color {
 	 * Creates a color based on the hue, saturation and lightness components.<br>
 	 * <i>Note:</i> the color will be fully opaque i.e. alpha will be set to 1.0.
 	 * HSL is an alternative representation of the RGBA color model.
-	 * @param hue the hue is an angular color wheel where 0° is the primary red,
-	 * 		120° is the primary green, 240° is the primary blue and then
-	 * 		wrapping back to red at 360°. 
+	 * @param hue the hue is an angular color wheel where 0Â° is the primary red,
+	 * 		120ï¿½ is the primary green, 240Â° is the primary blue and then
+	 * 		wrapping back to red at 360Â°.
 	 * @param saturation the saturation has a value from 0 to 1 and it
 	 * 		is used for representing gray values, where saturation of 0
 	 * 		is an achromatic color and higher values gives different shades
@@ -185,9 +185,9 @@ public class Color {
 	/**
 	 * Creates a color based on the hue, saturation, lightness and alpha components.
 	 * HSL is an alternative representation of the RGBA color model.
-	 * @param hue the hue is an angular color wheel where 0° is the primary red,
-	 * 		120° is the primary green, 240° is the primary blue and then
-	 * 		wrapping back to red at 360°. 
+	 * @param hue the hue is an angular color wheel where 0Â° is the primary red,
+	 * 		120Â° is the primary green, 240Â° is the primary blue and then
+	 * 		wrapping back to red at 360Â°.
 	 * @param saturation the saturation has a value from 0 to 1 and it
 	 * 		is used for representing gray values, where saturation of 0
 	 * 		is an achromatic color and higher values gives different shades

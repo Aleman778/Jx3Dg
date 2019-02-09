@@ -1,8 +1,5 @@
 package jx3d.lwjgl3;
 
-import static org.lwjgl.util.nfd.NativeFileDialog.*;
-
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;

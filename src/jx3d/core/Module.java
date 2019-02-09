@@ -3,6 +3,7 @@ package jx3d.core;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.logging.Level;
 
 import org.joml.Vector2f;
 
@@ -986,7 +987,7 @@ public class Module {
 	/**
 	 * Mouse moved event is triggered when the user moves the cursor.
 	 * If the user presses and holds a button then the 
-	 * {@link #mouseDragged(int, double, double)} event is used instead.
+	 * {@link #mouseDragged(float, float)} event is used instead.
 	 * The change in position is provided as argument.
 	 * <p>
 	 * <i>Note:</i> in order for this event to be used you need to call
@@ -1000,13 +1001,12 @@ public class Module {
 	/**
 	 * Mouse dragged event is triggered when the user moves the cursor
 	 * after pressing and holding a button. If the user releases the button
-	 * then the {@link #mouseMoved(double, double)} event is used instead. 
+	 * then the {@link #mouseMoved(float, float)} event is used instead.
 	 * The mouse button and the change in position is provided as argument.
 	 * <p>
 	 * <i>Note:</i> in order for this event to be used you need to call
 	 * <code>install(MOUSE_EVENT);</code> in the {@link #setup()} method.
 	 * </p>
-	 * @param button the mouse button that is used to trigger the dragging
 	 * @param dx the movement in the x direction 
 	 * @param dy the movement in the y direction
 	 */
@@ -1091,10 +1091,47 @@ public class Module {
 	 * </p>
 	 */
 	public void windowClosed() { }
-	
+
+	/*
+	 * Logging functions
+	 */
+
+	/**
+	 * Log to the console a message.
+	 * @param msg the message to log
+	 */
+	public final void log(String msg) {
+		Log.CLIENT.log(Level.ALL, msg);
+	}
+
+	/**
+	 * Log to the console an information message.
+	 * @param msg the message to log
+	 */
+	public final void info(String msg) {
+		Log.CLIENT.info(msg);
+	}
+
+	/**
+	 * Log to the console a warning message.
+	 * @param msg the message to log
+	 */
+	public final void warn(String msg) {
+		Log.CLIENT.warning(msg);
+	}
+
+	/**
+	 * Log to the console a severe message.
+	 * @param msg the message to log
+	 */
+	public final void severe(String msg) {
+		Log.CLIENT.severe(msg);
+	}
+
 	/*
 	 * Functions
 	 */
+
 	//Immediate primitive rendering
 	public final void rect(float x, float y, float w, float h) {
 		window.graphics.rect(x, y, w, h);
