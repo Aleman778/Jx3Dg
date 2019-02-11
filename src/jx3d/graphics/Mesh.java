@@ -17,91 +17,95 @@ import org.joml.Vector4f;
  * <i>Note:</i> that by default these properties are set to null, which means that
  * they are not used by the mesh.
  * </p>
- * @since 1.0
+ *
  * @author Aleman778
+ * @since 1.0
  */
 public class Mesh {
 
-	/**
-	 * The vertices used by this mesh.
-	 */
-	public Vector3f[] vertices;
-	
-	/**
-	 * The normals used by this mesh.
-	 */
-	public Vector3f[] normals;
-	
-	/**
-	 * The base texture coordinates used by this mesh. 
-	 */
-	public Vector2f[] uv;
+    /**
+     * The vertices used by this mesh.
+     */
+    public Vector3f[] vertices;
 
-	/**
-	 * The second texture coordinates used by this mesh.
-	 */
-	public Vector2f[] uv2;
-	
-	/**
-	 * The third texture coordinates used by this mesh.
-	 */
-	public Vector2f[] uv3;
+    /**
+     * The normals used by this mesh.
+     */
+    public Vector3f[] normals;
 
-	/**
-	 * The forth texture coordinates used by this mesh.
-	 */
-	public Vector2f[] uv4;
-	
-	/**
-	 * The fifth texture coordinates used by this mesh.
-	 */
-	public Vector2f[] uv5;
-	
-	/**
-	 * The sixth texture coordinates used by this mesh.
-	 */
-	public Vector2f[] uv6;
-	
-	/**
-	 * The seventh texture coordinates used by this mesh.
-	 */
-	public Vector2f[] uv7;
-	
-	/**
-	 * The eights texture coordinates used by this mesh.
-	 */
-	public Vector2f[] uv8;
-	
-	/**
-	 * The colors used by this mesh.
-	 */
-	public Color[] colors;
-	
-	/**
-	 * The tangents used by this mesh.
-	 */
-	public Vector4f[] tangens;
-	
-	/**
-	 * Array of indices, this has to be divisible by
-	 * the number of indices that represents a face.
-	 */
-	public short[] indices;
-	
-	/**
-	 * Constructor creates an empty mesh with a specific capacity.
-	 * @param capacity the maximum number of vertices to store, the capacity is dynamic
-	 */
-	public Mesh() { }
-	
-	/**
-	 * Get the number of vertices that are created.
-	 * @return the number of vertices
-	 */
-	public int vertexCount() {
-		if (vertices == null)
-			return 0;
-		
-		return vertices.length;
-	}
+    /**
+     * The base texture coordinates used by this mesh.
+     */
+    public Vector2f[] uv;
+
+    /**
+     * The second texture coordinates used by this mesh.
+     */
+    public Vector2f[] uv2;
+
+    /**
+     * The third texture coordinates used by this mesh.
+     */
+    public Vector2f[] uv3;
+
+    /**
+     * The forth texture coordinates used by this mesh.
+     */
+    public Vector2f[] uv4;
+
+    /**
+     * The fifth texture coordinates used by this mesh.
+     */
+    public Vector2f[] uv5;
+
+    /**
+     * The sixth texture coordinates used by this mesh.
+     */
+    public Vector2f[] uv6;
+
+    /**
+     * The seventh texture coordinates used by this mesh.
+     */
+    public Vector2f[] uv7;
+
+    /**
+     * The eights texture coordinates used by this mesh.
+     */
+    public Vector2f[] uv8;
+
+    /**
+     * The colors used by this mesh.
+     */
+    public Color[] colors;
+
+    /**
+     * The tangents used by this mesh.
+     */
+    public Vector4f[] tangens;
+
+    /**
+     * Array of indices, this has to be divisible by
+     * the number of indices that represents a face.
+     */
+    public short[] indices;
+
+    /**
+     * Constructor creates an empty mesh with a specific capacity.
+     *
+     * @param capacity the maximum number of vertices to store, the capacity is dynamic
+     */
+    public Mesh() {
+    }
+
+    /**
+     * Get the number of vertices that are created.
+     *
+     * @return the number of vertices
+     */
+    public int vertexCount() {
+        if (vertices == null)
+            return 0;
+
+        return vertices.length;
+    }
 }

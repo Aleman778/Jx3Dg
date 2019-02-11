@@ -18,7 +18,8 @@ public class Log {
     /**
      * Private constructor, static class.
      */
-    private Log() {}
+    private Log() {
+    }
 
     /**
      * Setting up loggers.
@@ -65,7 +66,9 @@ public class Log {
             }
         });
         handler.setLevel(level);
-        handler.setFilter((LogRecord record) -> { return record.getLevel() == level; });
+        handler.setFilter((LogRecord record) -> {
+            return record.getLevel() == level;
+        });
         return handler;
     }
 }
