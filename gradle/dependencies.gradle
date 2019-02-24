@@ -1,0 +1,43 @@
+ext {
+    versions = [:]
+    libraries = [:]
+}
+
+versions.lwjgl3 = "3.1.6"
+versions.joml = "1.9.11"
+versions.junit = "4.11"
+
+libraries.lwjgl3 = [
+    "org.lwjgl:lwjgl:${versions.lwjgl3}",
+    "org.lwjgl:lwjgl:${versions.lwjgl3}:natives-linux",
+    "org.lwjgl:lwjgl:${versions.lwjgl3}:natives-macos",
+    "org.lwjgl:lwjgl:${versions.lwjgl3}:natives-windows",
+    "org.lwjgl:lwjgl-glfw:${versions.lwjgl3}",
+    "org.lwjgl:lwjgl-glfw:${versions.lwjgl3}:natives-linux",
+    "org.lwjgl:lwjgl-glfw:${versions.lwjgl3}:natives-macos",
+    "org.lwjgl:lwjgl-glfw:${versions.lwjgl3}:natives-windows",
+    "org.lwjgl:lwjgl-openal:${versions.lwjgl3}",
+    "org.lwjgl:lwjgl-openal:${versions.lwjgl3}:natives-linux",
+    "org.lwjgl:lwjgl-openal:${versions.lwjgl3}:natives-macos",
+    "org.lwjgl:lwjgl-openal:${versions.lwjgl3}:natives-windows",
+    "org.lwjgl:lwjgl-opengl:${versions.lwjgl3}",
+    "org.lwjgl:lwjgl-opengl:${versions.lwjgl3}:natives-linux",
+    "org.lwjgl:lwjgl-opengl:${versions.lwjgl3}:natives-macos",
+    "org.lwjgl:lwjgl-opengl:${versions.lwjgl3}:natives-windows",
+    "org.lwjgl:lwjgl-stb:${versions.lwjgl3}",
+    "org.lwjgl:lwjgl-stb:${versions.lwjgl3}:natives-linux",
+    "org.lwjgl:lwjgl-stb:${versions.lwjgl3}:natives-macos",
+    "org.lwjgl:lwjgl-stb:${versions.lwjgl3}:natives-windows",
+    "org.lwjgl:lwjgl-assimp:${versions.lwjgl3}",
+    "org.lwjgl:lwjgl-assimp:${versions.lwjgl3}:natives-linux",
+    "org.lwjgl:lwjgl-assimp:${versions.lwjgl3}:natives-macos",
+    "org.lwjgl:lwjgl-assimp:${versions.lwjgl3}:natives-windows"
+]
+
+libraries.joml = [
+    "org.joml:joml:${versions.joml}"
+]
+
+libraries.junit = [
+    "junit:junit:${versions.junit}"
+]

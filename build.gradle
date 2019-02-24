@@ -1,0 +1,33 @@
+apply from: "gradle/dependencies.gradle"
+
+allprojects {
+    group 'jx3d'
+    version '1.0.0-SNAPSHOT'
+
+    buildscript {
+        repositories {
+            mavenCentral()
+            google()
+            jcenter()
+            maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        }
+    }
+
+    repositories {
+        mavenCentral()
+        google()
+        jcenter()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    }
+}
+
+configure(subprojects) {
+    apply plugin: "eclipse"
+    apply plugin: "idea"
+    apply plugin: "java"
+
+    compileJava {
+        options.fork = true
+        options.incremental = true
+    }
+}

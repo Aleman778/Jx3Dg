@@ -1,0 +1,5 @@
+include ":CoreEngine"
+include ':Sandbox'
+
+rootProject.name = 'jx3Dg'
+
