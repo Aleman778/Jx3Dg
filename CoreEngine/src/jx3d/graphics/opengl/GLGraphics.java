@@ -1,5 +1,6 @@
 package jx3d.graphics.opengl;
 
+import jx3d.core.JX3D;
 import jx3d.core.Window;
 import jx3d.graphics.*;
 import jx3d.lwjgl3.Lwjgl3GL20;
@@ -126,7 +127,7 @@ public class GLGraphics extends Graphics {
 
     @Override
     public Shader loadShader(String fragment) {
-        String source = window.files.loadText(fragment);
+        String source = JX3D.files.loadText(fragment);
         Shader shader = new GLSLShader(gl20);
         shader.add(FRAGMENT_SHADER, source);
         shader.setup();
@@ -135,8 +136,8 @@ public class GLGraphics extends Graphics {
 
     @Override
     public Shader loadShader(String fragment, String vertex) {
-        String fsource = window.files.loadText(fragment);
-        String vsource = window.files.loadText(vertex);
+        String fsource = JX3D.files.loadText(fragment);
+        String vsource = JX3D.files.loadText(vertex);
         Shader shader = new GLSLShader(gl20);
         shader.add(FRAGMENT_SHADER, fsource);
         shader.add(VERTEX_SHADER, vsource);

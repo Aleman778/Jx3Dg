@@ -1200,15 +1200,15 @@ public class Module {
 
     //Immediate primitive rendering
     public final void rect(float x, float y, float w, float h) {
-        window.graphics.rect(x, y, w, h);
+        JX3D.graphics.rect(x, y, w, h);
     }
 
     public final void ellipse(float x, float y, float rx, float ry) {
-        window.graphics.ellipse(x, y, rx, ry);
+        JX3D.graphics.ellipse(x, y, rx, ry);
     }
 
     public final void arc(float x, float y, float rx, float ry, float sa, float ea, boolean ccw) {
-        window.graphics.arc(x, y, rx, ry, sa, ea, ccw);
+        JX3D.graphics.arc(x, y, rx, ry, sa, ea, ccw);
     }
 
 
@@ -1223,7 +1223,7 @@ public class Module {
      * @param h the height of the viewport
      */
     public final void viewport(int x, int y, int w, int h) {
-        window.graphics.viewport(x, y, w, h);
+        JX3D.graphics.viewport(x, y, w, h);
     }
 
     /**
@@ -1234,7 +1234,7 @@ public class Module {
      * @return the loaded shader program
      */
     public Shader loadShader(String fragment) {
-        return window.graphics.loadShader(fragment);
+        return JX3D.graphics.loadShader(fragment);
     }
 
     /**
@@ -1246,7 +1246,7 @@ public class Module {
      * @return the loaded shader program
      */
     public Shader loadShader(String fragment, String vertex) {
-        return window.graphics.loadShader(fragment, vertex);
+        return JX3D.graphics.loadShader(fragment, vertex);
     }
 
     /**
@@ -1256,107 +1256,108 @@ public class Module {
      * @return the loaded shader program
      */
     public Shader loadShader(int shader) {
-        return window.graphics.loadShader(shader);
+        return JX3D.graphics.loadShader(shader);
     }
 
     //Input functions
 
-    /**
+/*    *//**
      * The current location of the mouse in the x-axis.
      *
      * @return a float holding the horizontal mouse location
-     */
+     *//*
     public float mouseX() {
-        return window.input.getMouseX();
+        return JX3D.input.getMouseX();
     }
 
-    /**
+    *//**
      * The current location of the mouse in the y-axis.
      *
      * @return a float holding the vertical mouse location
-     */
+     *//*
     public float mouseY() {
-        return window.input.getMouseY();
+        return JX3D.input.getMouseY();
     }
 
-    /**
+    *//**
      * The current state of the mouse, a byte is used to represents all 8 mouse buttons where
      * each bit corresponds the button state pressed = 1/ released = 0. The first bit represents
      * {@link #MOUSE_BUTTON_1}, the second bit is {@link #MOUSE_BUTTON_2} etc.
      *
      * @return a byte holding the current state of all the mouse buttons
-     */
+     *//*
     public byte mouseState() {
-        return window.input.getMouseButtons();
+        return JX3D.input.getMouseButtons();
     }
 
-    /**
+    *//**
      * Check if a specific mouse button is being held down or has been released.
      *
      * @param button the specific button the check
      * @return true if the button is pressed down, false if the button has been released
-     */
+     *//*
     public boolean mouse(int button) {
-        return window.input.getMouseState(button);
+        return JX3D.input.getMouseState(button);
     }
 
-    /**
+    *//**
      * Check if a specific keyboard key is being held down or has been released.
      *
      * @param key the specific key the check
      * @return true if the key is pressed down, false if the key has been released
-     */
+     *//*
     public boolean key(int key) {
-        return window.input.getKeyState(key);
-    }
+        return JX3D.input.getKeyState(key);
+    }*/
+
 
     //File I/O functions
     public byte[] loadBytes(String file) {
-        return window.files.loadBytes(file);
+        return JX3D.files.loadBytes(file);
     }
 
     public boolean saveBytes(String file, byte[] bytes) {
-        return window.files.saveBytes(file, bytes);
+        return JX3D.files.saveBytes(file, bytes);
     }
 
     public String loadText(String file) {
-        return window.files.loadText(file);
+        return JX3D.files.loadText(file);
     }
 
     public boolean saveText(String file, String text) {
-        return window.files.saveText(file, text);
+        return JX3D.files.saveText(file, text);
     }
 
     public String[] loadStrings(String file) {
-        return window.files.loadStrings(file);
+        return JX3D.files.loadStrings(file);
     }
 
     public boolean saveStrings(String file, String[] strings) {
-        return window.files.saveStrings(file, strings);
+        return JX3D.files.saveStrings(file, strings);
     }
 
     public Image loadImage(String file) {
-        return window.files.loadImage(file);
+        return JX3D.files.loadImage(file);
     }
 
     public boolean saveImage(String file, Image image) {
-        return window.files.saveImage(file, image);
+        return JX3D.files.saveImage(file, image);
     }
 
     public Mesh loadShape(String file) {
-        return window.files.loadShape(file);
+        return JX3D.files.loadShape(file);
     }
 
     public boolean saveShape(String file, Mesh shape) {
-        return window.files.saveShape(file, shape);
+        return JX3D.files.saveShape(file, shape);
     }
 
     public InputStream createInput(String file) {
-        return window.files.createInput(file);
+        return JX3D.files.createInput(file);
     }
 
     public OutputStream createOutput(String file) {
-        return window.files.createOutput(file);
+        return JX3D.files.createOutput(file);
     }
 
 
@@ -1390,11 +1391,11 @@ public class Module {
      * @see Module#install(int)
      */
     public void install(int type, Node node) {
-        if ((type & KEY_EVENTS) == KEY_EVENTS)
-            window.input.addKeyListener(node);
+        /*if ((type & KEY_EVENTS) == KEY_EVENTS)
+            JX3D.input.addKeyListener(node);
         if ((type & MOUSE_EVENTS) == MOUSE_EVENTS)
-            window.input.addMouseListener(node);
+            JX3D.input.addMouseListener(node);
         if ((type & WINDOW_EVENTS) == WINDOW_EVENTS)
-            window.input.addWindowListener(node);
+            JX3D.input.addWindowListener(node);*/
     }
 }

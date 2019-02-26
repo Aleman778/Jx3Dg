@@ -24,17 +24,13 @@ import static org.lwjgl.glfw.GLFW.*;
  * @see <a href="http://www.glfw.org/">http://www.glfw.org/</a>
  * @since 1.0
  */
-public class Lwjgl3Window extends Window implements Runnable {
+public class Lwjgl3Window extends Window {
 
     private static final IntBuffer xpos = BufferUtils.createIntBuffer(1);
     private static final IntBuffer ypos = BufferUtils.createIntBuffer(1);
 
     private static final long NULL = 0L;
 
-    private static boolean initialized = false;
-
-    private final Object lock = new Object();
-    private Thread mainThread;
     private Lwjgl3Screen screen;
     private String title;
 
@@ -89,45 +85,39 @@ public class Lwjgl3Window extends Window implements Runnable {
      * @param height the height of the window
      */
     public Lwjgl3Window(String title, int width, int height) {
-        initialized();
-
-        this.files = new Lwjgl3Files();
-        this.input = new Lwjgl3Input(this);
         this.title = title;
         this.width = width;
         this.height = height;
+        object = glfwCreateWindow(width, height, title, NULL, NULL);
     }
 
-    @Override
-    public void run() {
-        createWindow();
-        window = this;
+    public Lwjgl3Window(Lwjgl3Configurations config) {
+        title = config.title;
+        width = config.windowWidth;
+        height = config.windowHeight;
+        fullscreen = config.windowFullscreen;
+        resizable = config.windowResizable;
+        decorated = config.windowDecorated;
+        floating = config.windowFloating;
+        swapInterval = config.vSyncEnabled ? 1 : 0;
 
-        new Thread(() -> {
-            glfwMakeContextCurrent(object);
-            graphics.init();
-
-            setup();
-
-            while (!shouldClose()) {
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                //glfwPollEvents();
-                glfwSwapBuffers(object);
-                draw();
-            }
-        }).start();
-
-        synchronized (lock) {
-            lock.notify();
+        if (fullscreen) {
+            glfwWindowHint(GLFW_REFRESH_RATE, (int) screen.getRefreshRate());
+            object = glfwCreateWindow(screen.getWidth(), screen.getHeight(), title, screen.getMonitor(), NULL);
+        } else {
+            object = glfwCreateWindow(width, height, title, NULL, NULL);
         }
 
-        while (!shouldClose()) {
-            glfwWaitEvents();
-        }
+        setupAttributes();
+        setupCallbacks();
+    }
+
+    public void pollEvents() {
+        glfwPollEvents();
+    }
+
+    public void swapBuffers() {
+        glfwSwapBuffers(object);
     }
 
     @Override
@@ -141,7 +131,7 @@ public class Lwjgl3Window extends Window implements Runnable {
      * @return true if the window is active.
      */
     public boolean isActive() {
-        return visible && isCreated();
+        return visible;
     }
 
     /**
@@ -159,110 +149,7 @@ public class Lwjgl3Window extends Window implements Runnable {
      */
     public void setTitle(String title) {
         this.title = title;
-        if (isCreated()) {
-            glfwSetWindowTitle(object, title);
-        }
-    }
-
-    /**
-     * Set the rendering engine of the display.
-     * This method can also accept an optional profile
-     * parameter if applicable, see {@link #setRenderer(int, int)}.
-     *
-     * @param renderer the rendering engine constant,
-     *                 supported renderer of GlfwDisplay is <code>OPENGL</code>.
-     */
-    public void setRenderer(int renderer) {
-        if (isCreated()) {
-            throw new IllegalStateException("The renderer cannot be set after the window has been initialized.");
-        }
-        setRendererImpl(renderer);
-    }
-
-    /**
-     * Set the rendering engine of the display with a
-     * specific profile. By using this function you are
-     * explicitly setting the graphics requirements, so
-     * if a user does not support the requirements then
-     * the application will be either glitchy or will not run at all.
-     * Thus you are recommended to use this function
-     * {@link #setRenderer(int)} instead as it automatically sets
-     * the appropriate requirements for the users systems.
-     *
-     * @param renderer the rendering engine constant
-     * @param profile  an optional parameter that specifies
-     *                 a version number and/ or other settings for the
-     *                 provided renderer
-     * @see #setRenderer(int)
-     */
-    public void setRenderer(int renderer, int profile) {
-        if (isCreated()) {
-            throw new IllegalStateException("The renderer cannot be set after the window has been initialized.");
-        }
-
-        setRendererImpl(renderer);
-
-        switch (renderer) {
-            case OPENGL:
-            case OPENGL_DEBUG:
-                setGLProfile(profile);
-                break;
-            default:
-                throw new IllegalArgumentException("Renderer does not support different profiles.");
-        }
-    }
-
-
-    /**
-     * Set the renderer.
-     *
-     * @param renderer the renderer to use
-     */
-    private void setRendererImpl(int renderer) {
-        switch (renderer) {
-            case OPENGL:
-                graphics = new GLGraphics(this);
-                break;
-            case OPENGL_DEBUG:
-                graphics = new GLGraphics(this);
-                gldebug = true;
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid or unsupported renderer provided.");
-        }
-    }
-
-    /**
-     * Set the opengl profile.
-     *
-     * @param profile the profile to use
-     */
-    private void setGLProfile(int profile) {
-        switch (profile) {
-            case GL20_PROFILE:
-                setProfileImpl(2, false);
-                break;
-            case GL30_COMPAT_PROFILE:
-                setProfileImpl(3, true);
-                break;
-            case GL30_CORE_PROFILE:
-                setProfileImpl(3, false);
-                break;
-        }
-    }
-
-    /**
-     * Setup glfw context creation profile window hints.
-     *
-     * @param major  major version
-     * @param compat compatibility profile?
-     */
-    private void setProfileImpl(int major, boolean compat) {
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);
-        if (compat && major >= 3)
-            glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
-        else
-            glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        glfwSetWindowTitle(object, title);
     }
 
     /**
@@ -302,10 +189,7 @@ public class Lwjgl3Window extends Window implements Runnable {
     public final void setSize(int width, int height) {
         this.width = width;
         this.height = height;
-
-        if (isCreated()) {
-            glfwSetWindowSize(object, width, height);
-        }
+        glfwSetWindowSize(object, width, height);
     }
 
     /**
@@ -332,10 +216,7 @@ public class Lwjgl3Window extends Window implements Runnable {
         this.minHeight = minHeight;
         this.maxWidth = maxWidth;
         this.maxHeight = maxHeight;
-
-        if (isCreated()) {
-            glfwSetWindowSizeLimits(object, minWidth, minHeight, maxWidth, maxHeight);
-        }
+        glfwSetWindowSizeLimits(object, minWidth, minHeight, maxWidth, maxHeight);
     }
 
     /**
@@ -380,10 +261,7 @@ public class Lwjgl3Window extends Window implements Runnable {
     public final void setLocation(int x, int y) {
         this.x = x;
         this.y = y;
-
-        if (isCreated()) {
-            glfwSetWindowPos(object, x, y);
-        }
+        glfwSetWindowPos(object, x, y);
     }
 
     /**
@@ -432,9 +310,7 @@ public class Lwjgl3Window extends Window implements Runnable {
             throw new IllegalStateException("Cannot set swap interval to be reset to zero once it has been set to a non-zero value");
 
         this.swapInterval = interval;
-        if (isCreated()) {
-            glfwSwapInterval(interval);
-        }
+        glfwSwapInterval(interval);
     }
 
     /**
@@ -455,14 +331,10 @@ public class Lwjgl3Window extends Window implements Runnable {
         if (this.fullscreen && this.screen.equals(screen)) {
             return;
         }
-
         this.fullscreen = true;
         this.screen = screen;
-
-        if (isCreated()) {
-            glfwSetWindowMonitor(object, screen.getMonitor(), 0, 0,
-                    screen.getWidth(), screen.getHeight(), (int) screen.getRefreshRate());
-        }
+        glfwSetWindowMonitor(object, screen.getMonitor(), 0, 0,
+                screen.getWidth(), screen.getHeight(), (int) screen.getRefreshRate());
     }
 
     /**
@@ -481,10 +353,7 @@ public class Lwjgl3Window extends Window implements Runnable {
         }
         this.fullscreen = false;
         this.screen = null;
-
-        if (isCreated()) {
-            glfwSetWindowMonitor(object, NULL, x, y, width, height, GLFW_DONT_CARE);
-        }
+        glfwSetWindowMonitor(object, NULL, x, y, width, height, GLFW_DONT_CARE);
     }
 
     /**
@@ -503,21 +372,6 @@ public class Lwjgl3Window extends Window implements Runnable {
      */
     public final void setVisible(boolean visible) {
         this.visible = visible;
-
-        if (visible && !isCreated()) {
-            mainThread = new Thread(this, title);
-            mainThread.start();
-            synchronized (lock) {
-                try {
-                    lock.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            return;
-        }
-
         if (hasReference()) {
             if (visible) {
                 glfwShowWindow(object);
@@ -543,9 +397,7 @@ public class Lwjgl3Window extends Window implements Runnable {
      */
     public final void setDecorated(boolean decorated) {
         this.decorated = decorated;
-        if (isCreated()) {
-            glfwSetWindowAttrib(object, GLFW_DECORATED, decorated ? GLFW_TRUE : GLFW_FALSE);
-        }
+        glfwSetWindowAttrib(object, GLFW_DECORATED, decorated ? GLFW_TRUE : GLFW_FALSE);
     }
 
     /**
@@ -564,9 +416,7 @@ public class Lwjgl3Window extends Window implements Runnable {
      */
     public final void setFloating(boolean floating) {
         this.floating = floating;
-        if (isCreated()) {
-            glfwSetWindowAttrib(object, GLFW_FLOATING, floating ? GLFW_TRUE : GLFW_FALSE);
-        }
+        glfwSetWindowAttrib(object, GLFW_FLOATING, floating ? GLFW_TRUE : GLFW_FALSE);
     }
 
     /**
@@ -585,9 +435,7 @@ public class Lwjgl3Window extends Window implements Runnable {
      */
     public final void setResizeable(boolean resizable) {
         this.resizable = resizable;
-        if (isCreated()) {
-            glfwSetWindowAttrib(object, GLFW_RESIZABLE, resizable ? GLFW_TRUE : GLFW_FALSE);
-        }
+        glfwSetWindowAttrib(object, GLFW_RESIZABLE, resizable ? GLFW_TRUE : GLFW_FALSE);
     }
 
     /**
@@ -628,7 +476,7 @@ public class Lwjgl3Window extends Window implements Runnable {
     }
 
     @Override
-    public final Lwjgl3Screen[] getScreens() {
+    public final Lwjgl3Screen[] getAllScreens() {
         PointerBuffer buff = glfwGetMonitors();
         Lwjgl3Screen[] result = new Lwjgl3Screen[buff.limit()];
         for (int i = 0; i < result.length; i++) {
@@ -639,10 +487,6 @@ public class Lwjgl3Window extends Window implements Runnable {
 
     @Override
     public boolean shouldClose() {
-        if (!isCreated()) {
-            return true;
-        }
-
         return glfwWindowShouldClose(object);
     }
 
@@ -650,27 +494,13 @@ public class Lwjgl3Window extends Window implements Runnable {
         return object != NULL;
     }
 
-    private boolean isCreated() {
-        return (object != NULL) && (!disposed);
-    }
-
-    private void createWindow() {
-        if (fullscreen) {
-            glfwWindowHint(GLFW_REFRESH_RATE, (int) screen.getRefreshRate());
-            object = glfwCreateWindow(screen.getWidth(), screen.getHeight(), title, screen.getMonitor(), NULL);
-        } else {
-            object = glfwCreateWindow(width, height, title, NULL, NULL);
-        }
-
-        setupAttributes();
-        setupCallbacks();
-    }
 
     private void setupCallbacks() {
         glfwSetWindowRefreshCallback(object, (long window) -> {
             //glfwSwapBuffers(window);
         });
-
+        //TODO: Implement a better Event system and then fix this code.
+        /*
         glfwSetKeyCallback(object, (long window, int key, int scancode, int action, int mods) -> {
             if (action == GLFW_PRESS)
                 input.keyDownProc(key, mods);
@@ -729,6 +559,7 @@ public class Lwjgl3Window extends Window implements Runnable {
         glfwSetWindowCloseCallback(object, (long window) -> {
             input.windowClosedProc();
         });
+        */
     }
 
     private void setupAttributes() {
@@ -751,19 +582,5 @@ public class Lwjgl3Window extends Window implements Runnable {
         //OpenGL debug mode
         if (gldebug)
             glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL20.TRUE);
-    }
-
-    /**
-     * Initialize the window, has to be called before calling GLFW and is only performed once.
-     */
-    private static void initialized() {
-        if (!initialized) {
-            if (glfwInit()) {
-                initialized = true;
-                glfwSetErrorCallback(GLFWErrorCallback.createThrow());
-            } else {
-                throw new IllegalStateException("The GLFW library failed to initialize.");
-            }
-        }
     }
 }

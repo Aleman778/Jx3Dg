@@ -16,5 +16,5 @@ dependencies {
 }
 
 application {
-    mainClassName = "sandbox.TestApplication"
+    mainClassName = "sandbox.DesktopLauncher"
 }

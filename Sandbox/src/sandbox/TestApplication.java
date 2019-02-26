@@ -1,11 +1,13 @@
 package sandbox;
 
+import jx3d.core.Application;
+import jx3d.core.ApplicationModule;
+import jx3d.core.JX3D;
 import jx3d.graphics.*;
 import jx3d.graphics.opengl.GL20;
 import jx3d.graphics.opengl.GL30;
 import jx3d.graphics.opengl.GLTexture2D;
 import jx3d.lwjgl3.Lwjgl3GL30;
-import jx3d.lwjgl3.Lwjgl3Window;
 import jx3d.math.Transform;
 import org.joml.Vector3f;
 
@@ -14,7 +16,7 @@ import org.joml.Vector3f;
  *
  * @author Aleman778
  */
-public class TestApplication extends Lwjgl3Window {
+public class TestApplication extends ApplicationModule {
 
     private VertexBuffer vbo;
     private IndexBuffer ibo;
@@ -26,13 +28,9 @@ public class TestApplication extends Lwjgl3Window {
     private OrthographicCamera camera2D;
     private PerspectiveCamera camera3D;
 
-
-    public TestApplication(String title, int width, int height) {
-        super(title, width, height);
-    }
-
     @Override
     public void setup() {
+
         float[] cube_vert = {
                 0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
                 0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
@@ -86,7 +84,7 @@ public class TestApplication extends Lwjgl3Window {
         image = loadImage("models/lamborghini/lambo_diffuse.jpeg");
 
 
-        vbo = graphics.createVBO(STATIC_DRAW);
+        vbo = JX3D.graphics.createVBO(STATIC_DRAW);
         vbo.bind();
         //vbo.insert(cube_vert, 0);
         float[] vboData = new float[mesh.vertexCount() * 5];
@@ -103,12 +101,12 @@ public class TestApplication extends Lwjgl3Window {
         vbo.set(vboData);
 
 
-        ibo = graphics.createIBO(STATIC_DRAW);
+        ibo = JX3D.graphics.createIBO(STATIC_DRAW);
         ibo.bind();
         //ibo.insert(indices, 0);
         ibo.set(mesh.indices);
 
-        vao = graphics.createVAO();
+        vao = JX3D.graphics.createVAO();
 
         VertexAttribute attribs = new VertexAttribute();
         attribs.add(0, 3, false, 5, 0);
@@ -116,7 +114,7 @@ public class TestApplication extends Lwjgl3Window {
 
         vao.put(vbo, attribs);
 
-        shader = graphics.loadShader("shaders/basic_fragment.glsl", "shaders/basic_vertex.glsl");
+        shader = loadShader("shaders/basic_fragment.glsl", "shaders/basic_vertex.glsl");
         shader.setup();
         shader.enable();
         GL30 gl = new Lwjgl3GL30();
@@ -148,41 +146,30 @@ public class TestApplication extends Lwjgl3Window {
 
         //Orthographic camera
         camera2D = new OrthographicCamera();
-        camera2D.setOrtho(0, getWidth(), getHeight(), 0);
+        camera2D.setOrtho(0, 640, 480, 0);
 
         //shader.set("projection", perspective);
-        graphics.viewport(0, 0, getWidth(), getHeight());
+        viewport(0, 0, 640, 480);
 
         //APPLY TRANSFORMATION
         shader.set("transform", t.getMapping());
-
-        add(camera3D);
     }
 
     @Override
     public void draw() {
-        graphics.viewport(0, 0, getWidth(), getHeight());
-        graphics.clear(GL20.COLOR_BUFFER_BIT | GL20.DEPTH_BUFFER_BIT);
+        JX3D.graphics.viewport(0, 0, 640, 480);
+        JX3D.graphics.clear(GL20.COLOR_BUFFER_BIT | GL20.DEPTH_BUFFER_BIT);
 
         //t.rotateY(0.01f);
         shader.set("transform", t.getMapping());
         shader.set("projection", camera3D.getMapping());
         //shader.set("projection", new Matrix4f().perspective);
 
-        graphics.background(0.0f, 0.5f, 1.0f, 1.0f);
+        //background(0.0f, 0.5f, 1.0f, 1.0f);
         shader.enable();
         tex.bind();
-        graphics.render(TRIANGLES, vao);
+        //render(TRIANGLES, vao);
 
-    }
-
-    public static void main(String[] args) {
-        TestApplication display = new TestApplication("Test Application", 1280, 720);
-        display.setRenderer(OPENGL_DEBUG);
-        display.setVisible(true);
-//		TestApplication display2 = new TestApplication("Test Application 2", 1280, 720);
-//		display2.setRenderer(OPENGL_DEBUG); 
-//		display2.setVisible(true);
     }
 
     @Override
