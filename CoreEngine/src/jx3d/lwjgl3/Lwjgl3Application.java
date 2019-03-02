@@ -2,6 +2,7 @@ package jx3d.lwjgl3;
 
 import jx3d.core.*;
 import jx3d.core.Module;
+import jx3d.graphics.Color;
 import jx3d.graphics.Context;
 import jx3d.graphics.Context.RenderAPI;
 import jx3d.graphics.Graphics;
@@ -30,7 +31,7 @@ public final class Lwjgl3Application extends Application {
 
         initializeGlfw();
         if (config.title == null) {
-            config.title = getClass().getSimpleName();
+            config.title = listener.getClass().getSimpleName();
         }
 
         mainWindow = new Lwjgl3Window(config);
@@ -40,6 +41,7 @@ public final class Lwjgl3Application extends Application {
 
         JX3D.graphics = graphics;
         JX3D.files = files;
+
     }
 
     private void setupGraphics(Lwjgl3Configurations config) {
@@ -66,20 +68,24 @@ public final class Lwjgl3Application extends Application {
                 }
                 break;
         }
+        Color c = config.initialBackground;
+
         graphics.init();
+        graphics.background(c.red, c.green, c.blue, c.alpha);
     }
 
     @Override
     public void run() {
         listener.setup();
 
+        mainWindow.setVisible(true);
         while (!mainWindow.shouldClose()) {
-            mainWindow.pollEvents();
-            mainWindow.swapBuffers();
 
             listener.update();
             listener.draw();
 
+            mainWindow.swapBuffers();
+            mainWindow.pollEvents();
             try {
                 Thread.sleep(1);
             } catch (InterruptedException e) {

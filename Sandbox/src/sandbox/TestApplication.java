@@ -1,13 +1,9 @@
 package sandbox;
 
-import jx3d.core.Application;
 import jx3d.core.ApplicationModule;
 import jx3d.core.JX3D;
 import jx3d.graphics.*;
-import jx3d.graphics.opengl.GL20;
-import jx3d.graphics.opengl.GL30;
 import jx3d.graphics.opengl.GLTexture2D;
-import jx3d.lwjgl3.Lwjgl3GL30;
 import jx3d.math.Transform;
 import org.joml.Vector3f;
 
@@ -30,56 +26,6 @@ public class TestApplication extends ApplicationModule {
 
     @Override
     public void setup() {
-
-        float[] cube_vert = {
-                0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
-                0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
-                -0.5f, 0.5f, 0.5f, 0.0f, 1.0f,
-                -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-
-                0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
-                0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-                0.5f, 0.5f, 0.5f, 0.0f, 1.0f,
-                0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-
-                -0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
-                -0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
-                -0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
-                -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
-
-                0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-                0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-                -0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
-                -0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
-
-                0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
-                0.5f, -0.5f, 0.5f, 1.0f, 1.0f,
-                -0.5f, -0.5f, 0.5f, 0.0f, 1.0f,
-                -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
-
-                0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
-                0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-                -0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
-                -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
-        };
-        float[] vertices = {
-                0, 0, 2, 0, 0,
-                1, 0, 2, 1, 0,
-                1, 1, 2, 1, 1,
-                0, 1, 2, 0, 1
-        };
-//		float[] vertices = {
-//					-1.0f, -1.0f, 0.0f, 0.0f,
-//					 1.0f, -1.0f, 4.0f, 0.0f,
-//					 1.0f,  1.0f, 4.0f, 3.0f,
-//					-1.0f,  1.0f, 0.0f, 3.0f
-//		};
-
-        short[] indices = {
-                0, 1, 3,
-                1, 2, 3
-        };
-
         Mesh mesh = loadShape("models/lamborghini/lambo.obj");
         image = loadImage("models/lamborghini/lambo_diffuse.jpeg");
 
@@ -115,13 +61,12 @@ public class TestApplication extends ApplicationModule {
         shader = loadShader("shaders/basic_fragment.glsl", "shaders/basic_vertex.glsl");
         shader.setup();
         shader.enable();
-        GL30 gl = new Lwjgl3GL30();
-
-        gl.activeTexture(0);
+        JX3D.gl30.activeTexture(0);
 
         shader.set("sampler", 0);
 
-        tex = new GLTexture2D(gl, false, false);
+        tex = new GLTexture2D(false, false);
+        tex.bind();
         tex.image(image);
         tex.setSample(LINEAR);
 
@@ -156,7 +101,7 @@ public class TestApplication extends ApplicationModule {
     @Override
     public void draw() {
         JX3D.graphics.viewport(0, 0, 640, 480);
-        JX3D.graphics.background(0.0f, 0.5f, 1.0f, 1.0f);
+        //JX3D.graphics.background(0.0f, 0.5f, 1.0f, 1.0f);
 
         //t.rotateY(0.01f);
         shader.set("transform", t.getMapping());
@@ -166,37 +111,7 @@ public class TestApplication extends ApplicationModule {
         //background(0.0f, 0.5f, 1.0f, 1.0f);
         shader.enable();
         tex.bind();
-        JX3D.graphics.render(TRIANGLES, vao);
-
-    }
-
-    @Override
-    public void keyDown(int key) {
-        System.out.println("Pressed key " + key);
-    }
-
-    @Override
-    public void mousePressed(int button) {
-        System.out.println("What's up button # " + button);
-    }
-
-    @Override
-    public void mouseEntered() {
-        System.out.println("Mouse entered");
-    }
-
-    @Override
-    public void mouseExited() {
-        System.out.println("Mouse exited");
-    }
-
-    @Override
-    public void windowClosed() {
-        System.out.println("The window is now closed!");
-    }
-
-    @Override
-    public void windowResized(int width, int height) {
+        JX3D.graphics.render(TRIANGLES, vao, ibo);
 
     }
 }

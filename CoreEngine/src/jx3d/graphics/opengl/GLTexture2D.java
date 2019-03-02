@@ -1,5 +1,6 @@
 package jx3d.graphics.opengl;
 
+import jx3d.core.JX3D;
 import jx3d.core.Module;
 import jx3d.graphics.Image;
 import jx3d.graphics.Texture2D;
@@ -15,9 +16,9 @@ public class GLTexture2D extends Texture2D {
     private Image image;
     private int object;
 
-    public GLTexture2D(GL30 gl, boolean mipmaps, boolean anisotropic) {
+    public GLTexture2D(boolean mipmaps, boolean anisotropic) {
         super(mipmaps, anisotropic);
-        this.gl = gl;
+        this.gl = JX3D.gl30;
         this.object = gl.genTexture();
     }
 
@@ -62,7 +63,6 @@ public class GLTexture2D extends Texture2D {
     }
 
     private void imageImpl(Image image, int level) {
-        bind();
         this.image = image;
         IntBuffer buf = BufferUtils.createIntBuffer(image.getPixels());
         gl.texImage2D(GL20.TEXTURE_2D, level, GL20.RGBA8, image.getWidth(),
@@ -70,7 +70,6 @@ public class GLTexture2D extends Texture2D {
     }
 
     private void subImageImpl(Image image, int level, int x, int y, int w, int h) {
-        bind();
         this.image = image;
         IntBuffer buf = BufferUtils.createIntBuffer(image.getPixels());
         gl.texSubImage2D(GL20.TEXTURE_2D, BASE_LOD, x, y, w, h,
@@ -82,7 +81,6 @@ public class GLTexture2D extends Texture2D {
         if (image == null)
             throw new IllegalStateException("There is no source image, cannot generate mipmaps.");
 
-        bind();
         mipmapping = true;
         int size = Math.max(getWidth(), getHeight());
         int levels = (int) (Math.log(size) / Math.log(2));
@@ -93,45 +91,38 @@ public class GLTexture2D extends Texture2D {
 
     @Override
     public void setLODBias(float bias) {
-        bind();
         gl.texParameterf(GL20.TEXTURE_2D, GL20.TEXTURE_LOD_BIAS, bias);
     }
 
     @Override
     public void setLODRange(int min, int max) {
-        bind();
         gl.texParameteri(GL20.TEXTURE_2D, GL20.TEXTURE_MIN_LOD, min);
         gl.texParameteri(GL20.TEXTURE_2D, GL20.TEXTURE_MAX_LOD, max);
     }
 
     @Override
     public void setNumLODLevels(int levels) {
-        bind();
         gl.texParameteri(GL20.TEXTURE_2D, GL20.TEXTURE_MAX_LEVEL, levels);
     }
 
     @Override
     public void setMinFilter(int filter) {
-        bind();
         gl.texParameteri(GL20.TEXTURE_2D, GL20.TEXTURE_MIN_FILTER, filter);
     }
 
     @Override
     public void setMagFilter(int filter) {
-        bind();
         gl.texParameteri(GL20.TEXTURE_2D, GL20.TEXTURE_MAG_FILTER, filter);
     }
 
     @Override
     public void setMaxAnisotropy(float amount) {
-        bind();
         throw new IllegalStateException();
         //gl.texParameterf(GL20.TEXTURE_2D, GL20.TEXTURE_LOD_BIAS, amount);
     }
 
     @Override
     public void setWrapMode(int wrap, int axis) {
-        bind();
         int glwrap = GLGraphics.glGetTextureWrapMode(wrap);
         if ((axis & Module.S) == Module.S)
             gl.texParameteri(GL20.TEXTURE_2D, GL20.TEXTURE_WRAP_S, glwrap);

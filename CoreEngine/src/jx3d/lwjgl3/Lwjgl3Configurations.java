@@ -13,15 +13,15 @@ public class Lwjgl3Configurations {
 
     /**
      * The position of the window in the x direction.
-     * If set to -1 the window is put in the center of the screen.
+     * If set to {@link Module#DEFAULT}, then the window will keep its starting x position.
      */
-    public int windowX = -1;
+    public int windowX = Module.DEFAULT;
 
     /**
      * The position of the window in the y direction.
-     * If set to -1 the window is put in the center of the screen.
+     * If set to {@link Module#DEFAULT}, then the window will keep its starting y position.
      */
-    public int windowY = -1;
+    public int windowY = Module.DEFAULT;
 
     /**
      * The width of the window.
@@ -32,6 +32,30 @@ public class Lwjgl3Configurations {
      * The height of the window.
      */
     public int windowHeight = 480;
+
+    /**
+     * The minimum window width.
+     * If set to {@link Module#DEFAULT}, no minimum width is used.
+     */
+    public int windowMinWidth = Module.DEFAULT;
+
+    /**
+     * The maximum window width.
+     * If set to {@link Module#DEFAULT}, no maximum width is used.
+     */
+    public int windowMaxWidth = Module.DEFAULT;
+
+    /**
+     * The minimum window height.
+     * If set to {@link Module#DEFAULT}, no minimum height is used.
+     */
+    public int windowMinHeight = Module.DEFAULT;
+
+    /**
+     * The maximum window height.
+     * If set to {@link Module#DEFAULT}, no maximum height is used.
+     */
+    public int windowMaxHeight = Module.DEFAULT;
 
     /**
      * Whether to allow the window to be resizable by the user.
@@ -56,6 +80,13 @@ public class Lwjgl3Configurations {
      * ignored if this is set to true.
      */
     public boolean windowFullscreen = false;
+
+    /**
+     * Set the screen to use in fullscreen mode, this has no effect outside fullscreen mode.
+     * Default is null i.e. use the primary screen.
+     * @see Lwjgl3Configurations#windowFullscreen
+     */
+    public Lwjgl3Screen screen = null;
 
     /**
      * Whether to use vertical synchronization.

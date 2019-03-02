@@ -48,7 +48,7 @@ public class Lwjgl3Window extends Window {
     private int minWidth = GLFW_DONT_CARE, minHeight = GLFW_DONT_CARE;
     private int maxWidth = GLFW_DONT_CARE, maxHeight = GLFW_DONT_CARE;
     private int width, height;
-    private int x = GLFW_DONT_CARE, y = GLFW_DONT_CARE;
+    private int x = DEFAULT, y = DEFAULT;
 
     /**
      * Default constructor.
@@ -87,19 +87,31 @@ public class Lwjgl3Window extends Window {
         this.title = title;
         this.width = width;
         this.height = height;
+        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
         object = glfwCreateWindow(width, height, title, NULL, NULL);
     }
 
     public Lwjgl3Window(Lwjgl3Configurations config) {
         title = config.title;
+        x = config.windowX;
+        y = config.windowY;
         width = config.windowWidth;
         height = config.windowHeight;
+        minWidth = config.windowMinWidth;
+        maxWidth = config.windowMaxWidth;
+        minHeight = config.windowMinHeight;
+        maxHeight = config.windowMaxHeight;
         fullscreen = config.windowFullscreen;
         resizable = config.windowResizable;
         decorated = config.windowDecorated;
         floating = config.windowFloating;
         swapInterval = config.vSyncEnabled ? 1 : 0;
+        screen = config.screen;
+        if (screen == null) {
+            screen = getScreen();
+        }
 
+        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
         setupContextHints(config.renderer, config.profile);
 
         if (fullscreen) {
@@ -599,10 +611,19 @@ public class Lwjgl3Window extends Window {
     }
 
     private void setupAttributes() {
-        if (x == -1 && y == -1) {
+        if (x == DEFAULT || y == DEFAULT) {
             glfwGetWindowPos(object, xpos, ypos);
-            x = xpos.get(0);
-            y = ypos.get(0);
+            int tempX = xpos.get(0);
+            int tempY = ypos.get(0);
+            if (x != DEFAULT) {
+                glfwSetWindowPos(object, x, tempY);
+                y = tempY;
+            } else if (y != -1) {
+                glfwSetWindowPos(object, tempX, y);
+                x = tempX;
+            } else {
+                x = tempX; y = tempY;
+            }
         } else {
             glfwSetWindowPos(object, x, y);
         }
