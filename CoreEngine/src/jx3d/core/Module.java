@@ -150,6 +150,37 @@ public class Module {
      */
     public static final float EPSILON = 0.0001f;
 
+    //General constants
+    /**
+     * Use default.
+     */
+    public static final int DEFAULT = -1;
+
+    /**
+     * Use the preferred option.
+     */
+    public static final int PREFERRED = -2;
+
+    /**
+     * Use the none of them.
+     */
+    public static final int NONE = -3;
+
+    /**
+     * Use the any of them.
+     */
+    public static final int ANY = -4;
+
+    /**
+     * Use the all of them.
+     */
+    public static final int ALL = -5;
+
+    /**
+     * Use the some of them.
+     */
+    public static final int SOME = -6;
+
     //I/O constants
     /**
      * Read flag is used to specify a read-only access.
@@ -497,17 +528,11 @@ public class Module {
     //Rendering engines
 
     // -> OpenGL
+
     /**
      * The OpenGL rendering engine.
      */
-    public static final int OPENGL = 0;
-
-    /**
-     * The OpenGL rendering engine with debug messages enabled.<br>
-     * <i>Note:</i> this configuration should not be used
-     * in released applications.
-     */
-    public static final int OPENGL_DEBUG = 1;
+    public static final int OPENGL = 100;
 
     /**
      * OpenGL profile for version 2.x.
@@ -538,6 +563,12 @@ public class Module {
      */
     public static final int GL40_COMPAT_PROFILE = 6;
 
+    /**
+     * The OpenGL rendering engine with debug messages enabled.<br>
+     * <i>Note:</i> this configuration should not be used
+     * in released applications.
+     */
+    public static final int OPENGL_DEBUG = 200;
 
     //Stencil testing functions
     /**
@@ -589,29 +620,25 @@ public class Module {
 
     //Event handlers
     /**
-     * Keyboard events e.g. keyUp(), keyDown() etc.
+     * Application events e.g. AppSetup, AppUpdate etc.
      */
-    public static final int KEY_EVENTS = 1;
+    public static final int APP_EVENTS = 1;
 
     /**
-     * Mouse events e.g. mousePressed(), mouseReleased() etc.
+     * Window events e.g. WindowResized, WindowMoved etc.
      */
-    public static final int MOUSE_EVENTS = 2;
+    public static final int WINDOW_EVENTS = 2;
 
     /**
-     * Touch events.
+     * Keyboard events e.g. KeyDown, KeyUp etc.
      */
-    public static final int TOUCH_EVENTS = 4;
+    public static final int KEY_EVENTS = 4;
 
     /**
-     * Gamepad events.
+     * Mouse events e.g. MousePressed, MouseReleased etc.
      */
-    public static final int GAMEPAD_EVENTS = 8;
+    public static final int MOUSE_EVENTS = 8;
 
-    /**
-     * Window events. e.g. windowResized(), windowMoved() etc.
-     */
-    public static final int WINDOW_EVENTS = 16;
 
     //Input
     /**

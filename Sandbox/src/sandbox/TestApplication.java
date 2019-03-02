@@ -84,9 +84,8 @@ public class TestApplication extends ApplicationModule {
         image = loadImage("models/lamborghini/lambo_diffuse.jpeg");
 
 
-        vbo = JX3D.graphics.createVBO(STATIC_DRAW);
+        vbo = VertexBuffer.create(mesh.vertexCount() * 5, STATIC_DRAW);
         vbo.bind();
-        //vbo.insert(cube_vert, 0);
         float[] vboData = new float[mesh.vertexCount() * 5];
         for (int i = 0; i < mesh.vertexCount(); i++) {
             Vector3f v = mesh.vertices[i];
@@ -101,12 +100,11 @@ public class TestApplication extends ApplicationModule {
         vbo.set(vboData);
 
 
-        ibo = JX3D.graphics.createIBO(STATIC_DRAW);
+        ibo = IndexBuffer.create(mesh.indices.length, STATIC_DRAW);
         ibo.bind();
-        //ibo.insert(indices, 0);
         ibo.set(mesh.indices);
 
-        vao = JX3D.graphics.createVAO();
+        vao = VertexArray.create();
 
         VertexAttribute attribs = new VertexAttribute();
         attribs.add(0, 3, false, 5, 0);
@@ -158,7 +156,7 @@ public class TestApplication extends ApplicationModule {
     @Override
     public void draw() {
         JX3D.graphics.viewport(0, 0, 640, 480);
-        JX3D.graphics.clear(GL20.COLOR_BUFFER_BIT | GL20.DEPTH_BUFFER_BIT);
+        JX3D.graphics.background(0.0f, 0.5f, 1.0f, 1.0f);
 
         //t.rotateY(0.01f);
         shader.set("transform", t.getMapping());
@@ -168,7 +166,7 @@ public class TestApplication extends ApplicationModule {
         //background(0.0f, 0.5f, 1.0f, 1.0f);
         shader.enable();
         tex.bind();
-        //render(TRIANGLES, vao);
+        JX3D.graphics.render(TRIANGLES, vao);
 
     }
 

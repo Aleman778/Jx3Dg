@@ -1,5 +1,8 @@
 package jx3d.graphics;
 
+import jx3d.graphics.opengl.GLGraphics;
+import jx3d.graphics.opengl.GLIndexBuffer;
+
 import java.nio.ShortBuffer;
 
 /**
@@ -28,6 +31,19 @@ public abstract class IndexBuffer extends Buffer {
      */
     public IndexBuffer(int capacity) {
         super(capacity);
+    }
+
+    /**
+     * Create a new index buffer based on the rendering API.
+     * @param capacity the buffer capacity
+     * @param usage the buffer usage
+     * @return a new index buffer object
+     */
+    public static IndexBuffer create(int capacity, int usage) {
+        switch (Context.getRenderAPI()) {
+            case OPENGL: return new GLIndexBuffer(capacity, GLGraphics.glGetBufferUsage(usage));
+        }
+        return null;
     }
 
     /**

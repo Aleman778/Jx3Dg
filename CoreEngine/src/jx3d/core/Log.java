@@ -50,12 +50,12 @@ public class Log {
     private static ConsoleHandler createLogHandler(Level level, String prefix, boolean msgOnly) {
         ConsoleHandler handler = new ConsoleHandler();
         handler.setFormatter(new SimpleFormatter() {
-            private final String format = prefix + "[%1$tD %1$tT] %2$s: %3$s %n";
+            private final String format = prefix + "[%1$tD %1$tT] %2$s: %3$s %n\u001B[30m";
 
             @Override
             public synchronized String format(LogRecord lr) {
                 if (msgOnly) {
-                    return String.format(prefix + "%1$s %n", lr.getMessage());
+                    return String.format(prefix + "%1$s %n", lr.getMessage() + "\u001B[30m");
                 } else {
                     return String.format(format,
                             new Date(lr.getMillis()),

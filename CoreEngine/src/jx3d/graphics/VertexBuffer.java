@@ -1,5 +1,8 @@
 package jx3d.graphics;
 
+import jx3d.graphics.opengl.GLGraphics;
+import jx3d.graphics.opengl.GLVertexBuffer;
+
 import java.nio.FloatBuffer;
 
 
@@ -29,6 +32,19 @@ public abstract class VertexBuffer extends Buffer {
      */
     public VertexBuffer(int capacity) {
         super(capacity);
+    }
+
+    /**
+     * Create a new vertex buffer based on the rendering API.
+     * @param capacity the buffer capacity
+     * @param usage the buffer usage
+     * @return a new vertex buffer object
+     */
+    public static VertexBuffer create(int capacity, int usage) {
+        switch (Context.getRenderAPI()) {
+            case OPENGL: return new GLVertexBuffer(capacity, GLGraphics.glGetBufferUsage(usage));
+        }
+        return null;
     }
 
     /**

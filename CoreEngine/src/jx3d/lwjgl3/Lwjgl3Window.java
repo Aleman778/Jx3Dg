@@ -1,14 +1,15 @@
 package jx3d.lwjgl3;
 
+import jx3d.core.Log;
 import jx3d.core.Screen;
 import jx3d.core.Window;
 import jx3d.graphics.opengl.GL20;
-import jx3d.graphics.opengl.GLGraphics;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
-import org.lwjgl.glfw.GLFWErrorCallback;
 
 import java.nio.IntBuffer;
+
+import static jx3d.core.Module.*;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -34,10 +35,8 @@ public class Lwjgl3Window extends Window {
     private Lwjgl3Screen screen;
     private String title;
 
-    private long object = NULL;
+    private long object;
     private boolean visible = false;
-    private boolean disposed = false;
-    private boolean gldebug = false;
 
     private boolean fullscreen = false;
     private boolean decorated = true;
@@ -100,6 +99,8 @@ public class Lwjgl3Window extends Window {
         decorated = config.windowDecorated;
         floating = config.windowFloating;
         swapInterval = config.vSyncEnabled ? 1 : 0;
+
+        setupContextHints(config.renderer, config.profile);
 
         if (fullscreen) {
             glfwWindowHint(GLFW_REFRESH_RATE, (int) screen.getRefreshRate());
@@ -494,6 +495,41 @@ public class Lwjgl3Window extends Window {
         return object != NULL;
     }
 
+    protected long getObject() {
+        return object;
+    }
+
+    private void setupContextHints(int renderer, int profile) {
+        switch (renderer) {
+            case OPENGL_DEBUG:
+                glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL20.TRUE);
+            case OPENGL:
+                switch (profile) {
+                    case GL20_PROFILE:
+                        Log.CORE.warning("GLFW does not support GL20_PROFILE, chaning to PREFERRED");
+                        break;
+                    case GL30_CORE_PROFILE:
+                        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+                        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+                        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+                        break;
+                    case GL30_COMPAT_PROFILE:
+                        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+                        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+                        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
+                        break;
+                    case GL40_CORE_PROFILE:
+                        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+                        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+                        break;
+                    case GL40_COMPAT_PROFILE:
+                        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+                        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+                        break;
+                }
+                break;
+        }
+    }
 
     private void setupCallbacks() {
         glfwSetWindowRefreshCallback(object, (long window) -> {
@@ -578,9 +614,5 @@ public class Lwjgl3Window extends Window {
 
         if (iconified)
             glfwIconifyWindow(object);
-
-        //OpenGL debug mode
-        if (gldebug)
-            glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL20.TRUE);
     }
 }

@@ -1,5 +1,6 @@
 package jx3d.graphics.opengl;
 
+import jx3d.core.JX3D;
 import jx3d.graphics.VertexArray;
 import jx3d.graphics.VertexAttribute;
 import jx3d.graphics.VertexAttribute.Attribute;
@@ -25,8 +26,8 @@ public class GLVertexArray extends VertexArray {
     /**
      * Constructor. Create an empty vertex array.
      */
-    public GLVertexArray(GL30 graphics) {
-        gl = graphics;
+    public GLVertexArray() {
+        gl = JX3D.gl30;
         object = gl.genVertexArray();
         buffers = new ArrayList<>();
     }

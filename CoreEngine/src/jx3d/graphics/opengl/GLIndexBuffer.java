@@ -1,5 +1,6 @@
 package jx3d.graphics.opengl;
 
+import jx3d.core.JX3D;
 import jx3d.graphics.IndexBuffer;
 import jx3d.util.BufferUtils;
 
@@ -25,24 +26,22 @@ public class GLIndexBuffer extends IndexBuffer {
     /**
      * Create an empty index buffer with a provided usage.
      *
-     * @param graphics the graphics processor being used in this thread
      * @param usage    describes how the buffer is used
      */
-    public GLIndexBuffer(GL20 graphics, int usage) {
-        this(graphics, 0, usage);
+    public GLIndexBuffer(int usage) {
+        this(0, usage);
     }
 
     /**
      * Creates an empty index buffer with a desired maximum capacity.
      *
-     * @param graphics the graphics processor being used in this thread
      * @param capacity the maximum number of elements the buffer can hold
      * @param usage    describes how the buffer is used
      */
-    public GLIndexBuffer(GL20 graphics, int capacity, int usage) {
+    public GLIndexBuffer(int capacity, int usage) {
         super(capacity);
 
-        this.gl = graphics;
+        this.gl = JX3D.gl20;
         this.usage = usage;
         this.allocated = false;
         this.object = gl.genBuffer();

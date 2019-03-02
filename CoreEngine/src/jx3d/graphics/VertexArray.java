@@ -1,5 +1,6 @@
 package jx3d.graphics;
 
+import jx3d.graphics.opengl.GLVertexArray;
 import jx3d.util.Disposable;
 
 /**
@@ -9,6 +10,17 @@ import jx3d.util.Disposable;
  * @since 1.0
  */
 public abstract class VertexArray implements Disposable {
+
+    /**
+     * Create a new vertex array based on the rendering API.
+     * @return a new vertex array object
+     */
+    public static VertexArray create() {
+        switch (Context.getRenderAPI()) {
+            case OPENGL: return new GLVertexArray();
+        }
+        return null;
+    }
 
     /**
      * Bind the vertex array.

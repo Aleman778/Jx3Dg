@@ -139,17 +139,6 @@ public abstract class Graphics {
 
     public abstract Shader loadShader(int shader);
 
-    //Native buffer functions
-    public abstract VertexBuffer createVBO(int usage);
-
-    public abstract VertexBuffer createVBO(int usage, int capacity);
-
-    public abstract IndexBuffer createIBO(int usage);
-
-    public abstract IndexBuffer createIBO(int usage, int capacity);
-
-    public abstract VertexArray createVAO();
-
     /**
      * Enable or disable the writing to each color component of the color buffer.
      *

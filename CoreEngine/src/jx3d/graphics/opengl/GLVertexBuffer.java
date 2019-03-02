@@ -1,5 +1,6 @@
 package jx3d.graphics.opengl;
 
+import jx3d.core.JX3D;
 import jx3d.graphics.VertexBuffer;
 import jx3d.util.BufferUtils;
 
@@ -25,24 +26,22 @@ public class GLVertexBuffer extends VertexBuffer {
     /**
      * Create an empty vertex buffer with a provided usage.
      *
-     * @param graphics the graphics processor being used in this thread
      * @param usage    how the buffer is used
      */
-    public GLVertexBuffer(GL20 graphics, int usage) {
-        this(graphics, 0, usage);
+    public GLVertexBuffer(int usage) {
+        this(0, usage);
     }
 
     /**
      * Creates an empty vertex buffer with a desired maximum capacity.
      *
-     * @param graphics the graphics processor being used in this thread
      * @param capacity the maximum number of elements the buffer can hold
      * @param usage    describes how the buffer is used
      */
-    public GLVertexBuffer(GL20 graphics, int capacity, int usage) {
+    public GLVertexBuffer(int capacity, int usage) {
         super(capacity);
 
-        this.gl = graphics;
+        this.gl = JX3D.gl20;
         this.usage = usage;
         this.allocated = false;
         this.object = gl.genBuffer();

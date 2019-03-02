@@ -40,21 +40,6 @@ public abstract class Input {
     protected final Window window;
 
     /**
-     * Map of all installed key listeners in this window.
-     */
-    private Set<Node> keyListeners;
-
-    /**
-     * Map of all installed mouse listeners in this window.
-     */
-    private Set<Node> mouseListeners;
-
-    /**
-     * Map of all installed window listeners in this window.
-     */
-    private Set<Node> windowListeners;
-
-    /**
      * Set of nodes that are setup for being dragged.
      */
     private Set<Node> dragging;
@@ -91,9 +76,6 @@ public abstract class Input {
      */
     public Input(Window window) {
         this.window = window;
-        this.keyListeners = new HashSet<>();
-        this.mouseListeners = new HashSet<>();
-        this.windowListeners = new HashSet<>();
         this.mouseState = new boolean[MOUSE_BUTTON_LAST + 1];
         this.keyboardState = new boolean[KEY_LAST + 1];
     }

@@ -1,14 +1,9 @@
 package jx3d.graphics.opengl;
 
 import jx3d.core.JX3D;
+import jx3d.core.Log;
 import jx3d.core.Window;
 import jx3d.graphics.*;
-import jx3d.lwjgl3.Lwjgl3GL20;
-import jx3d.lwjgl3.Lwjgl3GL30;
-import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GLCapabilities;
-import org.lwjgl.opengl.GLUtil;
-import org.lwjgl.system.Callback;
 
 import static jx3d.core.Module.*;
 
@@ -25,28 +20,6 @@ public class GLGraphics extends Graphics {
      * OpenGL state variables.
      */
     public GLState state;
-
-    /**
-     * OpenGL 20 API interface.
-     */
-    private GL20 gl20;
-
-    /**
-     * OpenGL 30 API interface.<br>
-     * <i>Note:</i> if this variable is null then
-     * this version might be unsupported your hardware.
-     */
-    private GL30 gl30;
-
-    /**
-     * OpenGL capabilities object.
-     */
-    private GLCapabilities capabilities;
-
-    /**
-     * Debug process callback.
-     */
-    private Callback debugProc;
 
     /**
      * Flag determines if the context have been initialized before.
@@ -67,23 +40,13 @@ public class GLGraphics extends Graphics {
         if (initialized)
             return;
 
-        capabilities = GL.createCapabilities();
+        Log.CORE.info("Initializing graphics for OpenGL " + GLContext.getMajorVersion() + "." + GLContext.getMinorVersion());
 
-        if (capabilities.OpenGL30) {
-            gl30 = new Lwjgl3GL30();
-            gl20 = gl30;
-        } else {
-            gl30 = null;
-            gl20 = new Lwjgl3GL20();
-        }
 
         //Setup backface culling, JUST TEST MOVE THIS LATER LATER
-        gl20.cullFace(GL20.BACK);
-        gl20.depthFunc(GL20.LESS);
-        gl20.enable(GL20.DEPTH_TEST);
-
-        //DEBUG REMOVE LATER
-        debugProc = GLUtil.setupDebugMessageCallback(System.out);
+        JX3D.gl20.cullFace(GL20.BACK);
+        JX3D.gl20.depthFunc(GL20.LESS);
+        JX3D.gl20.enable(GL20.DEPTH_TEST);
     }
 
     @Override
@@ -98,37 +61,37 @@ public class GLGraphics extends Graphics {
 
     @Override
     public void clear(int flag) {
-        gl20.clear(flag);
+        JX3D.gl20.clear(flag);
     }
 
     @Override
     public void viewport(int x, int y, int w, int h) {
-        gl20.viewport(x, y, w, h);
+        JX3D.gl20.viewport(x, y, w, h);
     }
 
     @Override
     public void render(int mode, VertexArray vao) {
         vao.bind();
-        gl20.drawArrays(glGetShapeMode(mode), 0, vao.count());
+        JX3D.gl20.drawArrays(glGetShapeMode(mode), 0, vao.count());
     }
 
     @Override
     public void render(int mode, VertexArray vao, IndexBuffer ibo) {
         vao.bind();
         ibo.bind();
-        gl20.drawElements(glGetShapeMode(mode), vao.count(), GL20.UNSIGNED_SHORT, 0);
+        JX3D.gl20.drawElements(glGetShapeMode(mode), vao.count(), GL20.UNSIGNED_SHORT, 0);
     }
 
     @Override
     public void background(float red, float green, float blue, float alpha) {
-        gl20.clear(GL20.COLOR_BUFFER_BIT);
-        gl20.clearColor(red, green, blue, alpha);
+        JX3D.gl20.clear(GL20.COLOR_BUFFER_BIT);
+        JX3D.gl20.clearColor(red, green, blue, alpha);
     }
 
     @Override
     public Shader loadShader(String fragment) {
         String source = JX3D.files.loadText(fragment);
-        Shader shader = new GLSLShader(gl20);
+        Shader shader = new GLSLShader(JX3D.gl20);
         shader.add(FRAGMENT_SHADER, source);
         shader.setup();
         return shader;
@@ -138,7 +101,7 @@ public class GLGraphics extends Graphics {
     public Shader loadShader(String fragment, String vertex) {
         String fsource = JX3D.files.loadText(fragment);
         String vsource = JX3D.files.loadText(vertex);
-        Shader shader = new GLSLShader(gl20);
+        Shader shader = new GLSLShader(JX3D.gl20);
         shader.add(FRAGMENT_SHADER, fsource);
         shader.add(VERTEX_SHADER, vsource);
         shader.setup();
@@ -151,37 +114,14 @@ public class GLGraphics extends Graphics {
         return null;
     }
 
-    public VertexBuffer createVBO(int usage) {
-        return new GLVertexBuffer(gl20, glGetBufferUsage(usage));
-    }
-
-    @Override
-    public VertexBuffer createVBO(int capacity, int usage) {
-        return new GLVertexBuffer(gl20, capacity, glGetBufferUsage(usage));
-    }
-
-    public IndexBuffer createIBO(int usage) {
-        return new GLIndexBuffer(gl20, glGetBufferUsage(usage));
-    }
-
-    @Override
-    public IndexBuffer createIBO(int capacity, int usage) {
-        return new GLIndexBuffer(gl20, capacity, glGetBufferUsage(usage));
-    }
-
-    @Override
-    public VertexArray createVAO() {
-        return new GLVertexArray(gl30);
-    }
-
     @Override
     public void setDepthTest(boolean enable) {
         super.setDepthTest(enable);
 
         if (enable) {
-            gl20.enable(GL20.DEPTH_TEST);
+            JX3D.gl20.enable(GL20.DEPTH_TEST);
         } else {
-            gl20.disable(GL20.DEPTH_TEST);
+            JX3D.gl20.disable(GL20.DEPTH_TEST);
         }
     }
 
@@ -189,13 +129,13 @@ public class GLGraphics extends Graphics {
     public void setDepthFunc(int func) {
         super.setDepthFunc(func);
 
-        gl20.depthFunc(glGetDepthFunc(func));
+        JX3D.gl20.depthFunc(glGetDepthFunc(func));
     }
 
     @Override
     public void setDepthMask(boolean mask) {
         super.setDepthMask(mask);
-        gl20.depthMask(mask);
+        JX3D.gl20.depthMask(mask);
     }
 
     @Override
@@ -203,9 +143,9 @@ public class GLGraphics extends Graphics {
         super.setStencilTest(enable);
 
         if (enable) {
-            gl20.enable(GL20.STENCIL_TEST);
+            JX3D.gl20.enable(GL20.STENCIL_TEST);
         } else {
-            gl20.disable(GL20.STENCIL_TEST);
+            JX3D.gl20.disable(GL20.STENCIL_TEST);
         }
     }
 
@@ -213,7 +153,7 @@ public class GLGraphics extends Graphics {
     public void setStencilFunc(int func, int ref, int mask) {
         this.stencilFunc = func;
 
-        gl20.stencilFunc(glGetStencilFunc(func), ref, mask);
+        JX3D.gl20.stencilFunc(glGetStencilFunc(func), ref, mask);
     }
 
     public static int glGetBufferUsage(int usage) {
