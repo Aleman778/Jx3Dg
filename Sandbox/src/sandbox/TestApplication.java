@@ -101,7 +101,7 @@ public class TestApplication extends ApplicationModule {
     @Override
     public void draw() {
         JX3D.graphics.viewport(0, 0, 640, 480);
-        //JX3D.graphics.background(0.0f, 0.5f, 1.0f, 1.0f);
+        JX3D.graphics.background(0.0f, 0.5f, 1.0f, 1.0f);
 
         //t.rotateY(0.01f);
         shader.set("transform", t.getMapping());

@@ -19,7 +19,7 @@ public abstract class VertexArray implements Disposable {
         switch (Context.getRenderAPI()) {
             case OPENGL: return new GLVertexArray();
         }
-        return null;
+        throw new IllegalStateException("There is no vertex array support for the current render API!");
     }
 
     /**

@@ -44,7 +44,7 @@ public abstract class VertexBuffer extends Buffer {
         switch (Context.getRenderAPI()) {
             case OPENGL: return new GLVertexBuffer(capacity, GLGraphics.glGetBufferUsage(usage));
         }
-        return null;
+        throw new IllegalStateException("There is no vertex buffer support for the current render API!");
     }
 
     /**

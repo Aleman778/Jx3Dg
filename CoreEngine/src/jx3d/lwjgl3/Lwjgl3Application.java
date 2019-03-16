@@ -68,10 +68,8 @@ public final class Lwjgl3Application extends Application {
                 }
                 break;
         }
-        Color c = config.initialBackground;
 
         graphics.init();
-        graphics.background(c.red, c.green, c.blue, c.alpha);
     }
 
     @Override

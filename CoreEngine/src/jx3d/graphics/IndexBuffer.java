@@ -43,7 +43,7 @@ public abstract class IndexBuffer extends Buffer {
         switch (Context.getRenderAPI()) {
             case OPENGL: return new GLIndexBuffer(capacity, GLGraphics.glGetBufferUsage(usage));
         }
-        return null;
+        throw new IllegalStateException("There is no index buffer support for the current render API!");
     }
 
     /**

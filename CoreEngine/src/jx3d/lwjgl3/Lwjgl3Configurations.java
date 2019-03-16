@@ -94,11 +94,6 @@ public class Lwjgl3Configurations {
     public boolean vSyncEnabled = true;
 
     /**
-     * The initial background color of window.
-     */
-    public Color initialBackground = Color.BLACK;
-
-    /**
      * Number of bits per color channel.
      */
     public int r = 8, g = 8, b = 8, a = 8;
