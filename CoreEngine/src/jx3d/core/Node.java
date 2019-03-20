@@ -60,7 +60,6 @@ public abstract class Node extends Module {
         children.add(node);
         node.parent = this;
         node.window = window;
-        node.setup();
     }
 
     /**

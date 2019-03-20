@@ -2,7 +2,6 @@ package jx3d.lwjgl3;
 
 import jx3d.core.*;
 import jx3d.core.Module;
-import jx3d.graphics.Color;
 import jx3d.graphics.Context;
 import jx3d.graphics.Context.RenderAPI;
 import jx3d.graphics.Graphics;
@@ -10,6 +9,7 @@ import jx3d.graphics.opengl.GLContext;
 import jx3d.graphics.opengl.GLGraphics;
 import jx3d.io.Files;
 import jx3d.io.Input;
+import jx3d.io.events.Event;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GLUtil;
 
@@ -79,17 +79,24 @@ public final class Lwjgl3Application extends Application {
         mainWindow.setVisible(true);
         while (!mainWindow.shouldClose()) {
 
+
             listener.update();
             listener.draw();
 
             mainWindow.swapBuffers();
             mainWindow.pollEvents();
+
             try {
                 Thread.sleep(1);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void onEvent(Event event) {
+
     }
 
     @Override

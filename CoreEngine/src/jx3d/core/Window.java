@@ -1,5 +1,6 @@
 package jx3d.core;
 
+import jx3d.io.Input;
 import jx3d.util.Disposable;
 
 /**
@@ -9,7 +10,7 @@ import jx3d.util.Disposable;
  * @author Aleman778
  * @since 1.0
  */
-public abstract class Window implements Disposable {
+public abstract class Window implements Disposable, Input {
 
     /**
      * Constructor.

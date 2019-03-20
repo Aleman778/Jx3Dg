@@ -2,20 +2,39 @@ package jx3d.io.events;
 
 import jx3d.core.Module;
 
+/**
+ * Mouse event
+ */
 public class MouseEvent extends Event {
 
     /**
      * The name of the event.
      */
-    String name;
+    private String name;
 
-    float x, y;
+    /**
+     * The type of event.
+     */
+    private EventType type;
 
-    int button;
+    /**
+     * The relative mouse position.
+     */
+    private float x, y;
 
-    int clickCount;
+    /**
+     * The change in mouse position.
+     */
+    private float dx, dy;
 
-    boolean popupTrigger = false;
+    /**
+     * The mouse scrolling offset.
+     */
+    private float scrollX, scrollY;
+
+    private int button;
+
+    private int clickCount;
 
     public MouseEvent(EventType type, String name, int button) {
         this.name = name;
@@ -36,7 +55,7 @@ public class MouseEvent extends Event {
 
     @Override
     public EventType getType() {
-        return null;
+        return EventType.MousePressed;
     }
 
     @Override

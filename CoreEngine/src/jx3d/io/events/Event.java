@@ -1,5 +1,4 @@
 package jx3d.io.events;
-import java.awt.event.MouseEvent;
 
 /**
  * Abstract event class is a basis for every event in the event system.
@@ -36,7 +35,7 @@ public abstract class Event {
      * @param category the category to check for
      * @return true if the category belongs to any of the specified categories.
      */
-    public boolean belongsTo(int category) {
+    public final boolean belongsTo(int category) {
         return (getCategoryFlag() & category) != 0;
     }
 
@@ -45,7 +44,4 @@ public abstract class Event {
         return "Event: " + getName() + " (handled=" + handled + ")";
     }
 
-    class EventDispatcher {
-
-    }
 }

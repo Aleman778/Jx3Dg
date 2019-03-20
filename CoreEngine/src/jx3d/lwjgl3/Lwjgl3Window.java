@@ -7,6 +7,7 @@ import jx3d.graphics.opengl.GL20;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 
+import java.nio.DoubleBuffer;
 import java.nio.IntBuffer;
 
 import static jx3d.core.Module.*;
@@ -29,6 +30,8 @@ public class Lwjgl3Window extends Window {
 
     private static final IntBuffer xpos = BufferUtils.createIntBuffer(1);
     private static final IntBuffer ypos = BufferUtils.createIntBuffer(1);
+    private static final DoubleBuffer xcursor = BufferUtils.createDoubleBuffer(1);
+    private static final DoubleBuffer ycursor = BufferUtils.createDoubleBuffer(1);
 
     private static final long NULL = 0L;
 
@@ -496,6 +499,34 @@ public class Lwjgl3Window extends Window {
             result[i] = new Lwjgl3Screen(buff.get(i));
         }
         return result;
+    }
+
+    @Override
+    public boolean isKeyDown(int key) {
+        int state = glfwGetKey(object, key);
+        return state == GLFW_PRESS || state == GLFW_REPEAT;
+    }
+
+    @Override
+    public boolean isMouseButtonDown(int button) {
+        int state = glfwGetMouseButton(object, button);
+        return state == GLFW_PRESS;
+    }
+
+    @Override
+    public float[] getMousePos() {
+        glfwGetCursorPos(object, xcursor, ycursor);
+        return new float[] {(float) xcursor.get(0), (float) ycursor.get(0)};
+    }
+
+    @Override
+    public float getMouseX() {
+        return getMousePos()[0];
+    }
+
+    @Override
+    public float getMouseY() {
+        return getMousePos()[1];
     }
 
     @Override

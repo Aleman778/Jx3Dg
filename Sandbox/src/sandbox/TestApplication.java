@@ -2,6 +2,7 @@ package sandbox;
 
 import jx3d.core.ApplicationModule;
 import jx3d.core.JX3D;
+import jx3d.core.Node;
 import jx3d.graphics.*;
 import jx3d.graphics.opengl.GLTexture2D;
 import jx3d.math.Transform;
@@ -96,22 +97,21 @@ public class TestApplication extends ApplicationModule {
 
         //APPLY TRANSFORMATION
         shader.set("transform", t.getMapping());
+
+        Node hello = new Node() {
+
+        };
     }
 
     @Override
     public void draw() {
-        JX3D.graphics.viewport(0, 0, 640, 480);
         JX3D.graphics.background(0.0f, 0.5f, 1.0f, 1.0f);
 
-        //t.rotateY(0.01f);
         shader.set("transform", t.getMapping());
         shader.set("projection", camera3D.getMapping());
-        //shader.set("projection", new Matrix4f().perspective);
-
-        //background(0.0f, 0.5f, 1.0f, 1.0f);
         shader.enable();
+
         tex.bind();
         JX3D.graphics.render(TRIANGLES, vao, ibo);
-
     }
 }

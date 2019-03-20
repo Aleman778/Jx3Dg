@@ -84,7 +84,7 @@ public class GLGraphics extends Graphics {
 
     @Override
     public void background(float red, float green, float blue, float alpha) {
-        JX3D.gl20.clear(GL20.COLOR_BUFFER_BIT);
+        JX3D.gl20.clear(GL20.COLOR_BUFFER_BIT | GL20.DEPTH_BUFFER_BIT);
         JX3D.gl20.clearColor(red, green, blue, alpha);
     }
 

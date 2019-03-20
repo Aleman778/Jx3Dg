@@ -1,6 +1,7 @@
 package jx3d.core;
 
 import jx3d.graphics.*;
+import jx3d.io.events.EventAdapter;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -12,7 +13,7 @@ import java.util.logging.Level;
  * @author Aleman778
  * @since 1.0
  */
-public class Module {
+public class Module extends EventAdapter {
     /*
      * Constants
      */
@@ -930,255 +931,41 @@ public class Module {
     public Window window;
 
     /*
-     * Basic events
+     * Input polling functions
      */
 
     /**
-     * The setup event is triggered once this object is ready to be used.
-     * Use this method for initializing variables and other settings.
+     * Check if a specified key on the keyboard is being pressed at the moment.
+     * @param key the specific key to check
+     * @return true if the specified key is down, false otherwise
      */
-    public void setup() {
+    public final boolean isKeyDown(int key) {
+        return false;
     }
 
     /**
-     * The update event is triggered for each time the window requests an update from the running program,
-     * this is normally performed via a loop that continuously triggers this event 30 times every second.
-     * The rate in which this is executed can be customized.
+     * Check if a specific mouse button is being pressed at the moment.
+     * @param button the specific mouse button to check
+     * @return true if the specific mouse button is down, false otherwise
      */
-    public void update() {
+    public final boolean isMouseButtonDown(int button) {
+        return false;
     }
 
     /**
-     * The draw event is triggered for each time the window requests a new frame from the running program,
-     * this is normally performed via a loop that continuously requests new frames 30 times every second.
-     * The rate at which new frames are requested (frame rate) can be customized.
+     * Get the mouse x position inside the related component.
+     * @return the x position
      */
-    public void draw() {
+    public final float mouseX() {
+        return 0.0f;
     }
 
     /**
-     * Key down event is triggered when the user presses
-     * a key on the keyboard.
-     * <p>
-     * <i>Note:</i> in order for this event to be used you need to call
-     * <code>install(KEY_EVENT);</code> in the {@link #setup()} method.
-     * </p>
-     *
-     * @param key the pressed key
+     * Get the mouse y position inside the related component.
+     * @return the y position
      */
-    public void keyDown(int key) {
-    }
-
-    /**
-     * Key up event is triggered when the user releases
-     * a key on the keyboard.
-     * <p>
-     * <i>Note:</i> in order for this event to be used you need to call
-     * <code>install(KEY_EVENT);</code> in the {@link #setup()} method.
-     * </p>
-     *
-     * @param key the released key
-     */
-    public void keyUp(int key) {
-    }
-
-    /**
-     * Key repeat event is triggered repeatedly when the user holds
-     * down a key on the keyboard for some time.
-     * <p>
-     * <i>Note:</i> in order for this event to be used you need to call
-     * <code>install(KEY_EVENT);</code> in the {@link #setup()} method.
-     * </p>
-     *
-     * @param key the repeating key
-     */
-    public void keyRepeat(int key) {
-    }
-
-    /**
-     * Mouse pressed event is triggered when the user presses
-     * a button on the mouse.
-     * <p>
-     * <i>Note:</i> in order for this event to be used you need to call
-     * <code>install(MOUSE_EVENT);</code> in the {@link #setup()} method.
-     * </p>
-     *
-     * @param button the pressed mouse button
-     */
-    public void mousePressed(int button) {
-    }
-
-    /**
-     * Mouse released event is triggered when the user releases
-     * a button on the mouse.
-     * <p>
-     * <i>Note:</i> in order for this event to be used you need to call
-     * <code>install(MOUSE_EVENT);</code> in the {@link #setup()} method.
-     * </p>
-     *
-     * @param button the released mouse button
-     */
-    public void mouseReleased(int button) {
-    }
-
-    /**
-     * Mouse clicked event is triggered when the user clicks
-     * a button on the mouse.
-     * <p>
-     * <i>Note:</i> in order for this event to be used you need to call
-     * <code>install(MOUSE_EVENT);</code> in the {@link #setup()} method.
-     * </p>
-     *
-     * @param button the clicked mouse button
-     */
-    public void mouseClicked(int button) {
-    }
-
-    /**
-     * Mouse entered event is triggered when the user moves the
-     * cursor on this node.
-     * <p>
-     * <i>Note:</i> in order for this event to be used you need to call
-     * <code>install(MOUSE_EVENT);</code> in the {@link #setup()} method.
-     * </p>
-     */
-    public void mouseEntered() {
-    }
-
-    /**
-     * Mouse exited event is triggered when the user moves the
-     * cursor away from this node.
-     * <p>
-     * <i>Note:</i> in order for this event to be used you need to call
-     * <code>install(MOUSE_EVENT);</code> in the {@link #setup()} method.
-     * </p>
-     */
-    public void mouseExited() {
-    }
-
-    /**
-     * Mouse moved event is triggered when the user moves the cursor.
-     * If the user presses and holds a button then the
-     * {@link #mouseDragged(float, float)} event is used instead.
-     * The change in position is provided as argument.
-     * <p>
-     * <i>Note:</i> in order for this event to be used you need to call
-     * <code>install(MOUSE_EVENT);</code> in the {@link #setup()} method.
-     * </p>
-     *
-     * @param dx the movement in the x direction
-     * @param dy the movement in the y direction
-     */
-    public void mouseMoved(float dx, float dy) {
-    }
-
-    /**
-     * Mouse dragged event is triggered when the user moves the cursor
-     * after pressing and holding a button. If the user releases the button
-     * then the {@link #mouseMoved(float, float)} event is used instead.
-     * The mouse button and the change in position is provided as argument.
-     * <p>
-     * <i>Note:</i> in order for this event to be used you need to call
-     * <code>install(MOUSE_EVENT);</code> in the {@link #setup()} method.
-     * </p>
-     *
-     * @param dx the movement in the x direction
-     * @param dy the movement in the y direction
-     */
-    public void mouseDragged(float dx, float dy) {
-    }
-
-    /**
-     * <p>
-     * Mouse scrolled event is triggered when the user scrolls on the
-     * mouse wheel or using touch gesture on a trackpad.
-     * The change in the scroll position is provided as argument.
-     * </p>
-     * <p>
-     * <i>Note:</i> in order for this event to be used you need to call
-     * <code>install(MOUSE_EVENT);</code> in the {@link #setup()} method.
-     * </p>
-     *
-     * @param dx the scrolling in the x direction
-     * @param dy the scrolling in the y direction
-     */
-    public void mouseScrolled(float dx, float dy) {
-    }
-
-    /**
-     * Window resized event is triggered when the user resizes the window.
-     * <p>
-     * <i>Note:</i> in order for this event to be used you need to call
-     * <code>install(WINDOW_EVENT);</code> in the {@link #setup()} method.
-     * </p>
-     *
-     * @param width  the new width of the window
-     * @param height the new height of the window
-     */
-    public void windowResized(int width, int height) {
-    }
-
-    /**
-     * Window moved event is triggered when the user moves the window.
-     *
-     * @param x the new x location of the window
-     * @param y the new y location of the window
-     *          <p>
-     *          <i>Note:</i> in order for this event to be used you need to call
-     *          <code>install(WINDOW_EVENT);</code> in the {@link #setup()} method.
-     *          </p>
-     */
-    public void windowMoved(int x, int y) {
-    }
-
-    /**
-     * Window focus event is triggered when the window has lost focus
-     * or when then user interacts with the window and it regains the focus.
-     * The focused state is provided as argument.
-     * <p>
-     * <i>Note:</i> in order for this event to be used you need to call
-     * <code>install(WINDOW_EVENT);</code> in the {@link #setup()} method.
-     * </p>
-     *
-     * @param focused true if the window is focused, false otherwise
-     */
-    public void windowFocus(boolean focused) {
-    }
-
-    /**
-     * Window iconify event is triggered when the user iconify (minimize) the window
-     * or when the user restores the window.
-     * <p>
-     * <i>Note:</i> in order for this event to be used you need to call
-     * <code>install(WINDOW_EVENT);</code> in the {@link #setup()} method.
-     * </p>
-     *
-     * @param iconified true if the window is iconified, false otherwise
-     */
-    public void windowIconify(boolean iconified) {
-    }
-
-    /**
-     * Window maximize event is triggered when the user maximizes the window
-     * or when the user restores the window.
-     * <p>
-     * <i>Note:</i> in order for this event to be used you need to call
-     * <code>install(WINDOW_EVENT);</code> in the {@link #setup()} method.
-     * </p>
-     *
-     * @param maximized true if the window is maximized, false otherwise
-     */
-    public void windowMaximize(boolean maximized) {
-    }
-
-    /**
-     * Window closed event is triggered when the user closes the window.
-     * <p>
-     * <i>Note:</i> in order for this event to be used you need to call
-     * <code>install(WINDOW_EVENT);</code> in the {@link #setup()} method.
-     * </p>
-     */
-    public void windowClosed() {
+    public final float mouseY() {
+        return 0.0f;
     }
 
     /*
@@ -1285,58 +1072,6 @@ public class Module {
     public Shader loadShader(int shader) {
         return JX3D.graphics.loadShader(shader);
     }
-
-    //Input functions
-
-/*    *//**
-     * The current location of the mouse in the x-axis.
-     *
-     * @return a float holding the horizontal mouse location
-     *//*
-    public float mouseX() {
-        return JX3D.input.getMouseX();
-    }
-
-    *//**
-     * The current location of the mouse in the y-axis.
-     *
-     * @return a float holding the vertical mouse location
-     *//*
-    public float mouseY() {
-        return JX3D.input.getMouseY();
-    }
-
-    *//**
-     * The current state of the mouse, a byte is used to represents all 8 mouse buttons where
-     * each bit corresponds the button state pressed = 1/ released = 0. The first bit represents
-     * {@link #MOUSE_BUTTON_1}, the second bit is {@link #MOUSE_BUTTON_2} etc.
-     *
-     * @return a byte holding the current state of all the mouse buttons
-     *//*
-    public byte mouseState() {
-        return JX3D.input.getMouseButtons();
-    }
-
-    *//**
-     * Check if a specific mouse button is being held down or has been released.
-     *
-     * @param button the specific button the check
-     * @return true if the button is pressed down, false if the button has been released
-     *//*
-    public boolean mouse(int button) {
-        return JX3D.input.getMouseState(button);
-    }
-
-    *//**
-     * Check if a specific keyboard key is being held down or has been released.
-     *
-     * @param key the specific key the check
-     * @return true if the key is pressed down, false if the key has been released
-     *//*
-    public boolean key(int key) {
-        return JX3D.input.getKeyState(key);
-    }*/
-
 
     //File I/O functions
     public byte[] loadBytes(String file) {

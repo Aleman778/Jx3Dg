@@ -3,6 +3,7 @@ package jx3d.core;
 import jx3d.graphics.Graphics;
 import jx3d.io.Files;
 import jx3d.io.Input;
+import jx3d.io.events.Event;
 
 /**
  * Basic abstract Application class should be implemented
@@ -30,9 +31,15 @@ public abstract class Application {
     }
 
     /**
-     * The run method is used to start the application
+     * The run method is used to start the application.
      */
     public abstract void run();
+
+    /**
+     * On event method is called when an event is created and should be dispatched.
+     * @param event the event to handle
+     */
+    public abstract void onEvent(Event event);
 
     /**
      * Get the current graphics context used by this application.

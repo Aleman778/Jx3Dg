@@ -9,75 +9,39 @@ import java.util.Set;
 import static jx3d.core.Module.*;
 
 /**
- * <p>
- * Input class is an abstract class that contains functions for handling input
- * events from the windowing system. The window and nodes have their own input
- * handling callback functions but only callbacks from the window will be
- * automatically triggered.
- * </p>
- * <p>
- * In order to receive callbacks for a specific node
- * you have to manually add it the set of listeners using the add listeners functions
- * e.g. {@link Node#install(int)} where the <code>int</code> is the type of event listener.
- * However your nodes will always have access to the current input state using functions
- * like {@link Node#mouseX()} to get the location of the mouse in the x-axis.
- * </p>
- * <p>
- * This basic class has a general implementation
- * but because some platform have specific input handlers you should always implement
- * this class for each windowing system. This class also contains states for
- * some input devices such as the mouse, keyboard etc.
- * </p>
- *
+ * Input interface should be implemented for objects such as a window that has inputs that can be checked whenever
+ * requested. This is called input polling and should always implemented by the window classes.
  * @author Aleman778
  * @since 1.0
  */
-public abstract class Input {
+public interface Input {
 
     /**
-     * The window owner.
+     * Check if a specified key on the keyboard is being pressed at the moment.
+     * @param key the specific key to check
+     * @return true if the specified key is down, false otherwise
      */
-    protected final Window window;
+    boolean isKeyDown(int key);
 
     /**
-     * Set of nodes that are setup for being dragged.
+     * Check if a specific mouse button is being pressed at the moment.
+     * @param button the specific mouse button to check
+     * @return true if the specific mouse button is down, false otherwise
      */
-    private Set<Node> dragging;
+    boolean isMouseButtonDown(int button);
+
+    float[] getMousePos();
 
     /**
-     * Mouse buttons that are being held down, every bit represents
-     * one button where the first bit is button 1 and the last is button 8.
+     * Get the mouse x position inside the related component.
+     * @return the x position
      */
-    private byte mouseButtons;
+    float getMouseX();
 
     /**
-     * Mouse cursor position.
+     * Get the mouse y position inside the related component.
+     * @return the y position
      */
-    private float mouseX, mouseY;
-
-    /**
-     * Array of mouse button states, if the value is true
-     * then the specific button is being held down.
-     */
-    private boolean[] mouseState;
-
-    /**
-     * Array of keyboard button states if the value is true
-     * then the specific button is being held down.
-     */
-    private boolean[] keyboardState;
-
-
-    /**
-     * Constructor.
-     * Creates a new input handler object.
-     *
-     * @param window the window owner.
-     */
-    public Input(Window window) {
-        this.window = window;
-        this.mouseState = new boolean[MOUSE_BUTTON_LAST + 1];
-        this.keyboardState = new boolean[KEY_LAST + 1];
-    }
+    float getMouseY();
 
 }

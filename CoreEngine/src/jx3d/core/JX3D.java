@@ -25,11 +25,6 @@ public class JX3D {
     public static Graphics graphics;
 
     /**
-     * The inputs taken from the main application window.
-     */
-    public static Input input;
-
-    /**
      * The file system used by the application platform.
      */
     public static Files files;
