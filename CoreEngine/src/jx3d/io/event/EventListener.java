@@ -1,4 +1,4 @@
-package jx3d.io.events;
+package jx3d.io.event;
 
 /**
  * Event listener contains callback functions to all evens that the core engine uses.

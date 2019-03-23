@@ -3,7 +3,7 @@ package jx3d.core;
 import jx3d.graphics.Graphics;
 import jx3d.io.Files;
 import jx3d.io.Input;
-import jx3d.io.events.Event;
+import jx3d.io.event.Event;
 
 /**
  * Basic abstract Application class should be implemented

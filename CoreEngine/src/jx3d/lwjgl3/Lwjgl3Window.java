@@ -1,9 +1,13 @@
 package jx3d.lwjgl3;
 
+import jx3d.core.Application;
 import jx3d.core.Log;
 import jx3d.core.Screen;
 import jx3d.core.Window;
 import jx3d.graphics.opengl.GL20;
+import jx3d.io.event.Event;
+import jx3d.io.event.EventType;
+import jx3d.io.event.MouseEvent;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 
@@ -20,7 +24,7 @@ import static org.lwjgl.glfw.GLFW.*;
  * <i>GLFW</i> is an Open Source, multi-platform library
  * for OpenGL, OpenGL ES and Vulkan development on
  * the desktop. It provides a simple API for creating
- * windows, contexts and surfaces, receiving input and events.
+ * windows, contexts and surfaces, receiving input and event.
  *
  * @author Aleman778
  * @see <a href="http://www.glfw.org/">http://www.glfw.org/</a>
@@ -578,6 +582,19 @@ public class Lwjgl3Window extends Window {
         glfwSetWindowRefreshCallback(object, (long window) -> {
             //glfwSwapBuffers(window);
         });
+
+
+        glfwSetMouseButtonCallback(object, (long window, int button, int action, int mods) -> {
+            EventType type = null;
+            if (action == GLFW_PRESS) {
+                type = EventType.MousePressed;
+            } else {
+                type = EventType.MouseReleased;
+            }
+            Event event = new MouseEvent(type, "glfw_mouse_press", button, x, y, 0, 0, 0);
+            Application.get().onEvent(event);
+        });
+
         //TODO: Implement a better Event system and then fix this code.
         /*
         glfwSetKeyCallback(object, (long window, int key, int scancode, int action, int mods) -> {
@@ -589,12 +606,7 @@ public class Lwjgl3Window extends Window {
                 input.keyRepeatProc(key, mods);
         });
 
-        glfwSetMouseButtonCallback(object, (long window, int button, int action, int mods) -> {
-            if (action == GLFW_PRESS)
-                input.mousePressedProc(button, mods);
-            else if (action == GLFW_RELEASE)
-                input.mouseReleasedProc(button, mods);
-        });
+
 
         glfwSetScrollCallback(object, (long window, double xoffset, double yoffset) -> {
             input.mouseScrolledProc((float) xoffset, (float) yoffset);

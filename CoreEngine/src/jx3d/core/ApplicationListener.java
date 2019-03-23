@@ -5,7 +5,7 @@ import jx3d.util.Disposable;
 /**
  * Application listener is used to create an implementation
  * of an application in the client code. The listener
- * provides some basic events that are triggered by the application.
+ * provides some basic event that are triggered by the application.
  */
 public interface ApplicationListener extends Disposable {
 

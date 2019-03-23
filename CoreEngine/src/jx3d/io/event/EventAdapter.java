@@ -1,4 +1,4 @@
-package jx3d.io.events;
+package jx3d.io.event;
 
 /**
  * Event adapter is a convenience class that inherits event listener so you can choose to only override the

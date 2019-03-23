@@ -2,7 +2,7 @@ package jx3d.core;
 
 /**
  * Application adapter is a class implements application listener in order to
- * give the user the possibility to override only the events you desire.
+ * give the user the possibility to override only the event you desire.
  */
 public abstract class ApplicationAdapter implements ApplicationListener {
 

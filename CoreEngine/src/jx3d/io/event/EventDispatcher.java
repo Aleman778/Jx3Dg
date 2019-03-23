@@ -1,4 +1,4 @@
-package jx3d.io.events;
+package jx3d.io.event;
 
 public class EventDispatcher {
 }

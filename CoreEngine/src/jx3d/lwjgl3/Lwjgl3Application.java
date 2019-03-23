@@ -9,7 +9,7 @@ import jx3d.graphics.opengl.GLContext;
 import jx3d.graphics.opengl.GLGraphics;
 import jx3d.io.Files;
 import jx3d.io.Input;
-import jx3d.io.events.Event;
+import jx3d.io.event.Event;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GLUtil;
 
@@ -96,7 +96,7 @@ public final class Lwjgl3Application extends Application {
 
     @Override
     public void onEvent(Event event) {
-
+        Log.CORE.info(event.toString());
     }
 
     @Override

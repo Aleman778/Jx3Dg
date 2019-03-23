@@ -1,4 +1,4 @@
-package jx3d.io.events;
+package jx3d.io.event;
 
 /**
  * Abstract event class is a basis for every event in the event system.
@@ -39,9 +39,17 @@ public abstract class Event {
         return (getCategoryFlag() & category) != 0;
     }
 
-    @Override
-    public String toString() {
-        return "Event: " + getName() + " (handled=" + handled + ")";
+
+    /**
+     * Check if the event has been handled by an event listener.
+     * @return true if an event listener has handled the event already, false otherwise
+     */
+    public final boolean isHandled() {
+        return handled;
     }
 
+    @Override
+    public String toString() {
+        return "Event(" + getType() + "): " + getName() + " (handled=" + handled + ")";
+    }
 }
