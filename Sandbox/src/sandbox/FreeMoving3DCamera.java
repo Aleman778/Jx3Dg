@@ -1,6 +1,8 @@
 package sandbox;
 
 import jx3d.graphics.PerspectiveCamera;
+import jx3d.io.event.MouseEvent;
+import jx3d.io.event.MouseScrollEvent;
 import org.joml.Vector3f;
 
 /**
@@ -24,7 +26,7 @@ public class FreeMoving3DCamera extends PerspectiveCamera {
     }
 
     @Override
-    public void mouseDragged(float dx, float dy) {
+    public void mouseDragged(MouseEvent event) {
         /*if (mouse(MOUSE_BUTTON_RIGHT)) {
             transform.rotateX(dy / sensitivityY);
             transform.rotateY(dx / sensitivityX);
@@ -33,8 +35,8 @@ public class FreeMoving3DCamera extends PerspectiveCamera {
     }
 
     @Override
-    public void mouseScrolled(float dx, float dy) {
-        zoom += sensitivityZoom * dy;
+    public void mouseScrolled(MouseScrollEvent event) {
+        zoom += sensitivityZoom * event.getDeltaX();
         validView = false;
     }
 

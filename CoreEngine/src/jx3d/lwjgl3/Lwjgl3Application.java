@@ -25,6 +25,7 @@ public final class Lwjgl3Application extends Application {
 
     private Graphics graphics;
     private Files files;
+    private Input input;
 
     public Lwjgl3Application(Lwjgl3Configurations config, ApplicationListener listener) {
         super(listener);
@@ -96,7 +97,9 @@ public final class Lwjgl3Application extends Application {
 
     @Override
     public void onEvent(Event event) {
-        Log.CORE.info(event.toString());
+        if (mainWindow.isKeyDown(Module.KEY_T)) {
+            Log.CORE.info(event.toString());
+        }
     }
 
     @Override

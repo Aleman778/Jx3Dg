@@ -9,120 +9,126 @@ public class EventAdapter implements EventListener {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setup() {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void update() {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void draw() {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void keyDown(int key) {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void keyUp(int key) {
     }
 
     /**
      * {@inheritDoc}
      */
-    public void keyRepeat(int key) {
+    @Override
+    public void mousePressed(MouseEvent event) {
     }
 
     /**
      * {@inheritDoc}
      */
-    public void mousePressed(int button) {
+    @Override
+    public void mouseReleased(MouseEvent event) {
     }
 
     /**
      * {@inheritDoc}
      */
-    public void mouseReleased(int button) {
+    @Override
+    public void mouseEntered(MouseEvent event) {
     }
 
     /**
      * {@inheritDoc}
      */
-    public void mouseClicked(int button) {
+    @Override
+    public void mouseExited(MouseEvent event) {
     }
 
     /**
      * {@inheritDoc}
      */
-    public void mouseEntered() {
+    @Override
+    public void mouseMoved(MouseEvent event) {
     }
 
     /**
      * {@inheritDoc}
      */
-    public void mouseExited() {
+    @Override
+    public void mouseDragged(MouseEvent event) {
     }
 
     /**
      * {@inheritDoc}
      */
-    public void mouseMoved(float dx, float dy) {
+    @Override
+    public void mouseScrolled(MouseScrollEvent event) {
     }
 
     /**
      * {@inheritDoc}
      */
-    public void mouseDragged(float dx, float dy) {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void mouseScrolled(float dx, float dy) {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void windowResized(int width, int height) {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void windowMoved(int x, int y) {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void windowFocus(boolean focused) {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void windowIconify(boolean iconified) {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void windowMaximize(boolean maximized) {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void windowClosed() {
     }
 }

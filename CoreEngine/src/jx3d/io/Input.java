@@ -17,7 +17,7 @@ import static jx3d.core.Module.*;
 public interface Input {
 
     /**
-     * Check if a specified key on the keyboard is being pressed at the moment.
+     * Check if a specified key on the keyboard is being held down at the moment.
      * @param key the specific key to check
      * @return true if the specified key is down, false otherwise
      */
@@ -29,8 +29,6 @@ public interface Input {
      * @return true if the specific mouse button is down, false otherwise
      */
     boolean isMouseButtonDown(int button);
-
-    float[] getMousePos();
 
     /**
      * Get the mouse x position inside the related component.
@@ -44,4 +42,15 @@ public interface Input {
      */
     float getMouseY();
 
+    /**
+     * Get the change in the mouse x position.
+     * @return the delta x position
+     */
+    float getMouseDeltaX();
+
+    /**
+     * Get the change in the mouse y position.
+     * @return the delta y position
+     */
+    float getMouseDeltaY();
 }

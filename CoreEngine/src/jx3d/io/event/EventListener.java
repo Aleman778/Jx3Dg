@@ -50,18 +50,6 @@ public interface EventListener {
     void keyUp(int key);
 
     /**
-     * Key repeat event is triggered repeatedly when the user holds
-     * down a key on the keyboard for some time.
-     * <p>
-     * <i>Note:</i> in order for this event to be used you need to call
-     * <code>install(KEY_EVENT);</code> in the {@link #setup()} method.
-     * </p>
-     *
-     * @param key the repeating key
-     */
-    void keyRepeat(int key);
-
-    /**
      * Mouse pressed event is triggered when the user presses
      * a button on the mouse.
      * <p>
@@ -69,9 +57,9 @@ public interface EventListener {
      * <code>install(MOUSE_EVENT);</code> in the {@link #setup()} method.
      * </p>
      *
-     * @param button the pressed mouse button
+     * @param event the mouse event
      */
-    void mousePressed(int button);
+    void mousePressed(MouseEvent event);
 
     /**
      * Mouse released event is triggered when the user releases
@@ -81,21 +69,9 @@ public interface EventListener {
      * <code>install(MOUSE_EVENT);</code> in the {@link #setup()} method.
      * </p>
      *
-     * @param button the released mouse button
+     * @param event the mouse event
      */
-    void mouseReleased(int button);
-
-    /**
-     * Mouse clicked event is triggered when the user clicks
-     * a button on the mouse.
-     * <p>
-     * <i>Note:</i> in order for this event to be used you need to call
-     * <code>install(MOUSE_EVENT);</code> in the {@link #setup()} method.
-     * </p>
-     *
-     * @param button the clicked mouse button
-     */
-    void mouseClicked(int button);
+    void mouseReleased(MouseEvent event);
 
     /**
      * Mouse entered event is triggered when the user moves the
@@ -104,8 +80,10 @@ public interface EventListener {
      * <i>Note:</i> in order for this event to be used you need to call
      * <code>install(MOUSE_EVENT);</code> in the {@link #setup()} method.
      * </p>
+     *
+     * @param event the mouse event
      */
-    void mouseEntered();
+    void mouseEntered(MouseEvent event);
 
     /**
      * Mouse exited event is triggered when the user moves the
@@ -114,38 +92,36 @@ public interface EventListener {
      * <i>Note:</i> in order for this event to be used you need to call
      * <code>install(MOUSE_EVENT);</code> in the {@link #setup()} method.
      * </p>
+     *
+     * @param event the mouse event
      */
-    void mouseExited();
+    void mouseExited(MouseEvent event);
 
     /**
      * Mouse moved event is triggered when the user moves the cursor.
      * If the user presses and holds a button then the
-     * {@link #mouseDragged(float, float)} event is used instead.
-     * The change in position is provided as argument.
+     * {@link #mouseDragged(MouseEvent)} event is used instead.
      * <p>
      * <i>Note:</i> in order for this event to be used you need to call
      * <code>install(MOUSE_EVENT);</code> in the {@link #setup()} method.
      * </p>
      *
-     * @param dx the movement in the x direction
-     * @param dy the movement in the y direction
+     * @param event the mouse event
      */
-    void mouseMoved(float dx, float dy);
+    void mouseMoved(MouseEvent event);
 
     /**
      * Mouse dragged event is triggered when the user moves the cursor
      * after pressing and holding a button. If the user releases the button
-     * then the {@link #mouseMoved(float, float)} event is used instead.
-     * The mouse button and the change in position is provided as argument.
+     * then the {@link #mouseMoved(MouseEvent)} event is used instead.
      * <p>
      * <i>Note:</i> in order for this event to be used you need to call
      * <code>install(MOUSE_EVENT);</code> in the {@link #setup()} method.
      * </p>
      *
-     * @param dx the movement in the x direction
-     * @param dy the movement in the y direction
+     * @param event the mouse event
      */
-    void mouseDragged(float dx, float dy);
+    void mouseDragged(MouseEvent event);
 
     /**
      * <p>
@@ -158,10 +134,9 @@ public interface EventListener {
      * <code>install(MOUSE_EVENT);</code> in the {@link #setup()} method.
      * </p>
      *
-     * @param dx the scrolling in the x direction
-     * @param dy the scrolling in the y direction
+     * @param event the mouse scroll event
      */
-    void mouseScrolled(float dx, float dy);
+    void mouseScrolled(MouseScrollEvent event);
 
     /**
      * Window resized event is triggered when the user resizes the window.

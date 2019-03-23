@@ -821,6 +821,7 @@ public class Module extends EventAdapter {
      * Mouse buttons.
      */
     public static final int
+        MOUSE_NOBUTTON = -1,
         MOUSE_BUTTON_1 = 0,
         MOUSE_BUTTON_2 = 1,
         MOUSE_BUTTON_3 = 2,
@@ -940,7 +941,7 @@ public class Module extends EventAdapter {
      * @return true if the specified key is down, false otherwise
      */
     public final boolean isKeyDown(int key) {
-        return false;
+        return window.isKeyDown(key);
     }
 
     /**
@@ -949,7 +950,7 @@ public class Module extends EventAdapter {
      * @return true if the specific mouse button is down, false otherwise
      */
     public final boolean isMouseButtonDown(int button) {
-        return false;
+        return window.isMouseButtonDown(button);
     }
 
     /**
@@ -957,7 +958,7 @@ public class Module extends EventAdapter {
      * @return the x position
      */
     public final float mouseX() {
-        return 0.0f;
+        return window.getMouseX();
     }
 
     /**
@@ -965,7 +966,15 @@ public class Module extends EventAdapter {
      * @return the y position
      */
     public final float mouseY() {
-        return 0.0f;
+        return window.getMouseY();
+    }
+
+    public final float deltaMouseX() {
+        return window.getMouseDeltaX();
+    }
+
+    public final float deltaMouseY() {
+        return window.getMouseDeltaY();
     }
 
     /*

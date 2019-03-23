@@ -8,6 +8,7 @@ import jx3d.graphics.opengl.GL20;
 import jx3d.io.event.Event;
 import jx3d.io.event.EventType;
 import jx3d.io.event.MouseEvent;
+import jx3d.io.event.MouseScrollEvent;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 
@@ -46,16 +47,66 @@ public class Lwjgl3Window extends Window {
     private boolean visible = false;
 
     private boolean fullscreen = false;
+
+    /**
+     * Window is decorated i.e. has a title bar.
+     */
     private boolean decorated = true;
+
+    /**
+     * Window is floating i.e. always on top.
+     */
     private boolean floating = false;
+
+    /**
+     * Window is iconified i.e. minimized.
+     */
     private boolean iconified = false;
+
+    /**
+     * Window is resizable
+     */
     private boolean resizable = true;
+
+    /**
+     * The swap time interval.
+     */
     private int swapInterval = 0;
 
+    /**
+     * Window minimum size
+     */
     private int minWidth = GLFW_DONT_CARE, minHeight = GLFW_DONT_CARE;
+
+    /**
+     * Window maximum size
+     */
     private int maxWidth = GLFW_DONT_CARE, maxHeight = GLFW_DONT_CARE;
+
+    /**
+     * Window size
+     */
     private int width, height;
+
+    /**
+     * Window x position
+     */
     private int x = DEFAULT, y = DEFAULT;
+
+    /**
+     * The first mouse button pressed of possible multiple simultaneous presses.
+     */
+    private int firstMouseButton;
+
+    /**
+     * Mouse cursor position.
+     */
+    private float mouseX, mouseY;
+
+    /**
+     * Previous mouse cursor position.
+     */
+    private float prevMouseX, prevMouseY;
 
     /**
      * Default constructor.
@@ -132,17 +183,58 @@ public class Lwjgl3Window extends Window {
         setupCallbacks();
     }
 
+    /**
+     * Poll events is used to process events that are stored in the internal event queue.
+     */
     public void pollEvents() {
         glfwPollEvents();
     }
 
+    /**
+     * Swap buffer is used to change the front buffer to render to and display the other buffer.
+     */
     public void swapBuffers() {
         glfwSwapBuffers(object);
     }
 
+    /**
+     * Dispose method destroys the GLFW window instance and free its memory.
+     */
     @Override
     public void dispose() {
         glfwDestroyWindow(object);
+    }
+
+    @Override
+    public boolean isKeyDown(int key) {
+        int state = glfwGetKey(object, key);
+        return state == GLFW_PRESS || state == GLFW_REPEAT;
+    }
+
+    @Override
+    public boolean isMouseButtonDown(int button) {
+        int state = glfwGetMouseButton(object, button);
+        return state == GLFW_PRESS;
+    }
+
+    @Override
+    public float getMouseX() {
+        return mouseX;
+    }
+
+    @Override
+    public float getMouseY() {
+        return mouseY;
+    }
+
+    @Override
+    public float getMouseDeltaX() {
+        return mouseX - prevMouseX;
+    }
+
+    @Override
+    public float getMouseDeltaY() {
+        return mouseY - prevMouseY;
     }
 
     /**
@@ -506,34 +598,6 @@ public class Lwjgl3Window extends Window {
     }
 
     @Override
-    public boolean isKeyDown(int key) {
-        int state = glfwGetKey(object, key);
-        return state == GLFW_PRESS || state == GLFW_REPEAT;
-    }
-
-    @Override
-    public boolean isMouseButtonDown(int button) {
-        int state = glfwGetMouseButton(object, button);
-        return state == GLFW_PRESS;
-    }
-
-    @Override
-    public float[] getMousePos() {
-        glfwGetCursorPos(object, xcursor, ycursor);
-        return new float[] {(float) xcursor.get(0), (float) ycursor.get(0)};
-    }
-
-    @Override
-    public float getMouseX() {
-        return getMousePos()[0];
-    }
-
-    @Override
-    public float getMouseY() {
-        return getMousePos()[1];
-    }
-
-    @Override
     public boolean shouldClose() {
         return glfwWindowShouldClose(object);
     }
@@ -545,6 +609,7 @@ public class Lwjgl3Window extends Window {
     protected long getObject() {
         return object;
     }
+
 
     private void setupContextHints(int renderer, int profile) {
         switch (renderer) {
@@ -583,15 +648,66 @@ public class Lwjgl3Window extends Window {
             //glfwSwapBuffers(window);
         });
 
-
         glfwSetMouseButtonCallback(object, (long window, int button, int action, int mods) -> {
-            EventType type = null;
+            EventType type;
+            String name = "glfw_mouse";
             if (action == GLFW_PRESS) {
                 type = EventType.MousePressed;
+                name += "_pressed";
+                if (firstMouseButton == MOUSE_NOBUTTON) {
+                    firstMouseButton = button;
+                }
             } else {
                 type = EventType.MouseReleased;
+                name += "_released";
+                if (firstMouseButton == button) {
+                    firstMouseButton = MOUSE_NOBUTTON;
+                }
             }
-            Event event = new MouseEvent(type, "glfw_mouse_press", button, x, y, 0, 0, 0);
+            Event event = new MouseEvent(type, name, button, getMouseX(), getMouseY(),
+                    getMouseDeltaX(), getMouseDeltaY(), 0);
+            Application.get().onEvent(event);
+        });
+
+        glfwSetCursorPosCallback(object, (long window, double xpos, double ypos) -> {
+            prevMouseX = mouseX;
+            prevMouseY = mouseY;
+            mouseX = (float) xpos;
+            mouseY = (float) ypos;
+
+            EventType type = EventType.MouseMoved;
+            String name = "glfw_mouse";
+            if (firstMouseButton == MOUSE_NOBUTTON) {
+                type = EventType.MouseDragged;
+                name += "_dragged";
+            } else {
+                name += "_motion";
+            }
+
+            Event event = new MouseEvent(type, name, MOUSE_NOBUTTON, (float) xpos, (float) ypos,
+                    getMouseDeltaX(), getMouseDeltaY(), 0);
+            Application.get().onEvent(event);
+        });
+
+        glfwSetCursorEnterCallback(object, (long window, boolean entered) -> {
+            EventType type;
+            String name = "glfw_mouse";
+            if (entered) {
+                type = EventType.MouseEntered;
+                name += "_entered";
+            } else {
+                type = EventType.MouseExited;
+                name += "_exited";
+            }
+
+            Event event = new MouseEvent(type, name, MOUSE_NOBUTTON, getMouseX(), getMouseY(),
+                    getMouseDeltaX(), getMouseDeltaY(), 0);
+            Application.get().onEvent(event);
+        });
+
+        glfwSetScrollCallback(object, (long window, double xoffset, double yoffset) -> {
+            Event event = new MouseScrollEvent("glfw_mouse_scroll", getMouseX(), getMouseY(), getMouseDeltaX(),
+                    getMouseDeltaY(), (float) xoffset, (float) yoffset, 0);
             Application.get().onEvent(event);
         });
 
@@ -608,20 +724,9 @@ public class Lwjgl3Window extends Window {
 
 
 
-        glfwSetScrollCallback(object, (long window, double xoffset, double yoffset) -> {
-            input.mouseScrolledProc((float) xoffset, (float) yoffset);
-        });
 
-        glfwSetCursorPosCallback(object, (long window, double xpos, double ypos) -> {
-            input.mouseMovedProc((float) xpos, (float) ypos);
-        });
 
-        glfwSetCursorEnterCallback(object, (long window, boolean entered) -> {
-            if (entered)
-                input.mouseEnteredProc();
-            else
-                input.mouseExitedProc();
-        });
+
 
         glfwSetWindowSizeCallback(object, (long window, int width, int height) -> {
             this.width = width;

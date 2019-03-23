@@ -41,6 +41,17 @@ public class MouseEvent extends Event {
      */
     private int clickCount;
 
+    /**
+     * Constructs a {@link MouseScrollEvent} object with specific parameters.
+     * @param type the type of event e.g. MousePressed, MouseReleased etc.
+     * @param name the name of the event
+     * @param button the mouse button that triggered this event
+     * @param x the mouse x position
+     * @param y the mouse y position
+     * @param dx the change in mouse x position
+     * @param dy the change in mouse y position
+     * @param clickCount the total click count
+     */
     public MouseEvent(EventType type, String name, int button, float x, float y, float dx, float dy, int clickCount) {
         this.type = type;
         this.name = name;
@@ -72,7 +83,7 @@ public class MouseEvent extends Event {
      * Get the change in the x position.
      * @return the delta x position
      */
-    public float getDx() {
+    public float getDeltaX() {
         return dx;
     }
 
@@ -80,7 +91,7 @@ public class MouseEvent extends Event {
      * Get the change in the y position.
      * @return the delta y position
      */
-    public float getDy() {
+    public float getDeltaY() {
         return dy;
     }
 
