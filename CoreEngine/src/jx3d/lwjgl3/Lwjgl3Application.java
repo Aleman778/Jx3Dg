@@ -9,7 +9,6 @@ import jx3d.graphics.opengl.GLContext;
 import jx3d.graphics.opengl.GLGraphics;
 import jx3d.io.Files;
 import jx3d.io.Input;
-import jx3d.io.event.Event;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GLUtil;
 
@@ -17,6 +16,12 @@ import java.util.ArrayList;
 
 import static org.lwjgl.glfw.GLFW.*;
 
+/**
+ * Lightweight Java Game Library (LWJGL3) Application is an implementation that supports most common desktop
+ * platform operating systems such as <code>Windows</code>, <code>macOS</code> and <code>Linux</code>. LWJGL3 is a collection of different open
+ * source projects and libraries, is has support for rendering with <code>OpenGL</code> and <code>Vulkan</code>.
+ * The window library used by LWJGL3 is <code>GLFW</code> and supports all the above mentioned platforms and rendering APIs.
+ */
 public final class Lwjgl3Application extends Application {
 
     private Lwjgl3Window mainWindow;
@@ -92,13 +97,6 @@ public final class Lwjgl3Application extends Application {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    @Override
-    public void onEvent(Event event) {
-        if (mainWindow.isKeyDown(Module.KEY_T)) {
-            Log.CORE.info(event.toString());
         }
     }
 

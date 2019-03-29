@@ -5,9 +5,13 @@ import jx3d.io.Files;
 import jx3d.io.Input;
 import jx3d.io.event.Event;
 
+import java.util.Iterator;
+import java.util.ListIterator;
+
 /**
- * Basic abstract Application class should be implemented
- * for each platform to better
+ * Application class is an abstract class that is used to define common methods and fields
+ * to easily achieve platform independent application code. For each platform this class has to
+ * be extended to setup the application for that particular platform.
  */
 public abstract class Application {
 
@@ -17,9 +21,14 @@ public abstract class Application {
     protected static Application instance = null;
 
     /**
-     * The the application listener attached to this application.
+     * The application listener attached to this application.
      */
     protected final ApplicationListener listener;
+
+    /**
+     * The application layer stack.
+     */
+    protected final LayerStack layerStack;
 
     /**
      * Constructor creates a new Application.
@@ -28,6 +37,7 @@ public abstract class Application {
         assert instance != null : "There already exists an application!";
         this.instance = this;
         this.listener = listener;
+        this.layerStack = new LayerStack();
     }
 
     /**
@@ -36,10 +46,37 @@ public abstract class Application {
     public abstract void run();
 
     /**
+     * Push a layer onto the applications layer stack.
+     * @param layer the layer to push
+     */
+    public final void pushLayer(Layer layer) {
+        layerStack.pushLayer(layer);
+        layer.onAttach();
+    }
+
+    /**
+     * Push a layer as an overlay onto the applications layer stack.
+     * @param layer the layer to push as overlay
+     */
+    public final void pushOverlay(Layer layer) {
+        layerStack.pushOverlay(layer);
+        layer.onAttach();
+    }
+
+    /**
      * On event method is called when an event is created and should be dispatched.
      * @param event the event to handle
      */
-    public abstract void onEvent(Event event);
+    public final void onEvent(Event event) {
+        Iterator<Layer> it = layerStack.begin();
+        while (it.hasNext()) {
+            if (event.isHandled())
+                break;
+
+            Layer layer = it.next();
+            layer.onEvent(event);
+        }
+    }
 
     /**
      * Get the current graphics context used by this application.
