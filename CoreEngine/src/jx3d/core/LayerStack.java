@@ -15,33 +15,48 @@ import java.util.ListIterator;
 public class LayerStack implements Disposable {
 
     /**
-     *
+     * Layer stack implemented using {@link ArrayList}.
      */
     private ArrayList<Layer> layers;
 
     /**
-     * The index of
+     * Index in array where the next layer stack starts.
      */
-    private int seperatorIndex;
+    private int layerIndex;
 
     public LayerStack() {
         layers = new ArrayList<>();
     }
 
     public void pushLayer(Layer layer) {
-        layers.add(layer);
+        if (layer == null)
+            throw new NullPointerException();
+
+        layers.add(layerIndex, layer);
+    }
+
+    public void pushOverlay(Layer layer) {
+        if (layer == null)
+            throw new NullPointerException();
+
+        layers.add(0, layer);
+        layerIndex++;
     }
 
     public void popLayer(Layer layer) {
         layers.remove(layer);
     }
 
-    public void pushOverlay(Layer layer) {
-        layers.add(0, layer);
+    public void popLayer() {
+        layers.remove(layerIndex);
     }
 
-    public void popOverlay(Layer layer) {
+    public void popOverlay() {
+        if (layerIndex == 0)
+            throw new IndexOutOfBoundsException();
+
         layers.remove(0);
+        layerIndex--;
     }
 
     public ListIterator<Layer> begin() {

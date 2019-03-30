@@ -4,6 +4,8 @@ import jx3d.graphics.Graphics;
 import jx3d.io.Files;
 import jx3d.io.Input;
 import jx3d.io.event.Event;
+import jx3d.io.event.EventAdapter;
+import jx3d.io.event.EventType;
 
 import java.util.Iterator;
 import java.util.ListIterator;
@@ -31,11 +33,17 @@ public abstract class Application {
     protected final LayerStack layerStack;
 
     /**
+     * The running flag indicates whether or not the application is currently running.
+     */
+    protected boolean running = true;
+
+    /**
      * Constructor creates a new Application.
      */
     public Application(ApplicationListener listener) {
         assert instance != null : "There already exists an application!";
-        this.instance = this;
+        instance = this;
+
         this.listener = listener;
         this.layerStack = new LayerStack();
     }
@@ -68,6 +76,12 @@ public abstract class Application {
      * @param event the event to handle
      */
     public final void onEvent(Event event) {
+        if (event.getType() == EventType.WindowClose) {
+            onWindowClose();
+        }
+
+        listener.onEvent(event);
+
         Iterator<Layer> it = layerStack.begin();
         while (it.hasNext()) {
             if (event.isHandled())
@@ -76,6 +90,13 @@ public abstract class Application {
             Layer layer = it.next();
             layer.onEvent(event);
         }
+    }
+
+    /**
+     * On window close method is called before the window is closing and application is terminated.
+     */
+    private void onWindowClose() {
+        running = false;
     }
 
     /**

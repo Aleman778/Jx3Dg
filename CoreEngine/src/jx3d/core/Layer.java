@@ -1,13 +1,14 @@
 package jx3d.core;
 
 import jx3d.io.event.Event;
+import jx3d.util.Disposable;
 
 /**
  * Abstract layer class provides with basic definition of what a layer behaves.
  * A layer is not necessarily related to graphics that can be drawn on screen,
  * it can also be used to handle inputs and outputs from other devices.
  */
-public abstract class Layer {
+public abstract class Layer implements Disposable {
 
     /**
      * The name of the layer

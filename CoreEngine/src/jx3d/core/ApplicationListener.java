@@ -1,5 +1,6 @@
 package jx3d.core;
 
+import jx3d.io.event.Event;
 import jx3d.util.Disposable;
 
 /**
@@ -8,6 +9,8 @@ import jx3d.util.Disposable;
  * provides some basic event that are triggered by the application.
  */
 public interface ApplicationListener extends Disposable {
+
+    void onEvent(Event event);
 
     /**
      * The setup event is triggered when the {@link Application} is .

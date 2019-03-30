@@ -48,6 +48,14 @@ public abstract class Event {
         return handled;
     }
 
+    /**
+     * Marks this event as handled. Events marked as handled should not be propagated any further
+     * in the layer stack.
+     */
+    public final void markAsHandled() {
+        handled = true;
+    }
+
     @Override
     public String toString() {
         return "Event(" + getType() + "): " + getName() + " (handled=" + handled + ")";
