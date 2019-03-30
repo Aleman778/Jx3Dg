@@ -46,7 +46,17 @@ public class EventDispatcher {
      */
     public void dispatch(Event event) {
         if (event.getType() != EventType.None) {
-
+            for (ListenerEntry le : getListeners(event.getType())) {
+                le.doDispatch(event);
+            }
+        } else if (event.getCategoryFlag() > 0) {
+            for (ListenerEntry le : getListeners(event.getType())) {
+                le.doDispatch(event);
+            }
+        } else if (event instanceof GenericEvent) {
+            for (ListenerEntry le : getListeners(event.getName())) {
+                le.doDispatch(event);
+            }
         }
     }
 
@@ -66,6 +76,10 @@ public class EventDispatcher {
      * @param listener the listener to add
      */
     public void addListener(EventType type, Listener listener) {
+        if (type == EventType.None) {
+            throw new IllegalArgumentException("Cannot add listener that does not listen for any events.");
+        }
+
         ListenerEntry entry = new ListenerEntry(listener, type, 0, 0);
         listeners.add(entry);
     }
@@ -77,47 +91,85 @@ public class EventDispatcher {
      * @param listener the listener to add
      */
     public void addListener(int categories, Listener listener) {
+        if (categories == 0) {
+            throw new IllegalArgumentException("Cannot add listener that does not listen for any events.");
+        }
+
         ListenerEntry entry = new ListenerEntry(listener, EventType.None, categories, 0);
         listeners.add(entry);
     }
 
-    public void addListener(ListenerEntry entry) {
-        listeners.add(entry);
-    }
-
-    public ArrayList<Listener> getListeners(Class<? extends Listener> listener) {
+    /**
+     * Get all the listeners of a certain class.
+     * @param listener the listener class
+     * @return a new {@link ArrayList} containing all matched listeners
+     */
+    public ArrayList<ListenerEntry> getListeners(Class<? extends Listener> listener) {
         if (!sorted)
             sortListeners();
 
-        ArrayList<Listener> result = new ArrayList<>();
+        ArrayList<ListenerEntry> result = new ArrayList<>();
         for (ListenerEntry le : prioritizedListeners) {
             if (le.listener.getClass() == listener) {
-                result.add(le.listener);
+                result.add(le);
             }
         }
         for (ListenerEntry le : listeners) {
             if (le.listener.getClass() == listener) {
-                result.add(le.listener);
+                result.add(le);
             }
         }
         return result;
     }
 
-    public ArrayList<GenericListener> getBasicListeners(String name) {
-        ArrayList<GenericListener> result = new ArrayList<>();
+    /**
+     * Get all the listeners of a certain event type.
+     * @param type the event type
+     * @return a new {@link ArrayList} containing all matched listeners
+     */
+    public ArrayList<ListenerEntry> getListeners(EventType type) {
+        if (!sorted)
+            sortListeners();
+
+        ArrayList<ListenerEntry> result = new ArrayList<>();
         for (ListenerEntry le : prioritizedListeners) {
-            if (le.name == name) {
-                result.add(le.genericListener);
+            if (le.type == type) {
+                result.add(le);
             }
         }
         for (ListenerEntry le : listeners) {
-            if (le.name == name) {
-                result.add(le.genericListener);
+            if (le.type == type) {
+                result.add(le);
             }
         }
         return result;
     }
 
+    /**
+     * Get all the generic listeners with a specific name.
+     * @param name the name of the listener and event
+     * @return a new {@link ArrayList} containing all matched listeners
+     */
+    public ArrayList<ListenerEntry> getListeners(String name) {
+        ArrayList<ListenerEntry> result = new ArrayList<>();
+        for (ListenerEntry le : prioritizedListeners) {
+            if (le.name.equals(name)) {
+                result.add(le);
+            }
+        }
+        for (ListenerEntry le : listeners) {
+            if (le.name.equals(name)) {
+                result.add(le);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Get the priority of a specific listener.
+     * @param listener the listener
+     * @return the listener priority value
+     */
     public int getListenerPriority(Listener listener) {
         for (ListenerEntry le : prioritizedListeners) {
             if (le.listener == listener) {
@@ -128,7 +180,7 @@ public class EventDispatcher {
     }
 
     private void sortListeners() {
-
+        //TODO: implement this later
     }
 
     /**
@@ -197,22 +249,26 @@ public class EventDispatcher {
                 genericListener.callback((GenericEvent) event);
             }
 
-            if (event.getType() != EventType.None) {
-                if (event.getType() == type || event.belongsTo(categories)) {
-                    switch (type) {
-                        case MousePressed:
-                            ((MouseListener) listener).mousePressed((MouseEvent) event);
-                        case MouseReleased:
-                            ((MouseListener) listener).mouseReleased((MouseEvent) event);
-                        case MouseMoved:
-                            ((MouseListener) listener).mouseMoved((MouseEvent) event);
-                        case MouseDragged:
-                            ((MouseListener) listener).mouseDragged((MouseEvent) event);
-                        case MouseEntered:
-                            ((MouseListener) listener).mouseEntered((MouseEvent) event);
-                        case MouseExited:
-                            ((MouseListener) listener).mouseExited((MouseEvent) event);
-                    }
+            if (event.getType() == type || event.belongsTo(categories)) {
+                switch (event.getType()) {
+                    case MousePressed:
+                        ((MouseListener) listener).mousePressed((MouseEvent) event);
+                        break;
+                    case MouseReleased:
+                        ((MouseListener) listener).mouseReleased((MouseEvent) event);
+                        break;
+                    case MouseMoved:
+                        ((MouseListener) listener).mouseMoved((MouseEvent) event);
+                        break;
+                    case MouseDragged:
+                        ((MouseListener) listener).mouseDragged((MouseEvent) event);
+                        break;
+                    case MouseEntered:
+                        ((MouseListener) listener).mouseEntered((MouseEvent) event);
+                        break;
+                    case MouseExited:
+                        ((MouseListener) listener).mouseExited((MouseEvent) event);
+                        break;
                 }
             }
         }
