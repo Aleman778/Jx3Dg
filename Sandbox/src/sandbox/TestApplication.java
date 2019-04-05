@@ -5,6 +5,8 @@ import jx3d.core.JX3D;
 import jx3d.core.Node;
 import jx3d.graphics.*;
 import jx3d.graphics.opengl.GLTexture2D;
+import jx3d.io.event.MouseEvent;
+import jx3d.io.event.MouseScrollEvent;
 import jx3d.math.Transform;
 import org.joml.Vector3f;
 
@@ -113,5 +115,15 @@ public class TestApplication extends ApplicationModule {
 
         tex.bind();
         JX3D.graphics.render(TRIANGLES, vao, ibo);
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent event) {
+        camera3D.mouseDragged(event);
+    }
+
+    @Override
+    public void mouseScrolled(MouseScrollEvent event) {
+        camera3D.mouseScrolled(event);
     }
 }

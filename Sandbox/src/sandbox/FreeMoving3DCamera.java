@@ -27,10 +27,11 @@ public class FreeMoving3DCamera extends PerspectiveCamera {
 
     @Override
     public void mouseDragged(MouseEvent event) {
-        /*if (mouse(MOUSE_BUTTON_RIGHT)) {
-            transform.rotateX(dy / sensitivityY);
-            transform.rotateY(dx / sensitivityX);
-        }*/
+        System.out.println(event);
+        if (event.getButton() == MOUSE_BUTTON_RIGHT) {
+            transform.rotateY(-event.getDeltaX() / sensitivityY);
+            transform.rotateX(event.getDeltaY() / sensitivityX);
+        }
         validView = false;
     }
 

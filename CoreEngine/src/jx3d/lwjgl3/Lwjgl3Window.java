@@ -96,7 +96,7 @@ public class Lwjgl3Window extends Window {
     /**
      * The first mouse button pressed of possible multiple simultaneous presses.
      */
-    private int firstMouseButton;
+    private int firstMouseButton = MOUSE_NOBUTTON;
 
     /**
      * Mouse cursor position.
@@ -677,14 +677,14 @@ public class Lwjgl3Window extends Window {
 
             EventType type = EventType.MouseMoved;
             String name = "glfw_mouse";
-            if (firstMouseButton == MOUSE_NOBUTTON) {
+            if (firstMouseButton != MOUSE_NOBUTTON) {
                 type = EventType.MouseDragged;
                 name += "_dragged";
             } else {
-                name += "_motion";
+                name += "_moved";
             }
 
-            Event event = new MouseEvent(type, name, MOUSE_NOBUTTON, (float) xpos, (float) ypos,
+            Event event = new MouseEvent(type, name, firstMouseButton, (float) xpos, (float) ypos,
                     getMouseDeltaX(), getMouseDeltaY(), 0);
             Application.get().onEvent(event);
         });

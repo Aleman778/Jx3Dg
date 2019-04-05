@@ -271,7 +271,6 @@ public class EventDispatcher {
                 genericListener.callback((GenericEvent) event);
             }
 
-            System.out.println(event.getType() + ", " + event.belongsTo(categories));
             if (event.getType() == type || event.belongsTo(categories)) {
                 switch (event.getType()) {
                     case MousePressed:

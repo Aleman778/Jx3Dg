@@ -1,6 +1,7 @@
 package jx3d.core;
 
 import jx3d.io.event.Event;
+import jx3d.io.event.EventDispatcher;
 
 /**
  * Application module is an implementation of {@link ApplicationListener} and extends {@link Module}
@@ -11,7 +12,9 @@ public class ApplicationModule extends Module implements ApplicationListener {
 
     @Override
     public final void onEvent(Event event) {
-        //TODO: dispatch the event to this module event listener
+        EventDispatcher dispatcher = new EventDispatcher();
+        dispatcher.addListener(Module.MOUSE_EVENTS, this);
+        dispatcher.dispatch(event);
     }
 
     @Override
