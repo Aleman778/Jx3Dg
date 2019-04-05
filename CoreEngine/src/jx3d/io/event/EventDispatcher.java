@@ -45,18 +45,17 @@ public class EventDispatcher {
      * @param event the event to dispatch
      */
     public void dispatch(Event event) {
-        if (event.getType() != EventType.None) {
-            for (ListenerEntry le : getListeners(event.getType())) {
-                le.doDispatch(event);
-            }
-        } else if (event.getCategoryFlag() > 0) {
-            for (ListenerEntry le : getListeners(event.getType())) {
-                le.doDispatch(event);
-            }
-        } else if (event instanceof GenericEvent) {
+        if (event instanceof GenericEvent) {
             for (ListenerEntry le : getListeners(event.getName())) {
                 le.doDispatch(event);
             }
+            return;
+        }
+        for (ListenerEntry le : getListeners(event.getType())) {
+            le.doDispatch(event);
+        }
+        for (ListenerEntry le : getListeners(event.getCategoryFlag())) {
+            le.doDispatch(event);
         }
     }
 
@@ -139,6 +138,29 @@ public class EventDispatcher {
         }
         for (ListenerEntry le : listeners) {
             if (le.type == type) {
+                result.add(le);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Get all the listeners of a certain event type.
+     * @param categories the event categories
+     * @return a new {@link ArrayList} containing all matched listeners
+     */
+    public ArrayList<ListenerEntry> getListeners(int categories) {
+        if (!sorted)
+            sortListeners();
+
+        ArrayList<ListenerEntry> result = new ArrayList<>();
+        for (ListenerEntry le : prioritizedListeners) {
+            if ((le.categories & categories) > 0) {
+                result.add(le);
+            }
+        }
+        for (ListenerEntry le : listeners) {
+            if ((le.categories & categories) > 0) {
                 result.add(le);
             }
         }
@@ -249,6 +271,7 @@ public class EventDispatcher {
                 genericListener.callback((GenericEvent) event);
             }
 
+            System.out.println(event.getType() + ", " + event.belongsTo(categories));
             if (event.getType() == type || event.belongsTo(categories)) {
                 switch (event.getType()) {
                     case MousePressed:
