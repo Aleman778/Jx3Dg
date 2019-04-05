@@ -2,13 +2,11 @@ package jx3d.lwjgl3;
 
 import jx3d.core.Application;
 import jx3d.core.Log;
+import jx3d.core.Module;
 import jx3d.core.Screen;
 import jx3d.core.Window;
 import jx3d.graphics.opengl.GL20;
-import jx3d.io.event.Event;
-import jx3d.io.event.EventType;
-import jx3d.io.event.MouseEvent;
-import jx3d.io.event.MouseScrollEvent;
+import jx3d.io.event.*;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 
@@ -711,16 +709,35 @@ public class Lwjgl3Window extends Window {
             Application.get().onEvent(event);
         });
 
+        glfwSetKeyCallback(object, (long window, int key, int scancode, int action, int mods) -> {
+            EventType type = EventType.None;
+            String name = "glfw_key";
+            char keyChar = 0;
+
+            boolean repeat = false;
+            if (action == GLFW_PRESS) {
+                type = EventType.KeyDown;
+                name += "_pressed";
+            } else if (action == GLFW_RELEASE) {
+                type = EventType.KeyUp;
+                name += "_released";
+            } else if (action == GLFW_REPEAT) {
+                type = EventType.KeyDown;
+                name += "_repeat";
+                repeat = true;
+            }
+
+            if (key >= KEY_SPACE && key < KEY_WORLD_2) {
+                keyChar = glfwGetKeyName(key, scancode).charAt(0);
+            }
+
+            Event event = new KeyEvent(name, type, key, scancode, keyChar, repeat);
+            Application.get().onEvent(event);
+        });
+
         //TODO: Implement a better Event system and then fix this code.
         /*
-        glfwSetKeyCallback(object, (long window, int key, int scancode, int action, int mods) -> {
-            if (action == GLFW_PRESS)
-                input.keyDownProc(key, mods);
-            else if (action == GLFW_RELEASE)
-                input.keyUpProc(key, mods);
-            else if (action == GLFW_REPEAT)
-                input.keyRepeatProc(key, mods);
-        });
+
 
 
 

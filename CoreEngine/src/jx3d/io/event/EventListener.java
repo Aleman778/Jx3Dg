@@ -3,7 +3,7 @@ package jx3d.io.event;
 /**
  * Event listener contains callback functions to all evens that the core engine uses.
  */
-public interface EventListener extends Listener, MouseListener {
+public interface EventListener extends Listener, MouseListener, KeyListener {
 
     /**
      * The setup event is triggered once this object is ready to be used.
@@ -24,45 +24,6 @@ public interface EventListener extends Listener, MouseListener {
      * The rate at which new frames are requested (frame rate) can be customized.
      */
     void draw();
-
-    /**
-     * Key down event is triggered when the user presses
-     * a key on the keyboard.
-     * <p>
-     * <i>Note:</i> in order for this event to be used you need to call
-     * <code>install(KEY_EVENT);</code> in the {@link #setup()} method.
-     * </p>
-     *
-     * @param key the pressed key
-     */
-    void keyDown(int key);
-
-    /**
-     * Key up event is triggered when the user releases
-     * a key on the keyboard.
-     * <p>
-     * <i>Note:</i> in order for this event to be used you need to call
-     * <code>install(KEY_EVENT);</code> in the {@link #setup()} method.
-     * </p>
-     *
-     * @param key the released key
-     */
-    void keyUp(int key);
-
-    /**
-     * <p>
-     * Mouse scrolled event is triggered when the user scrolls on the
-     * mouse wheel or using touch gesture on a trackpad.
-     * The change in the scroll position is provided as argument.
-     * </p>
-     * <p>
-     * <i>Note:</i> in order for this event to be used you need to call
-     * <code>install(MOUSE_EVENT);</code> in the {@link #setup()} method.
-     * </p>
-     *
-     * @param event the mouse scroll event
-     */
-    void mouseScrolled(MouseScrollEvent event);
 
     /**
      * Window resized event is triggered when the user resizes the window.

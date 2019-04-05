@@ -1,7 +1,7 @@
 package jx3d.io.event;
 
 /**
- * Event adapter is a convenience class that inherits mouse listener so you can choose to only override the
+ * Mouse adapter is a convenience class that inherits mouse listener so you can choose to only override the
  * mouse listener callback functions you need.
  */
 public class MouseAdapter implements MouseListener {
@@ -51,6 +51,15 @@ public class MouseAdapter implements MouseListener {
      */
     @Override
     public void mouseDragged(MouseEvent event) {
+
+    }
+
+    /**
+     * {@inheritDoc}
+     * @param event the mouse scroll event
+     */
+    @Override
+    public void mouseScrolled(MouseScrollEvent event) {
 
     }
 }

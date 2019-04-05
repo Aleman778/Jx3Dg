@@ -31,14 +31,14 @@ public class EventAdapter implements EventListener {
      * {@inheritDoc}
      */
     @Override
-    public void keyDown(int key) {
+    public void keyDown(KeyEvent key) {
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void keyUp(int key) {
+    public void keyUp(KeyEvent key) {
     }
 
     /**

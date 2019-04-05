@@ -247,7 +247,7 @@ public class EventDispatcher {
          * @param listener the actual listener
          * @param type the type of event to listen for
          * @param categories the category of events to listen for
-         * @param priority the event priority
+         * @param priority the listener priority
          */
         public ListenerEntry(Listener listener, EventType type, int categories, int priority) {
             this.listener = listener;
@@ -256,6 +256,12 @@ public class EventDispatcher {
             this.priority = priority;
         }
 
+        /**
+         * Constructs a listener entry for generic listener with a priority.
+         * @param name the name of the listener
+         * @param listener the actual generic listener
+         * @param priority the listener priority
+         */
         public ListenerEntry(String name, GenericListener listener, int priority) {
             this.name = name;
             this.genericListener = listener;
@@ -279,17 +285,26 @@ public class EventDispatcher {
                     case MouseReleased:
                         ((MouseListener) listener).mouseReleased((MouseEvent) event);
                         break;
+                    case MouseEntered:
+                        ((MouseListener) listener).mouseEntered((MouseEvent) event);
+                        break;
+                    case MouseExited:
+                        ((MouseListener) listener).mouseExited((MouseEvent) event);
+                        break;
                     case MouseMoved:
                         ((MouseListener) listener).mouseMoved((MouseEvent) event);
                         break;
                     case MouseDragged:
                         ((MouseListener) listener).mouseDragged((MouseEvent) event);
                         break;
-                    case MouseEntered:
-                        ((MouseListener) listener).mouseEntered((MouseEvent) event);
+                    case MouseScrolled:
+                        ((MouseListener) listener).mouseScrolled((MouseScrollEvent) event);
                         break;
-                    case MouseExited:
-                        ((MouseListener) listener).mouseExited((MouseEvent) event);
+                    case KeyDown:
+                        ((KeyListener) listener).keyDown((KeyEvent) event);
+                        break;
+                    case KeyUp:
+                        ((KeyListener) listener).keyUp((KeyEvent) event);
                         break;
                 }
             }

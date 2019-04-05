@@ -640,8 +640,18 @@ public class Module extends EventAdapter {
      */
     public static final int MOUSE_EVENTS = 8;
 
+    /**
+     * Input event are {@link #KEY_EVENTS} and {@link #MOUSE_EVENTS}
+     */
+    public static final int INPUT_EVENTS = KEY_EVENTS | MOUSE_EVENTS;
+
 
     //Input (based on GLFW, use lookup table for other platforms)
+    /**
+     * The unknown key.
+     */
+    public static final int KEY_UNKNOWN = -1;
+
     /**
      * Printable keys.
      */

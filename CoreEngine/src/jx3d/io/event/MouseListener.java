@@ -10,7 +10,7 @@ public interface MouseListener {
      * a button on the mouse.
      * <p>
      * <i>Note:</i> in order for this event to be used you need to call
-     * <code>install(MOUSE_EVENT);</code> in the {@link jx3d.core.Node#setup()} method.
+     * <code>install(MOUSE_EVENTS);</code> in the {@link jx3d.core.Node#setup()} method.
      * </p>
      *
      * @param event the mouse event
@@ -22,7 +22,7 @@ public interface MouseListener {
      * a button on the mouse.
      * <p>
      * <i>Note:</i> in order for this event to be used you need to call
-     * <code>install(MOUSE_EVENT);</code> in the {@link jx3d.core.Node#setup()} method.
+     * <code>install(MOUSE_EVENTS);</code> in the {@link jx3d.core.Node#setup()} method.
      * </p>
      *
      * @param event the mouse event
@@ -34,7 +34,7 @@ public interface MouseListener {
      * cursor on this node.
      * <p>
      * <i>Note:</i> in order for this event to be used you need to call
-     * <code>install(MOUSE_EVENT);</code> in the {@link jx3d.core.Node#setup()} method.
+     * <code>install(MOUSE_EVENTS);</code> in the {@link jx3d.core.Node#setup()} method.
      * </p>
      *
      * @param event the mouse event
@@ -46,7 +46,7 @@ public interface MouseListener {
      * cursor away from this node.
      * <p>
      * <i>Note:</i> in order for this event to be used you need to call
-     * <code>install(MOUSE_EVENT);</code> in the {@link jx3d.core.Node#setup()} method.
+     * <code>install(MOUSE_EVENTS);</code> in the {@link jx3d.core.Node#setup()} method.
      * </p>
      *
      * @param event the mouse event
@@ -59,7 +59,7 @@ public interface MouseListener {
      * {@link #mouseDragged(MouseEvent)} event is used instead.
      * <p>
      * <i>Note:</i> in order for this event to be used you need to call
-     * <code>install(MOUSE_EVENT);</code> in the {@link jx3d.core.Node#setup()} method.
+     * <code>install(MOUSE_EVENTS);</code> in the {@link jx3d.core.Node#setup()} method.
      * </p>
      *
      * @param event the mouse event
@@ -72,10 +72,25 @@ public interface MouseListener {
      * then the {@link #mouseMoved(MouseEvent)} event is used instead.
      * <p>
      * <i>Note:</i> in order for this event to be used you need to call
-     * <code>install(MOUSE_EVENT);</code> in the {@link jx3d.core.Node#setup()} method.
+     * <code>install(MOUSE_EVENTS);</code> in the {@link jx3d.core.Node#setup()} method.
      * </p>
      *
      * @param event the mouse event
      */
     void mouseDragged(MouseEvent event);
+
+    /**
+     * <p>
+     * Mouse scrolled event is triggered when the user scrolls on the
+     * mouse wheel or using touch gesture on a trackpad.
+     * The change in the scroll position is provided as argument.
+     * </p>
+     * <p>
+     * <i>Note:</i> in order for this event to be used you need to call
+     * <code>install(MOUSE_EVENT);</code> in the {@link jx3d.core.Node#setup()} method.
+     * </p>
+     *
+     * @param event the mouse scroll event
+     */
+    void mouseScrolled(MouseScrollEvent event);
 }

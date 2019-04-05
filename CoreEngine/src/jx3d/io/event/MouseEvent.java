@@ -3,7 +3,7 @@ package jx3d.io.event;
 import jx3d.core.Module;
 
 /**
- * Mouse events is a container class that contains information about the mouse position and the button that caused
+ * Mouse event is a container class that contains information about the mouse position and the button that caused
  * this event to be triggered. The types of events that uses this class are {@link EventType#MousePressed},
  * {@link EventType#MouseReleased}, {@link EventType#MouseMoved} and {@link EventType#MouseDragged}.
  */
@@ -42,7 +42,7 @@ public class MouseEvent extends Event {
     private int clickCount;
 
     /**
-     * Constructs a {@link MouseScrollEvent} object with specific parameters.
+     * Constructs a {@link MouseEvent} object with specific parameters.
      * @param type the type of event e.g. MousePressed, MouseReleased etc.
      * @param name the name of the event
      * @param button the mouse button that triggered this event
@@ -64,7 +64,7 @@ public class MouseEvent extends Event {
     }
 
     /**
-     * Get the x position of the mouse.
+     * Get the mouse x position of the mouse.
      * @return the x position
      */
     public float getX() {
@@ -72,7 +72,7 @@ public class MouseEvent extends Event {
     }
 
     /**
-     * Get the y position of the mouse.
+     * Get the mouse y position of the mouse.
      * @return the y position
      */
     public float getY() {
@@ -80,7 +80,7 @@ public class MouseEvent extends Event {
     }
 
     /**
-     * Get the change in the x position.
+     * Get the change in the mouse x position.
      * @return the delta x position
      */
     public float getDeltaX() {
@@ -88,7 +88,7 @@ public class MouseEvent extends Event {
     }
 
     /**
-     * Get the change in the y position.
+     * Get the change in the mouse y position.
      * @return the delta y position
      */
     public float getDeltaY() {
@@ -96,7 +96,7 @@ public class MouseEvent extends Event {
     }
 
     /**
-     * Get the button that triggered this event.
+     * Get the mouse button that triggered this event.
      * @return the related mouse button
      */
     public int getButton() {
