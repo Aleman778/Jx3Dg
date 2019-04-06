@@ -29,10 +29,10 @@ public class MouseScrollEvent extends MouseEvent {
      * @param scrollY the vertical mouse scroll
      * @param clickCount the total click count
      */
-    public MouseScrollEvent(String name, float x, float y, float dx, float dy,
+    public MouseScrollEvent(String name, int mods, float x, float y, float dx, float dy,
                             float scrollX, float scrollY, int clickCount) {
 
-        super(EventType.MouseScrolled, name, Module.MOUSE_NOBUTTON, x, y, dx, dy, clickCount);
+        super(EventType.MouseScrolled, name, Module.MOUSE_NOBUTTON, mods, x, y, dx, dy, clickCount);
 
         this.scrollX = scrollX;
         this.scrollY = scrollY;

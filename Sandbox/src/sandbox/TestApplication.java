@@ -5,6 +5,7 @@ import jx3d.core.JX3D;
 import jx3d.core.Node;
 import jx3d.graphics.*;
 import jx3d.graphics.opengl.GLTexture2D;
+import jx3d.io.event.KeyEvent;
 import jx3d.io.event.MouseEvent;
 import jx3d.io.event.MouseScrollEvent;
 import jx3d.math.Transform;
@@ -115,6 +116,24 @@ public class TestApplication extends ApplicationModule {
 
         tex.bind();
         JX3D.graphics.render(TRIANGLES, vao, ibo);
+    }
+
+    @Override
+    public void mousePressed(MouseEvent event) {
+        if (event.isShiftDown()) {
+            System.out.println("Mouse button " + event.getButton() + " pressed with shift key down");
+        }
+    }
+
+    @Override
+    public void keyDown(KeyEvent event) {
+        if (event.isControlDown()) {
+            if (event.isRepeated()) {
+                System.out.println("Key pressed " + event.getKey() + " pressed with control key down (Ctrl-" + event.getKeyChar() + ")");
+            } else {
+                System.out.println("Repeated key pressed " + event.getKey() + " pressed with control key down (Ctrl-" + event.getKeyChar() + ")");
+            }
+        }
     }
 
     @Override

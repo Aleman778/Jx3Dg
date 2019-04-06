@@ -13,7 +13,7 @@ public class ApplicationModule extends Module implements ApplicationListener {
     @Override
     public final void onEvent(Event event) {
         EventDispatcher dispatcher = new EventDispatcher();
-        dispatcher.addListener(Module.MOUSE_EVENTS, this);
+        dispatcher.addListener(Module.INPUT_EVENTS, this);
         dispatcher.dispatch(event);
     }
 

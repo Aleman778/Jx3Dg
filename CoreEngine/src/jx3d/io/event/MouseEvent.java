@@ -7,7 +7,7 @@ import jx3d.core.Module;
  * this event to be triggered. The types of events that uses this class are {@link EventType#MousePressed},
  * {@link EventType#MouseReleased}, {@link EventType#MouseMoved} and {@link EventType#MouseDragged}.
  */
-public class MouseEvent extends Event {
+public class MouseEvent extends InputEvent {
 
     /**
      * The name of the event.
@@ -52,7 +52,8 @@ public class MouseEvent extends Event {
      * @param dy the change in mouse y position
      * @param clickCount the total click count
      */
-    public MouseEvent(EventType type, String name, int button, float x, float y, float dx, float dy, int clickCount) {
+    public MouseEvent(EventType type, String name, int button, int mods, float x, float y, float dx, float dy, int clickCount) {
+        super(System.currentTimeMillis(), mods);
         this.type = type;
         this.name = name;
         this.button = button;

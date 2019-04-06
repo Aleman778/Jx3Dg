@@ -662,7 +662,8 @@ public class Lwjgl3Window extends Window {
                     firstMouseButton = MOUSE_NOBUTTON;
                 }
             }
-            Event event = new MouseEvent(type, name, button, getMouseX(), getMouseY(),
+
+            Event event = new MouseEvent(type, name, button, mods, getMouseX(), getMouseY(),
                     getMouseDeltaX(), getMouseDeltaY(), 0);
             Application.get().onEvent(event);
         });
@@ -682,7 +683,7 @@ public class Lwjgl3Window extends Window {
                 name += "_moved";
             }
 
-            Event event = new MouseEvent(type, name, firstMouseButton, (float) xpos, (float) ypos,
+            Event event = new MouseEvent(type, name, firstMouseButton, 0, (float) xpos, (float) ypos,
                     getMouseDeltaX(), getMouseDeltaY(), 0);
             Application.get().onEvent(event);
         });
@@ -698,13 +699,13 @@ public class Lwjgl3Window extends Window {
                 name += "_exited";
             }
 
-            Event event = new MouseEvent(type, name, MOUSE_NOBUTTON, getMouseX(), getMouseY(),
+            Event event = new MouseEvent(type, name, MOUSE_NOBUTTON, 0, getMouseX(), getMouseY(),
                     getMouseDeltaX(), getMouseDeltaY(), 0);
             Application.get().onEvent(event);
         });
 
         glfwSetScrollCallback(object, (long window, double xoffset, double yoffset) -> {
-            Event event = new MouseScrollEvent("glfw_mouse_scroll", getMouseX(), getMouseY(), getMouseDeltaX(),
+            Event event = new MouseScrollEvent("glfw_mouse_scroll", 0, getMouseX(), getMouseY(), getMouseDeltaX(),
                     getMouseDeltaY(), (float) xoffset, (float) yoffset, 0);
             Application.get().onEvent(event);
         });
@@ -728,23 +729,18 @@ public class Lwjgl3Window extends Window {
             }
 
             if (key >= KEY_SPACE && key < KEY_WORLD_2) {
-                keyChar = glfwGetKeyName(key, scancode).charAt(0);
+                String keyName = glfwGetKeyName(key, scancode);
+                System.err.println(keyName);
+                if (keyName.length() > 0) {
+                    keyChar = keyName.charAt(0);
+                }
             }
 
-            Event event = new KeyEvent(name, type, key, scancode, keyChar, repeat);
+            Event event = new KeyEvent(name, type, key, scancode, mods, keyChar, repeat);
             Application.get().onEvent(event);
         });
 
-        //TODO: Implement a better Event system and then fix this code.
         /*
-
-
-
-
-
-
-
-
         glfwSetWindowSizeCallback(object, (long window, int width, int height) -> {
             this.width = width;
             this.height = height;

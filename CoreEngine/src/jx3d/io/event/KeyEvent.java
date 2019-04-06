@@ -6,7 +6,7 @@ import jx3d.core.Module;
  * Key event is a container class that contains information about the key that triggered this event.
  * The types of events that uses this class are {@link EventType#KeyDown}, {@link EventType#KeyUp}.
  */
-public class KeyEvent extends Event {
+public class KeyEvent extends InputEvent {
 
     /**
      * The name of the event.
@@ -50,7 +50,8 @@ public class KeyEvent extends Event {
      * @param keyChar the character of the printable key
      * @param repeat true if this is a repeated event
      */
-    public KeyEvent(String name, EventType type, int key, int scancode, char keyChar, boolean repeat) {
+    public KeyEvent(String name, EventType type, int key, int scancode, int mods, char keyChar, boolean repeat) {
+        super(System.currentTimeMillis(), mods);
         this.name = name;
         this.type = type;
         this.key = key;
@@ -76,6 +77,12 @@ public class KeyEvent extends Event {
         return keyChar;
     }
 
+    /**
+     * Ge the scancode of the key, this is a unique number of each key on the keyboard.
+     * <i>Note:</i> the scancode is not platform independent so the scancode value of the same key
+     * is not the same on different devices.
+     * @return the scancode of this key
+     */
     public int getScancode() {
         return scancode;
     }
@@ -83,7 +90,7 @@ public class KeyEvent extends Event {
     /**
      * Check if the mouse event has been repeated this happens
      * when the user holds down the same key for some time.
-     * @return
+     * @return true if this is a repeated event, false otherwise
      */
     public boolean isRepeated() {
         return repeat;
