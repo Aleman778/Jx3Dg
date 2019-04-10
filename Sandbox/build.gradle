@@ -13,6 +13,7 @@ compileJava {
 
 dependencies {
     compile project(":CoreEngine")
+    compile project(":Platforms:LWJGL3")
 }
 
 application {

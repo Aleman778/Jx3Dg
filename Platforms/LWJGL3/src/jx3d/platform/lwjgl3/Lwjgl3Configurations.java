@@ -1,7 +1,6 @@
-package jx3d.lwjgl3;
+package jx3d.platform.lwjgl3;
 
 import jx3d.core.Module;
-import jx3d.graphics.Color;
 
 public class Lwjgl3Configurations {
 

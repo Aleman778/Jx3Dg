@@ -1,0 +1,9 @@
+
+sourceCompatibility = 1.10
+targetCompatibility = 1.10
+
+dependencies {
+    implementation libraries.lwjgl3
+    runtimeOnly libraries.lwjgl3
+    testCompile libraries.junit
+}

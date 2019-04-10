@@ -1,4 +1,4 @@
-package jx3d.lwjgl3;
+package jx3d.platform.lwjgl3;
 
 import jx3d.graphics.Mesh;
 import jx3d.io.IOUtils;

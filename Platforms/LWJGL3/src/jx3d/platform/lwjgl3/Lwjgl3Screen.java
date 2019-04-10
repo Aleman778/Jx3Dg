@@ -1,4 +1,4 @@
-package jx3d.lwjgl3;
+package jx3d.platform.lwjgl3;
 
 import jx3d.core.Screen;
 import org.lwjgl.glfw.GLFWVidMode;

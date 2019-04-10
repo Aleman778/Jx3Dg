@@ -27,14 +27,11 @@ public abstract class Context {
     /**
      * Create a new context.
      * @param renderAPI the render api to use
-     * @param config the application configurations
-     * @param deviceContext the device context
      */
-    public static void Create(RenderAPI renderAPI, Object config, Object deviceContext) {
+    public Context(RenderAPI renderAPI) {
+        assert Context.instance != null : "There already exists a graphics context!";
+        Context.instance = this;
         Context.renderAPI = renderAPI;
-        switch (renderAPI) {
-            case OPENGL: Context.instance = new GLContext(config, deviceContext);
-        }
     }
 
     /**

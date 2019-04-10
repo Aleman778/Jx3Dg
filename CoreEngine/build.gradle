@@ -14,8 +14,6 @@ compileJava {
 }
 
 dependencies {
-    implementation libraries.lwjgl3
-    runtimeOnly libraries.lwjgl3
     compile libraries.joml
     testCompile libraries.junit
 }

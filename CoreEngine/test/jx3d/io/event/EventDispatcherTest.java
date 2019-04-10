@@ -115,7 +115,7 @@ public class EventDispatcherTest {
     }
 
     public MouseEvent generateMouseEvent(EventType type) {
-        return new MouseEvent(type, "gen", 0, 0, 0, 0, 0, 0);
+        return new MouseEvent(type, "gen", 0, 0, 0, 0, 0, 0, 0);
     }
 
     class TestListener extends EventAdapter {

@@ -1,4 +1,4 @@
-package jx3d.lwjgl3;
+package jx3d.platform.lwjgl3;
 
 import jx3d.core.*;
 import jx3d.core.Module;
@@ -56,7 +56,7 @@ public final class Lwjgl3Application extends Application {
             case Module.OPENGL_DEBUG:
                 debug = true;
             case Module.OPENGL: case Module.DEFAULT:
-                Context.Create(RenderAPI.OPENGL, config, mainWindow.getObject());
+                new Lwjgl3Context(RenderAPI.OPENGL, config.forwardCompatible, mainWindow.getObject());
 
                 if (GLContext.hasGL30()) {
                     JX3D.gl30 = new Lwjgl3GL30();

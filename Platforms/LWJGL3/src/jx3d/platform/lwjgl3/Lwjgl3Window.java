@@ -1,8 +1,7 @@
-package jx3d.lwjgl3;
+package jx3d.platform.lwjgl3;
 
 import jx3d.core.Application;
 import jx3d.core.Log;
-import jx3d.core.Module;
 import jx3d.core.Screen;
 import jx3d.core.Window;
 import jx3d.graphics.opengl.GL20;

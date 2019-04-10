@@ -1,9 +1,8 @@
 package sandbox;
 
 import jx3d.core.Module;
-import jx3d.graphics.Color;
-import jx3d.lwjgl3.Lwjgl3Application;
-import jx3d.lwjgl3.Lwjgl3Configurations;
+import jx3d.platform.lwjgl3.Lwjgl3Application;
+import jx3d.platform.lwjgl3.Lwjgl3Configurations;
 
 public class DesktopLauncher {
 

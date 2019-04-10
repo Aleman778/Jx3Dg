@@ -1,4 +1,8 @@
 include ":CoreEngine"
+
+include ":Platforms"
+include ":Platforms:LWJGL3"
+
 include ':Sandbox'
 
 rootProject.name = 'jx3Dg'
