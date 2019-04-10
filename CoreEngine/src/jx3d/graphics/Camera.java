@@ -1,6 +1,7 @@
 package jx3d.graphics;
 
 import jx3d.core.Node;
+import jx3d.io.event.WindowEvent;
 import jx3d.math.Frustum;
 import jx3d.math.Transform;
 import org.joml.Matrix4f;
@@ -97,8 +98,7 @@ public abstract class Camera extends Node {
     }
 
     @Override
-    public void windowResized(int width, int height) {
-        System.out.println("Whats up!");
+    public void windowResized(WindowEvent event) {
         validProj = false;
     }
 

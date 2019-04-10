@@ -8,6 +8,7 @@ import jx3d.graphics.opengl.GLTexture2D;
 import jx3d.io.event.KeyEvent;
 import jx3d.io.event.MouseEvent;
 import jx3d.io.event.MouseScrollEvent;
+import jx3d.io.event.WindowEvent;
 import jx3d.math.Transform;
 import org.joml.Vector3f;
 
@@ -144,5 +145,10 @@ public class TestApplication extends ApplicationModule {
     @Override
     public void mouseScrolled(MouseScrollEvent event) {
         camera3D.mouseScrolled(event);
+    }
+
+    @Override
+    public void windowClose(WindowEvent event) {
+        System.out.println("Closing window now!");
     }
 }

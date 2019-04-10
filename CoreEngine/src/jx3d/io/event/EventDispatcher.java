@@ -279,6 +279,27 @@ public class EventDispatcher {
 
             if (event.getType() == type || event.belongsTo(categories)) {
                 switch (event.getType()) {
+                    case WindowMoved:
+                        ((WindowListener) listener).windowMoved((WindowEvent) event);
+                        break;
+                    case WindowResize:
+                        ((WindowListener) listener).windowResized((WindowEvent) event);
+                        break;
+                    case WindowFocus:
+                        ((WindowListener) listener).windowFocus((WindowEvent) event);
+                        break;
+                    case WindowLostFocus:
+                        ((WindowListener) listener).windowLostFocus((WindowEvent) event);
+                        break;
+                    case WindowIconified:
+                        ((WindowListener) listener).windowIconify((WindowEvent) event);
+                        break;
+                    case WindowMaximized:
+                        ((WindowListener) listener).windowMaximize((WindowEvent) event);
+                        break;
+                    case WindowClose:
+                        ((WindowListener) listener).windowClose((WindowEvent) event);
+                        break;
                     case MousePressed:
                         ((MouseListener) listener).mousePressed((MouseEvent) event);
                         break;

@@ -94,41 +94,55 @@ public class EventAdapter implements EventListener {
      * {@inheritDoc}
      */
     @Override
-    public void windowResized(int width, int height) {
+    public void windowResized(WindowEvent event) {
+
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void windowMoved(int x, int y) {
+    public void windowMoved(WindowEvent event) {
+
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void windowFocus(boolean focused) {
+    public void windowFocus(WindowEvent event) {
+
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void windowIconify(boolean iconified) {
+    public void windowLostFocus(WindowEvent event) {
+
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void windowMaximize(boolean maximized) {
+    public void windowIconify(WindowEvent event) {
+
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void windowClosed() {
+    public void windowMaximize(WindowEvent event) {
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void windowClose(WindowEvent event) {
+
     }
 }

@@ -740,35 +740,47 @@ public class Lwjgl3Window extends Window {
             Application.get().onEvent(event);
         });
 
-        /*
+
         glfwSetWindowSizeCallback(object, (long window, int width, int height) -> {
             this.width = width;
             this.height = height;
-            input.windowResizedProc(width, height);
+            Event event = new WindowEvent("glfw_window_resize", EventType.WindowResize, this,
+                    x, y, width, height, isIconified(), isMaximized());
+            Application.get().onEvent(event);
         });
 
         glfwSetWindowPosCallback(object, (long window, int xpos, int ypos) -> {
             this.x = xpos;
             this.y = ypos;
-            input.windowMovedProc(xpos, ypos);
+            Event event = new WindowEvent("glfw_window_moved", EventType.WindowMoved, this,
+                    x, y, width, height, isIconified(), isMaximized());
+            Application.get().onEvent(event);
         });
 
         glfwSetWindowFocusCallback(object, (long window, boolean focused) -> {
-            input.windowFocusProc(focused);
+            EventType type = focused ? EventType.WindowFocus : EventType.WindowLostFocus;
+            Event event = new WindowEvent("glfw_window_focus", type, this,
+                    x, y, width, height, isIconified(), isMaximized());
+            Application.get().onEvent(event);
         });
 
         glfwSetWindowIconifyCallback(object, (long window, boolean iconified) -> {
-            input.windowIconifyProc(iconified);
+            Event event = new WindowEvent("glfw_window_iconify", EventType.WindowIconified, this,
+                    x, y, width, height, iconified, isMaximized());
+            Application.get().onEvent(event);
         });
 
         glfwSetWindowMaximizeCallback(object, (long window, boolean maximized) -> {
-            input.windowMaximizeProc(maximized);
+            Event event = new WindowEvent("glfw_window_maximize", EventType.WindowMaximized, this,
+                    x, y, width, height, isIconified(), maximized);
+            Application.get().onEvent(event);
         });
 
         glfwSetWindowCloseCallback(object, (long window) -> {
-            input.windowClosedProc();
+            Event event = new WindowEvent("glfw_window_close", EventType.WindowClose, this,
+                    x, y, width, height, isIconified(), isMaximized());
+            Application.get().onEvent(event);
         });
-        */
     }
 
     private void setupAttributes() {
