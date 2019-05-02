@@ -80,14 +80,15 @@ public final class Lwjgl3Application extends Application {
 
     @Override
     public void run() {
-        listener.setup();
+        listener.onStart();
 
         mainWindow.setVisible(true);
         while (!mainWindow.shouldClose()) {
 
-
-            listener.update();
-            listener.draw();
+            listener.onUpdate();
+            for (Layer layer : layerStack) {
+                layer.onUpdate();
+            }
 
             mainWindow.swapBuffers();
             mainWindow.pollEvents();

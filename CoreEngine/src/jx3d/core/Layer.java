@@ -33,24 +33,37 @@ public abstract class Layer implements Disposable {
     /**
      * On attach method is called when the layer is attached to the layer stack.
      */
-    public abstract void onAttach();
+    public void onAttach() {
+
+    }
 
     /**
      * On detach method is called when the layer is detached from the layer stack.
      */
-    public abstract void onDetach();
+    public void onDetach() {
+
+    }
 
     /**
      * On update method is called when the application requests an update.
      */
-    public abstract void onUpdate();
+    public void onUpdate() {
+
+    }
 
     /**
      * On event method is called when an event was triggered and needs to be handled by the layer.
      * Events are processed first on overlay layers.
      * @param event the event that was triggered
      */
-    public abstract void onEvent(Event event);
+    public void onEvent(Event event) {
+
+    }
+
+    @Override
+    public void dispose() {
+
+    }
 
     /**
      * Get the name of the layer.

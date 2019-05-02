@@ -8,26 +8,33 @@ import jx3d.io.event.Event;
  */
 public abstract class ApplicationAdapter implements ApplicationListener {
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onStart() {
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onEvent(Event event) {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void setup() {
+    public void onUpdate() {
 
     }
 
-    @Override
-    public void update() {
-
-    }
-
-    @Override
-    public void draw() {
-
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void dispose() {
 

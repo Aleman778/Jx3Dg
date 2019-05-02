@@ -8,31 +8,28 @@ import jx3d.util.Disposable;
  * of an application in the client code. The listener
  * provides some basic event that are triggered by the application.
  */
-public interface ApplicationListener extends Disposable {
-
-    void onEvent(Event event);
+public interface ApplicationListener {
 
     /**
-     * The setup event is triggered when the {@link Application} is .
+     * The <code>onStart</code> function is triggered when the {@link Application} has started running.
      * This event is only called once and should not be invoked after or before
      * this event is triggered.
      */
-    void setup();
+    void onStart();
 
     /**
-     * The update event is triggered for each {@link Application} tick.
+     * The <code>onEvent</code> function is triggered when an event is created either by
+     * the user interacting with an input device or via a custom event.
+     * @param event the event that has to be handled
+     */
+    void onEvent(Event event);
+
+    /**
+     * The <code>onUpdate</code> function is triggered for each {@link Application} tick.
      * The frequency of the event can be changed in some configurations.
      * By default the update method is approximately called 30 times per second.
      */
-    void update();
-
-    /**
-     * The draw event is triggered for each time the {@link Application} needs to be redrawn.
-     * The frequency of the event can be changed in some configurations.
-     * By defailt the draw method is approximately called 30 times per second
-     * giving you 30 frames per second by above definition.
-     */
-    void draw();
+    void onUpdate();
 
     /**
      * The dispose event is triggered at the end of the {@link Application} lifecycle e.g.

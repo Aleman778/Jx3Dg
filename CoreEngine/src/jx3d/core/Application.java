@@ -82,12 +82,10 @@ public abstract class Application {
 
         listener.onEvent(event);
 
-        Iterator<Layer> it = layerStack.begin();
-        while (it.hasNext()) {
+        for (Layer layer : layerStack) {
             if (event.isHandled())
                 break;
 
-            Layer layer = it.next();
             layer.onEvent(event);
         }
     }
@@ -97,6 +95,7 @@ public abstract class Application {
      */
     private void onWindowClose() {
         running = false;
+        layerStack.dispose();
     }
 
     /**
