@@ -1,6 +1,9 @@
 package jx3d.platform.lwjgl3.nuklear;
 
 import jx3d.core.Layer;
+import jx3d.core.Module;
+import jx3d.io.event.Event;
+import jx3d.io.event.EventDispatcher;
 import jx3d.util.BufferUtils;
 import org.lwjgl.nuklear.*;
 import org.lwjgl.system.MemoryStack;
@@ -42,6 +45,7 @@ public class NkLayer extends Layer {
     }
 
     private NkFont font;
+    private NkInput input;
 
     private long win;
 
@@ -68,6 +72,8 @@ public class NkLayer extends Layer {
     private final Demo       demo = new Demo();
     private final Calculator calc = new Calculator();
 
+    private EventDispatcher dispatcher;
+
 
     public NkLayer() {
         nk_init(ctx, ALLOCATOR, null);
@@ -78,9 +84,22 @@ public class NkLayer extends Layer {
         display_width = width;
         display_height = height;
 
+        input = new NkInput(ctx);
+
+        dispatcher = new EventDispatcher();
+        dispatcher.addListener(Module.INPUT_EVENTS, input);
+
         setupContext();
 
         nk_style_set_font(ctx, font.getUserFont());
+    }
+
+    public void beginInput() {
+        nk_input_begin(ctx);
+    }
+
+    public void endInput() {
+        nk_input_end(ctx);
     }
 
     private void setupContext() {
@@ -272,6 +291,11 @@ public class NkLayer extends Layer {
         glDisable(GL_SCISSOR_TEST);
     }
 
+    @Override
+    public void onEvent(Event event) {
+        dispatcher.dispatch(event);
+    }
+
     private void destroy() {
         glDetachShader(prog, vert_shdr);
         glDetachShader(prog, frag_shdr);
@@ -289,8 +313,8 @@ public class NkLayer extends Layer {
 
     @Override
     public void dispose() {
-        Objects.requireNonNull(ctx.clip().copy()).free();
-        Objects.requireNonNull(ctx.clip().paste()).free();
+        //Objects.requireNonNull(ctx.clip().copy()).free();
+        //Objects.requireNonNull(ctx.clip().paste()).free();
         nk_free(ctx);
         destroy();
         Objects.requireNonNull(font.getUserFont().query()).free();

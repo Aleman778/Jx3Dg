@@ -51,6 +51,7 @@ public final class Lwjgl3Application extends Application {
         JX3D.files = files;
 
         nuklear = new NkLayer();
+        pushOverlay(nuklear);
     }
 
     private void setupGraphics(Lwjgl3Configurations config) {
@@ -87,6 +88,9 @@ public final class Lwjgl3Application extends Application {
 
         mainWindow.setVisible(true);
         while (!mainWindow.shouldClose()) {
+            nuklear.beginInput();
+            mainWindow.pollEvents();
+            nuklear.endInput();
 
             listener.onUpdate();
             for (Layer layer : layerStack) {
@@ -96,7 +100,6 @@ public final class Lwjgl3Application extends Application {
             nuklear.render();
 
             mainWindow.swapBuffers();
-            mainWindow.pollEvents();
 
             try {
                 Thread.sleep(1);
@@ -104,6 +107,14 @@ public final class Lwjgl3Application extends Application {
                 e.printStackTrace();
             }
         }
+        onShutdown();
+    }
+
+    @Override
+    protected void onShutdown() {
+        running = false;
+        layerStack.dispose();
+        mainWindow.dispose();
     }
 
     @Override

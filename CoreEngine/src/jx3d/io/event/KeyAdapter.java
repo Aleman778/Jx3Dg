@@ -21,4 +21,12 @@ public class KeyAdapter implements KeyListener {
     public void keyUp(KeyEvent event) {
 
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void character(CharacterEvent event) {
+
+    }
 }

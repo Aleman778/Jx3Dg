@@ -5,8 +5,8 @@ package jx3d.io.event;
  */
 public enum EventType {
     None,
-    WindowMoved, WindowResize, WindowFocus, WindowLostFocus, WindowIconified, WindowMaximized, WindowClose,
-    AppSetup, AppUpdate, AppDraw,
-    KeyDown, KeyUp,
-    MousePressed, MouseReleased, MouseMoved, MouseDragged, MouseScrolled, MouseEntered, MouseExited
+    WindowMoved, WindowResize, WindowFocus, WindowLostFocus,
+    WindowIconified, WindowMaximized, WindowClose, Character,
+    KeyDown, KeyUp, MousePressed, MouseReleased, MouseMoved,
+    MouseDragged, MouseScrolled, MouseEntered, MouseExited
 }

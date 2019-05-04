@@ -1,6 +1,7 @@
 package jx3d.io.event;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The event dispatcher is used to dispatch events to event listeners.
@@ -278,55 +279,61 @@ public class EventDispatcher {
             }
 
             if (event.getType() == type || event.belongsTo(categories)) {
-                switch (event.getType()) {
-                    case WindowMoved:
-                        ((WindowListener) listener).windowMoved((WindowEvent) event);
-                        break;
-                    case WindowResize:
-                        ((WindowListener) listener).windowResized((WindowEvent) event);
-                        break;
-                    case WindowFocus:
-                        ((WindowListener) listener).windowFocus((WindowEvent) event);
-                        break;
-                    case WindowLostFocus:
-                        ((WindowListener) listener).windowLostFocus((WindowEvent) event);
-                        break;
-                    case WindowIconified:
-                        ((WindowListener) listener).windowIconify((WindowEvent) event);
-                        break;
-                    case WindowMaximized:
-                        ((WindowListener) listener).windowMaximize((WindowEvent) event);
-                        break;
-                    case WindowClose:
-                        ((WindowListener) listener).windowClose((WindowEvent) event);
-                        break;
-                    case MousePressed:
-                        ((MouseListener) listener).mousePressed((MouseEvent) event);
-                        break;
-                    case MouseReleased:
-                        ((MouseListener) listener).mouseReleased((MouseEvent) event);
-                        break;
-                    case MouseEntered:
-                        ((MouseListener) listener).mouseEntered((MouseEvent) event);
-                        break;
-                    case MouseExited:
-                        ((MouseListener) listener).mouseExited((MouseEvent) event);
-                        break;
-                    case MouseMoved:
-                        ((MouseListener) listener).mouseMoved((MouseEvent) event);
-                        break;
-                    case MouseDragged:
-                        ((MouseListener) listener).mouseDragged((MouseEvent) event);
-                        break;
-                    case MouseScrolled:
-                        ((MouseListener) listener).mouseScrolled((MouseScrollEvent) event);
-                        break;
-                    case KeyDown:
-                        ((KeyListener) listener).keyDown((KeyEvent) event);
-                        break;
-                    case KeyUp:
-                        ((KeyListener) listener).keyUp((KeyEvent) event);
-                        break;
+                if (listener != null && listener instanceof EventListener) {
+                    EventListener listener = (EventListener) this.listener;
+                    switch (event.getType()) {
+                        case WindowMoved:
+                            listener.windowMoved((WindowEvent) event);
+                            break;
+                        case WindowResize:
+                            listener.windowResized((WindowEvent) event);
+                            break;
+                        case WindowFocus:
+                            listener.windowFocus((WindowEvent) event);
+                            break;
+                        case WindowLostFocus:
+                            listener.windowLostFocus((WindowEvent) event);
+                            break;
+                        case WindowIconified:
+                            listener.windowIconify((WindowEvent) event);
+                            break;
+                        case WindowMaximized:
+                            listener.windowMaximize((WindowEvent) event);
+                            break;
+                        case WindowClose:
+                            listener.windowClose((WindowEvent) event);
+                            break;
+                        case Character:
+                            listener.character((CharacterEvent) event);
+                            break;
+                        case MousePressed:
+                            listener.mousePressed((MouseEvent) event);
+                            break;
+                        case MouseReleased:
+                            listener.mouseReleased((MouseEvent) event);
+                            break;
+                        case MouseEntered:
+                            listener.mouseEntered((MouseEvent) event);
+                            break;
+                        case MouseExited:
+                            listener.mouseExited((MouseEvent) event);
+                            break;
+                        case MouseMoved:
+                            listener.mouseMoved((MouseEvent) event);
+                            break;
+                        case MouseDragged:
+                            listener.mouseDragged((MouseEvent) event);
+                            break;
+                        case MouseScrolled:
+                            listener.mouseScrolled((MouseScrollEvent) event);
+                            break;
+                        case KeyDown:
+                            listener.keyDown((KeyEvent) event);
+                            break;
+                        case KeyUp:
+                            listener.keyUp((KeyEvent) event);
+                            break;
+                    }
                 }
             }
         }

@@ -76,10 +76,6 @@ public abstract class Application {
      * @param event the event to handle
      */
     public final void onEvent(Event event) {
-        if (event.getType() == EventType.WindowClose) {
-            onWindowClose();
-        }
-
         listener.onEvent(event);
 
         for (Layer layer : layerStack) {
@@ -91,11 +87,11 @@ public abstract class Application {
     }
 
     /**
-     * On window close method is called before the window is closing and application is terminated.
+     * On shutdown method is called before the application is terminated.
+     * Make sure to dispose any resources created in the application implementation code.
      */
-    private void onWindowClose() {
-        running = false;
-        layerStack.dispose();
+    protected void onShutdown() {
+
     }
 
     /**

@@ -30,4 +30,10 @@ public interface KeyListener {
      */
     void keyUp(KeyEvent event);
 
+    /**
+     * The character event is triggered for each time the user presses any printable keys on the keyboard.
+     * This is typically used for Graphical User Interfaces for retrieving text from user to display in a text box.
+     * @param event the event that encapsulates the unicode character
+     */
+    void character(CharacterEvent event);
 }

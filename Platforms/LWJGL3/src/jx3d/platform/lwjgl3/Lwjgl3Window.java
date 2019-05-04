@@ -8,6 +8,7 @@ import jx3d.graphics.opengl.GL20;
 import jx3d.io.event.*;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
+import org.lwjgl.glfw.GLFWCharCallbackI;
 
 import java.nio.DoubleBuffer;
 import java.nio.IntBuffer;
@@ -729,7 +730,6 @@ public class Lwjgl3Window extends Window {
 
             if (key >= KEY_SPACE && key < KEY_WORLD_2) {
                 String keyName = glfwGetKeyName(key, scancode);
-                System.err.println(keyName);
                 if (keyName.length() > 0) {
                     keyChar = keyName.charAt(0);
                 }
@@ -739,6 +739,10 @@ public class Lwjgl3Window extends Window {
             Application.get().onEvent(event);
         });
 
+        glfwSetCharCallback(object, (long window, int codepoint) -> {
+            Event event = new CharacterEvent("glfw_char", codepoint);
+            Application.get().onEvent(event);
+        });
 
         glfwSetWindowSizeCallback(object, (long window, int width, int height) -> {
             this.width = width;
