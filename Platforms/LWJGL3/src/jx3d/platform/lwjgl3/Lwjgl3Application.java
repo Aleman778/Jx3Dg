@@ -9,6 +9,7 @@ import jx3d.graphics.opengl.GLContext;
 import jx3d.graphics.opengl.GLGraphics;
 import jx3d.io.Files;
 import jx3d.io.Input;
+import jx3d.platform.lwjgl3.nuklear.NkLayer;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GLUtil;
 
@@ -31,6 +32,7 @@ public final class Lwjgl3Application extends Application {
     private Graphics graphics;
     private Files files;
     private Input input;
+    private NkLayer nuklear;
 
     public Lwjgl3Application(Lwjgl3Configurations config, ApplicationListener listener) {
         super(listener);
@@ -48,6 +50,7 @@ public final class Lwjgl3Application extends Application {
         JX3D.graphics = graphics;
         JX3D.files = files;
 
+        nuklear = new NkLayer();
     }
 
     private void setupGraphics(Lwjgl3Configurations config) {
@@ -89,6 +92,8 @@ public final class Lwjgl3Application extends Application {
             for (Layer layer : layerStack) {
                 layer.onUpdate();
             }
+
+            nuklear.render();
 
             mainWindow.swapBuffers();
             mainWindow.pollEvents();

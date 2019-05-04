@@ -95,10 +95,12 @@ public class ModelViewerLayer extends Layer {
     public void onUpdate() {
         JX3D.graphics.background(0.0f, 0.5f, 1.0f, 1.0f);
 
+        shader.enable();
         shader.set("transform", t.getMapping());
         shader.set("projection", camera3D.getMapping());
-        shader.enable();
 
+        vao.bind();
+        ibo.bind();
         tex.bind();
         JX3D.graphics.render(TRIANGLES, vao, ibo);
     }
