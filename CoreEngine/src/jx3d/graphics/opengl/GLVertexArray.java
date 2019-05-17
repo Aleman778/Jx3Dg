@@ -59,7 +59,7 @@ public class GLVertexArray extends VertexArray {
             Attribute a = it.next();
             gl.enableVertexAttribArray(a.location);
             gl.vertexAttribPointer(a.location, a.size, GLGraphics.glGetType(a.type),
-                    a.normalized, a.stride * 4, a.pointer * 4);
+                    a.normalized, a.stride, a.pointer);
         }
 
         buffers.add(buf);
