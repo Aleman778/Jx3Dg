@@ -57,8 +57,8 @@ public class ModelViewerLayer extends Layer {
         vao = VertexArray.create();
 
         VertexAttribute attribs = new VertexAttribute();
-        attribs.add(0, 3, false, 5, 0);
-        attribs.add(1, 2, false, 5, 3);
+        attribs.add(0, 3, FLOAT, false, 20, 0);
+        attribs.add(1, 2, FLOAT, false, 20, 12);
 
         vao.put(vbo, attribs);
 
@@ -74,7 +74,7 @@ public class ModelViewerLayer extends Layer {
         tex.image(image);
         tex.setSample(LINEAR);
 
-        //Transformation
+        //transformation
         t = new Transform();
         t.scale(new Vector3f(0.01f, 0.01f, 0.01f));
 

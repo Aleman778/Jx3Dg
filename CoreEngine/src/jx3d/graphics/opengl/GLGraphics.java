@@ -283,6 +283,8 @@ public class GLGraphics extends Graphics {
                 return GL20.SHORT;
             case UNSIGNED_SHORT:
                 return GL20.UNSIGNED_SHORT;
+            case UNSIGNED_BYTE:
+                return GL20.UNSIGNED_BYTE;
         }
 
         return 0;

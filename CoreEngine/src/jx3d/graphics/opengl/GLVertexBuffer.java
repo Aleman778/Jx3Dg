@@ -4,6 +4,7 @@ import jx3d.core.JX3D;
 import jx3d.graphics.VertexBuffer;
 import jx3d.util.BufferUtils;
 
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
 /**
@@ -21,7 +22,7 @@ public class GLVertexBuffer extends VertexBuffer {
     private int object;
     private int usage;
     private boolean allocated;
-    private FloatBuffer mapBuffer;
+    private ByteBuffer mapBuffer;
 
     /**
      * Create an empty vertex buffer with a provided usage.
@@ -105,11 +106,11 @@ public class GLVertexBuffer extends VertexBuffer {
     }
 
     @Override
-    public FloatBuffer map() {
+    public ByteBuffer map() {
         if (mapBuffer != null)
             throw new IllegalStateException("Call the unmap method before calling map.");
-
-        return (mapBuffer = gl.mapBuffer(GL20.ARRAY_BUFFER, GL20.READ_WRITE).asFloatBuffer());
+        mapBuffer = gl.mapBuffer(GL20.ARRAY_BUFFER, GL20.READ_WRITE);
+        return mapBuffer;
     }
 
     @Override

@@ -1,5 +1,7 @@
 package jx3d.graphics;
 
+import jx3d.core.JX3D;
+import jx3d.graphics.opengl.GLSLShader;
 import jx3d.util.Disposable;
 import org.joml.*;
 
@@ -27,6 +29,16 @@ import org.joml.*;
  * @since 1.0
  */
 public abstract class Shader implements Disposable {
+
+    /**
+     * Create a shader for the specific graphics API.
+     */
+    public static Shader create() {
+        switch (Context.getRenderAPI()) {
+            case OPENGL: return new GLSLShader(JX3D.gl20);
+        }
+        throw new IllegalStateException("There is no vertex buffer support for the current render API!");
+    }
 
     /**
      * @param type   the type of shader. The type can be any of the following:<br>

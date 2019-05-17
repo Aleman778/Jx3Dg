@@ -10,6 +10,9 @@ import static jx3d.core.Module.*;
 
 import static org.lwjgl.nuklear.Nuklear.*;
 
+/**
+ * Nuklear input.
+ */
 public class NkInput extends EventAdapter {
 
     private NkContext ctx;

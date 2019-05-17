@@ -932,6 +932,11 @@ public class Module extends EventAdapter {
      */
     public static final int QUAT = 16;
 
+    /**
+     * Unsigned byte <i>type</i>.
+     */
+    public static final int UNSIGNED_BYTE = 16;
+
     /*
      * State variable
      */

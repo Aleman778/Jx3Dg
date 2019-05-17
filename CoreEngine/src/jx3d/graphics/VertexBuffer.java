@@ -3,6 +3,7 @@ package jx3d.graphics;
 import jx3d.graphics.opengl.GLGraphics;
 import jx3d.graphics.opengl.GLVertexBuffer;
 
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
 
@@ -93,7 +94,7 @@ public abstract class VertexBuffer extends Buffer {
     /**
      * Map this buffer's data into the client's address space.
      */
-    public abstract FloatBuffer map();
+    public abstract ByteBuffer map();
 
     /**
      * Unmaps the buffer.<br>

@@ -1,5 +1,6 @@
 package jx3d.graphics;
 
+import jx3d.core.Module;
 import org.joml.Vector3f;
 
 
@@ -31,9 +32,9 @@ public class Vertex {
 
     static {
         ATTRIBUTE = new VertexAttribute();
-        ATTRIBUTE.add(0, 3, false, 8, 0);
-        ATTRIBUTE.add(1, 3, false, 8, 3);
-        ATTRIBUTE.add(2, 2, false, 8, 5);
+        ATTRIBUTE.add(0, 3, Module.FLOAT, false, 8, 0);
+        ATTRIBUTE.add(1, 3, Module.FLOAT, false, 8, 3);
+        ATTRIBUTE.add(2, 2, Module.FLOAT, false, 8, 5);
     }
 
     /**

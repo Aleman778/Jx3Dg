@@ -39,8 +39,8 @@ public class VertexAttribute {
      * @param stride     the number of floats between two consecutive attributes, default value is 0
      * @param offset     the number of to the start of this attribute, default value is 0
      */
-    public void add(int location, int size, boolean normalized, int stride, int offset) {
-        attribs.add(new Attribute(location, size, normalized, stride, offset));
+    public void add(int location, int size, int type, boolean normalized, int stride, int offset) {
+        attribs.add(new Attribute(location, size, type, normalized, stride, offset));
         numElements += size;
     }
 
@@ -121,6 +121,11 @@ public class VertexAttribute {
         public final int size;
 
         /**
+         * The type used by this attribute.
+         */
+        public final int type;
+
+        /**
          * The data is normalized in the buffer.
          */
         public final boolean normalized;
@@ -144,9 +149,10 @@ public class VertexAttribute {
          * @param stride     the number of elements to next vertex
          * @param pointer    the offset to this attribute in a vertex
          */
-        public Attribute(int location, int size, boolean normalized, int stride, int pointer) {
+        public Attribute(int location, int size, int type, boolean normalized, int stride, int pointer) {
             this.location = location;
             this.size = size;
+            this.type = type;
             this.normalized = normalized;
             this.stride = stride;
             this.pointer = pointer;

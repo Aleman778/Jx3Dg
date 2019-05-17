@@ -4,6 +4,7 @@ import jx3d.core.JX3D;
 import jx3d.graphics.IndexBuffer;
 import jx3d.util.BufferUtils;
 
+import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
 
 /**
@@ -21,7 +22,7 @@ public class GLIndexBuffer extends IndexBuffer {
     private int object;
     private int usage;
     private boolean allocated;
-    private ShortBuffer mapBuffer;
+    private ByteBuffer mapBuffer;
 
     /**
      * Create an empty index buffer with a provided usage.
@@ -105,11 +106,11 @@ public class GLIndexBuffer extends IndexBuffer {
     }
 
     @Override
-    public ShortBuffer map() {
+    public ByteBuffer map() {
         if (mapBuffer != null)
             throw new IllegalStateException("Call the unmap method before calling map.");
-
-        return (mapBuffer = gl.mapBuffer(GL20.ELEMENT_ARRAY_BUFFER, GL20.READ_WRITE).asShortBuffer());
+        mapBuffer = gl.mapBuffer(GL20.ELEMENT_ARRAY_BUFFER, GL20.READ_WRITE);
+        return mapBuffer;
     }
 
     @Override
