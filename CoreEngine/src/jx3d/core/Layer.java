@@ -1,5 +1,6 @@
 package jx3d.core;
 
+import jx3d.graphics.DebugGui;
 import jx3d.io.event.Event;
 import jx3d.util.Disposable;
 
@@ -49,6 +50,13 @@ public abstract class Layer implements Disposable {
      */
     public void onUpdate() {
 
+    }
+
+    /**
+     * On debug gui render is called after the update and is used to setup simple debug graphical user interfaces.
+     */
+    public void onDebugGuiRender(DebugGui gui) {
+        
     }
 
     /**

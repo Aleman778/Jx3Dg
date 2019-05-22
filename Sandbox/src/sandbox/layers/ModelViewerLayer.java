@@ -106,6 +106,16 @@ public class ModelViewerLayer extends Layer {
     }
 
     @Override
+    public void onDebugGuiRender(DebugGui gui) {
+        int winFlags = gui.WINDOW_MOVABLE | gui.WINDOW_BORDER | gui.WINDOW_MINIMIZABLE | gui.WINDOW_TITLE;
+        if (gui.begin("Model Import Settings", gui.rect(50, 50, 200, 400), winFlags)) {
+            gui.layoutRowStatic(30, 120, 1);
+            gui.button("Import model");
+        }
+        gui.end();
+    }
+
+    @Override
     public void onEvent(Event event) {
         dispatcher.dispatch(event);
     }

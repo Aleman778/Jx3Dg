@@ -1,7 +1,7 @@
 package jx3d.core;
 
+import jx3d.graphics.DebugGui;
 import jx3d.io.event.Event;
-import jx3d.util.Disposable;
 
 /**
  * Application listener is used to create an implementation
@@ -30,6 +30,12 @@ public interface ApplicationListener {
      * By default the update method is approximately called 30 times per second.
      */
     void onUpdate();
+
+    /**
+     * The <code>onDebugGuiRender</code> function is triggered after the update and is
+     * used to setup a simple debug graphical user interface.
+     */
+    void onDebugGuiRender(DebugGui gui);
 
     /**
      * The dispose event is triggered at the end of the {@link Application} lifecycle e.g.

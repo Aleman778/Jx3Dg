@@ -27,14 +27,9 @@ public class NkLayer extends Layer {
 
     private NkFont font;
     private NkInput input;
-
-    private NkContext ctx          = NkContext.create();
-    private NkDrawNullTexture null_texture = NkDrawNullTexture.create();
-
     private NkRenderer renderer;
-
-    private final Demo       demo = new Demo();
-    private final Calculator calc = new Calculator();
+    private NkDebugGui debugGui;
+    private NkContext ctx = NkContext.create();
 
     private EventDispatcher dispatcher;
 
@@ -47,6 +42,7 @@ public class NkLayer extends Layer {
         dispatcher = new EventDispatcher();
         dispatcher.addListener(Module.INPUT_EVENTS, input);
         renderer = new NkRenderer(ctx);
+        debugGui = new NkDebugGui(ctx);
 
         nk_style_set_font(ctx, font.getUserFont());
     }
@@ -59,10 +55,11 @@ public class NkLayer extends Layer {
         nk_input_end(ctx);
     }
 
-    public void render() {
-        demo.layout(ctx, 50, 50);
-        calc.layout(ctx, 300, 50);
+    public NkDebugGui getDebugGui() {
+        return debugGui;
+    }
 
+    public void render() {
         renderer.present();
     }
 
@@ -81,7 +78,6 @@ public class NkLayer extends Layer {
         Objects.requireNonNull(font.getUserFont().width()).free();
 
         renderer.dispose();
-        calc.numberFilter.free();
 
         Objects.requireNonNull(ALLOCATOR.alloc()).free();
         Objects.requireNonNull(ALLOCATOR.mfree()).free();

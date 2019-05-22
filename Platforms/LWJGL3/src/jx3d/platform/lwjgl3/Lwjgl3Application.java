@@ -2,13 +2,13 @@ package jx3d.platform.lwjgl3;
 
 import jx3d.core.*;
 import jx3d.core.Module;
-import jx3d.graphics.Context;
 import jx3d.graphics.Context.RenderAPI;
 import jx3d.graphics.Graphics;
 import jx3d.graphics.opengl.GLContext;
 import jx3d.graphics.opengl.GLGraphics;
 import jx3d.io.Files;
 import jx3d.io.Input;
+import jx3d.platform.lwjgl3.nuklear.NkDebugGui;
 import jx3d.platform.lwjgl3.nuklear.NkLayer;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GLUtil;
@@ -95,6 +95,11 @@ public final class Lwjgl3Application extends Application {
             listener.onUpdate();
             for (Layer layer : layerStack) {
                 layer.onUpdate();
+            }
+
+            listener.onDebugGuiRender(nuklear.getDebugGui());
+            for (Layer layer : layerStack) {
+                layer.onDebugGuiRender(nuklear.getDebugGui());
             }
 
             nuklear.render();

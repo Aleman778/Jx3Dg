@@ -72,6 +72,16 @@ public abstract class Application {
     }
 
     /**
+     * Pop the specific layer from the application layer stack.
+     * @param layer the layer to pop from the stack
+     */
+    public final void popLayer(Layer layer) {
+        layerStack.popLayer(layer);
+        layer.onDetach();
+    }
+
+
+    /**
      * On event method is called when an event is created and should be dispatched.
      * @param event the event to handle
      */

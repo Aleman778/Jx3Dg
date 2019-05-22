@@ -65,10 +65,10 @@ public class NkRenderer implements Disposable {
     public NkRenderer(NkContext ctx) {
         this.ctx = ctx;
 
-        width = 640;
-        height = 480;
-        display_width = width;
-        display_height = height;
+        width = (int) (1280 * 1.0);
+        height = (int) (720 * 1.0);
+        display_width = (int) (1280 * 1.0);
+        display_height = (int) (720 * 1.0);
 
         setupShader();
         setupBuffers();
@@ -234,8 +234,8 @@ public class NkRenderer implements Disposable {
             glUnmapBuffer(GL_ARRAY_BUFFER);
 
             // iterate over and execute each draw command
-            float fb_scale_x = 1;
-            float fb_scale_y = 1;
+            float fb_scale_x = (float)display_width / (float)width;
+            float fb_scale_y = (float)display_height / (float)height;
 
             long offset = 0L;
             for (NkDrawCommand cmd = nk__draw_begin(ctx, cmds); cmd != null; cmd = nk__draw_next(cmd, cmds, ctx)) {
