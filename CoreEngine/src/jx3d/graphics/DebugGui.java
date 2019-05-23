@@ -30,6 +30,12 @@ public abstract class DebugGui {
         TREE_NODE = 0,
         TREE_TAB  = 1;
 
+    public final int
+        UP    = 0,
+        RIGHT = 1,
+        DOWN  = 2,
+        LEFT  = 3;
+
     public DebugGui() {
 
     }
@@ -62,13 +68,27 @@ public abstract class DebugGui {
     public abstract void end();
 
     /**
-     * Create a button with a label.
+     * Creates a label left aligned.
+     * @param text the text to display in label
+     */
+    public final void label(String text) {
+        label(text, LEFT);
+    }
+
+    /**
+     * Creates a label with a specific alignment.
+     * @param text the text to display in label
+     */
+    public abstract void label(String text, int align);
+
+    /**
+     * Creates a button with a label.
      * @param label
      * @return
      */
     public abstract boolean button(String label);
 
-
+    public abstract boolean checkbox(String label, boolean active);
 
     /**
      * NOTE: This is an inspiration from ImGui and is not directly supported by Nuklear.

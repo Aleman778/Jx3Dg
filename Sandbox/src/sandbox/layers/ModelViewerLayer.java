@@ -29,6 +29,8 @@ public class ModelViewerLayer extends Layer {
     private Graphics g;
     private EventDispatcher dispatcher;
 
+    private boolean triangulateFacecs;
+
     public ModelViewerLayer() {
         Mesh mesh = JX3D.files.loadShape("models/lamborghini/lambo.obj");
         image = JX3D.files.loadImage("models/lamborghini/lambo_diffuse.jpeg");
@@ -81,7 +83,7 @@ public class ModelViewerLayer extends Layer {
         camera3D = new FreeMoving3DCamera();
 
         //shader.set("projection", perspective);
-        JX3D.graphics.viewport(0, 0, 640, 480);
+        JX3D.graphics.viewport(0, 0, 1280-300, 720);
 
         shader.set("transform", t.getMapping());
 
@@ -102,15 +104,27 @@ public class ModelViewerLayer extends Layer {
         vao.bind();
         ibo.bind();
         tex.bind();
+        JX3D.graphics.viewport(0, 0, 1280-300, 720);
         JX3D.graphics.render(TRIANGLES, vao, ibo);
     }
 
     @Override
     public void onDebugGuiRender(DebugGui gui) {
-        int winFlags = gui.WINDOW_MOVABLE | gui.WINDOW_BORDER | gui.WINDOW_MINIMIZABLE | gui.WINDOW_TITLE;
-        if (gui.begin("Model Import Settings", gui.rect(50, 50, 200, 400), winFlags)) {
-            gui.layoutRowStatic(30, 120, 1);
+        if (gui.begin("Model Import Settings", gui.rect(1280-300, 0, 300, 720), gui.WINDOW_TITLE)) {
+            gui.layoutRowStatic(20, 250, 1);
+            gui.label("Select a model to import", gui.LEFT);
+            gui.layoutRowStatic(25, 120, 1);
             gui.button("Import model");
+            gui.layoutRowStatic(25, 120, 1);
+            gui.button("Export model");
+            gui.layoutRowStatic(25, 120, 1);
+            gui.button("Convert model");
+            gui.layoutRowStatic(20, 250, 1);
+            gui.label("Assimp preprocessing flags", gui.LEFT);
+            gui.layoutRowStatic(20, 250, 1);
+            if (gui.checkbox("Triangulate faces", triangulateFacecs)) {
+                triangulateFacecs = !triangulateFacecs;
+            }
         }
         gui.end();
     }

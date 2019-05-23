@@ -41,13 +41,23 @@ public class NkDebugGui extends DebugGui {
     }
 
     @Override
+    public void label(String text, int align) {
+        nk_label(ctx, text, align);
+    }
+
+    @Override
     public boolean button(String label) {
         return nk_button_label(ctx, label);
     }
 
     @Override
+    public boolean checkbox(String label, boolean active) {
+        return nk_checkbox_label(ctx, label, stack.ints(active ? 1 : 0));
+    }
+
+    @Override
     public void sameLine(float position, float spacing) {
-        throw new IllegalStateException("Not implemented yet!");
+
     }
 
     @Override
