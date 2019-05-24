@@ -4,6 +4,8 @@ import jx3d.graphics.debug.gui.GuiValue;
 import jx3d.util.BufferUtils;
 import org.lwjgl.PointerBuffer;
 
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
@@ -88,6 +90,36 @@ public class NkGuiValue extends GuiValue {
                 newValue = 0;
 
             buffer.put(0, newValue);
+        }
+    }
+
+    public static class NkText implements Text {
+
+        public ByteBuffer buffer;
+
+        private int max;
+
+        public NkText(String text, int maxLength) {
+            buffer = BufferUtils.createEmptyByteBuffer(maxLength);
+            max = maxLength;
+            set(text);
+        }
+
+        @Override
+        public int max() {
+            return max;
+        }
+
+        @Override
+        public String get() {
+            return new String(buffer.array());
+        }
+
+        @Override
+        public void set(String value) {
+            buffer.put(value.getBytes(), 0, Math.min(value.length(), max - 1));
+            buffer.put((byte) 0);
+            buffer.flip();
         }
     }
 }

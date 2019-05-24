@@ -28,4 +28,14 @@ public class GuiValue {
 
         void decr(long value);
     }
+
+    public interface Text {
+
+        int max();
+
+        String get();
+
+        void set(String value);
+
+    }
 }

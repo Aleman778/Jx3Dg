@@ -51,6 +51,10 @@ public abstract class GuiDebug {
         TEXT_ALIGN_MIDDLE   = 0x10,
         TEXT_ALIGN_BOTTOM   = 0x20;
 
+//    public final int
+//        FILTER_ASCII = 1,
+//        ,
+
 
     public GuiDebug() {
         assert instance != null : "There already exists a debug gui!";
@@ -157,6 +161,13 @@ public abstract class GuiDebug {
     public abstract void progress(GuiValue.Progress value, boolean modifiable);
 
     /**
+     * Create a text field widget with specific text and maximum size.
+     * @param text the text to display and edit
+     * @param filter filter only certain types of characters e.g. ASCII, decimal, binary etc.
+     */
+    public abstract void textField(GuiValue.Text text, int filter);
+
+    /**
      * Set the current row layout to share horizontal column space between the widgets evenly.
      * @param height holds height of each widget or zero for auto height
      * @param cols the number of columns inside this row
@@ -209,46 +220,41 @@ public abstract class GuiDebug {
     public abstract void layoutSpacePush(GuiRect bounds);
     public abstract void layoutSpaceEnd();
 
-    public abstract void groupBegin(String title, int flags);
-    public abstract void groupBegin(String name, String title, int flags);
-    public abstract void groupBegin(int offsetX, int offsetY, String title, int flags);
+    public abstract boolean groupBegin(String title, int flags);
+    public abstract boolean groupBegin(String name, String title, int flags);
+    public abstract boolean groupBegin(int offsetX, int offsetY, String title, int flags);
     public abstract void groupEnd();
-    public abstract void group();
 
-    public abstract void treePush(int type, String title, int state);
-    public abstract void treePushLoop(int type, String title, int state, int level);
-    //void treePushHashed();
-    public abstract void treeImagePush(int type, String title, Image image, int state);
-    public abstract void treeImagePush();
-    //void treeImagePushHashed();
+    public abstract boolean treePush(int type, String title, int state);
+    public abstract boolean treeImagePush(int type, String title, Image image, int state);
     public abstract void treePop();
-    //void treeStatePush();
-    //void treeStateImagePush();
-    //void treeStatePop();
-
-
-
 
     public GuiRect rect(float x, float y, float w, float h) {
         return new GuiRect(x, y, w, h);
     }
 
+    public abstract GuiValue.Int valueInt(int value);
+
     public abstract GuiValue.Float valueFloat(float value);
 
-    public static GuiValue.Float createValueFloat(float value) {
-        return getInstance().valueFloat(value);
-    }
+    public abstract GuiValue.Progress valueProgress(long max);
 
-    public abstract GuiValue.Int valueInt(int value);
+    public abstract GuiValue.Text valueText(String value, int maxLength);
 
     public static GuiValue.Int createValueInt(int value) {
         return getInstance().valueInt(value);
     }
 
-    public abstract GuiValue.Progress valueProgress(long max);
+    public static GuiValue.Float createValueFloat(float value) {
+        return getInstance().valueFloat(value);
+    }
 
     public static GuiValue.Progress createValueProgress(long value) {
         return getInstance().valueProgress(value);
+    }
+
+    public static GuiValue.Text createValueText(String value, int maxLength) {
+        return getInstance().valueText(value, maxLength);
     }
 
     public static GuiDebug getInstance() {

@@ -7,9 +7,7 @@ import jx3d.graphics.debug.gui.GuiValue;
 import org.lwjgl.nuklear.*;
 import org.lwjgl.system.MemoryStack;
 
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.LongBuffer;
+import java.nio.ByteBuffer;
 
 import static org.lwjgl.nuklear.Nuklear.*;
 
@@ -87,6 +85,13 @@ public class NkGuiDebug extends GuiDebug {
     }
 
     @Override
+    public void textField(GuiValue.Text text, int filter) {
+        //ByteBuffer buffer = ((NkGuiValue.NkText) text).buffer;
+        //nk_edit_string(ctx, NK_EDIT_FIELD, buffer, stack.ints(buffer.remaining()), text.max(), );
+
+    }
+
+    @Override
     public void layoutRowDynamic(float height, int cols) {
         nk_layout_row_dynamic(ctx, height, cols);
     }
@@ -98,106 +103,95 @@ public class NkGuiDebug extends GuiDebug {
 
     @Override
     public void layoutRowBegin(int format, float height, int cols) {
-
+        nk_layout_row_begin(ctx, format, height, cols);
     }
 
     @Override
     public void layoutRowPush(float value) {
-
+        nk_layout_row_push(ctx, value);
     }
 
     @Override
     public void layoutRowEnd() {
-
+        nk_layout_row_end(ctx);
     }
 
     @Override
     public void layoutTemplateBegin(float height) {
-
+        nk_layout_row_template_begin(ctx, height);
     }
 
     @Override
     public void layoutTemplatePushDynamic() {
-
+        nk_layout_row_template_push_dynamic(ctx);
     }
 
     @Override
     public void layoutTemplatePushVariable(float minWidth) {
-
+        nk_layout_row_template_push_variable(ctx, minWidth);
     }
 
     @Override
     public void layoutTemplatePushStatic(float width) {
-
+        nk_layout_row_template_push_static(ctx, width);
     }
 
     @Override
     public void layoutTemplateEnd() {
-
+        nk_layout_row_template_end(ctx);
     }
 
     @Override
     public void layoutSpaceBegin(int format, float height, int numWidgets) {
-
+        nk_layout_space_begin(ctx, format, height, numWidgets);
     }
 
     @Override
     public void layoutSpacePush(GuiRect bounds) {
-
+        stack.push();
+        NkRect rect = NkRect.mallocStack(stack);
+        nk_rect(bounds.x, bounds.y, bounds.w, bounds.h, rect);
+        nk_layout_space_push(ctx, rect);
     }
 
     @Override
     public void layoutSpaceEnd() {
-
+        nk_layout_space_end(ctx);
     }
 
     @Override
-    public void groupBegin(String title, int flags) {
-
+    public boolean groupBegin(String title, int flags) {
+        return nk_group_begin(ctx, title, flags);
     }
 
     @Override
-    public void groupBegin(String name, String title, int flags) {
-
+    public boolean groupBegin(String name, String title, int flags) {
+        return nk_group_begin_titled(ctx, name, title, flags);
     }
 
     @Override
-    public void groupBegin(int offsetX, int offsetY, String title, int flags) {
-
+    public boolean groupBegin(int offsetX, int offsetY, String title, int flags) {
+        return nk_group_scrolled_offset_begin(ctx, stack.ints(offsetX), stack.ints(offsetY), title, flags);
     }
 
     @Override
     public void groupEnd() {
-
+        nk_group_end(ctx);
     }
 
     @Override
-    public void group() {
-
+    public boolean treePush(int type, String title, int state) {
+        return nk_tree_state_push(ctx, type, title, stack.ints(state));
     }
 
     @Override
-    public void treePush(int type, String title, int state) {
-    }
-
-    @Override
-    public void treePushLoop(int type, String title, int state, int level) {
-
-    }
-
-    @Override
-    public void treeImagePush(int type, String title, Image image, int state) {
-
-    }
-
-    @Override
-    public void treeImagePush() {
-
+    public boolean treeImagePush(int type, String title, Image image, int state) {
+        throw new IllegalStateException("Not implemented yet!");
     }
 
     @Override
     public void treePop() {
-
+        nk_tree_state_pop(ctx);
     }
 
     @Override
@@ -213,5 +207,10 @@ public class NkGuiDebug extends GuiDebug {
     @Override
     public GuiValue.Progress valueProgress(long max) {
         return new NkGuiValue.NkProgress(max);
+    }
+
+    @Override
+    public GuiValue.Text valueText(String value, int maxLength) {
+        return new NkGuiValue.NkText(value, maxLength);
     }
 }

@@ -37,6 +37,7 @@ public class ModelViewerLayer extends Layer {
     private GuiValue.Float sliderF = GuiDebug.createValueFloat(0.5f);
     private GuiValue.Int sliderI = GuiDebug.createValueInt(50);
     private GuiValue.Progress progress = GuiDebug.createValueProgress(1000);
+    private GuiValue.Text text = GuiDebug.createValueText("models/lamborghini/lambo.obj", 999);
 
     private static final int HIGH = 0;
     private static final int MED = 1;
@@ -106,7 +107,7 @@ public class ModelViewerLayer extends Layer {
 
     @Override
     public void onUpdate() {
-        JX3D.graphics.background(0.0f, 0.5f, 1.0f, 1.0f);
+        JX3D.graphics.background(0.3f, 0.7f, 0.9f, 1.0f);
 
         shader.enable();
         shader.set("transform", t.getMapping());
@@ -122,55 +123,71 @@ public class ModelViewerLayer extends Layer {
     @Override
     public void onDebugGuiRender(GuiDebug gui) {
         if (gui.begin("Model Import Settings", gui.rect(1280-300, 0, 300, 720), gui.WINDOW_TITLE)) {
-            gui.layoutRowStatic(20, 250, 1);
+            gui.layoutRowDynamic(20, 1);
             gui.label("Select a model to import", gui.LEFT);
+            //gui.layoutRowDynamic(30, 1);
+            //gui.textField(text);
 
-            gui.layoutRowStatic(25, 120, 1);
-            gui.button("Import model");
+            gui.layoutRowDynamic(150, 1);
+            if (gui.groupBegin("Actions", gui.WINDOW_TITLE | gui.WINDOW_BORDER)) {
+                gui.layoutRowDynamic(25, 1);
+                gui.button("Import model");
 
-            gui.layoutRowStatic(25, 120, 1);
-            gui.button("Export model");
+                gui.layoutRowDynamic(25, 1);
+                gui.button("Export model");
 
-            gui.layoutRowStatic(25, 120, 1);
-            gui.button("Convert model");
+                gui.layoutRowDynamic(25, 1);
+                gui.button("Convert model");
 
-            gui.layoutRowStatic(20, 250, 1);
-            gui.label("Level of detail", gui.LEFT);
+                gui.groupEnd();
+            }
 
-            gui.layoutRowDynamic(25, 3);
-            if (gui.radioButton("Low", lod == LOW)) { lod = LOW; }
-            if (gui.radioButton("Medium", lod == MED)) { lod = MED; }
-            if (gui.radioButton("High", lod == HIGH)) { lod = HIGH; }
+            if (gui.treePush(gui.TREE_NODE, "Toggle widgets", 0)) {
+                gui.layoutRowDynamic(20, 1);
+                gui.label("Level of detail", gui.LEFT);
 
-            gui.layoutRowStatic(20, 250, 1);
-            gui.label("Selectable level of detail", gui.LEFT);
+                gui.layoutRowDynamic(25, 3);
+                if (gui.radioButton("Low", lod == LOW)) { lod = LOW; }
+                if (gui.radioButton("Medium", lod == MED)) { lod = MED; }
+                if (gui.radioButton("High", lod == HIGH)) { lod = HIGH; }
 
-            gui.layoutRowDynamic(25, 3);
-            if (gui.selectable("Low", gui.TEXT_ALIGN_CENTERED, lod2 == LOW)) { lod2 = LOW; }
-            if (gui.selectable("Medium", gui.TEXT_ALIGN_CENTERED, lod2 == MED)) { lod2 = MED; }
-            if (gui.selectable("High", gui.TEXT_ALIGN_CENTERED, lod2 == HIGH)) { lod2 = HIGH; }
+                gui.layoutRowDynamic(20, 1);
+                gui.label("Selectable level of detail", gui.LEFT);
 
-            gui.layoutRowStatic(20, 120, 2);
+                gui.layoutRowDynamic(25, 3);
+                if (gui.selectable("Low", gui.TEXT_ALIGN_CENTERED, lod2 == LOW)) { lod2 = LOW; }
+                if (gui.selectable("Medium", gui.TEXT_ALIGN_CENTERED, lod2 == MED)) { lod2 = MED; }
+                if (gui.selectable("High", gui.TEXT_ALIGN_CENTERED, lod2 == HIGH)) { lod2 = HIGH; }
+                gui.treePop();
+            }
+
+
+            gui.layoutRowDynamic(20, 2);
             gui.sliderFloat(sliderF, 0.0f, 1.0f, 0.01f);
             gui.label("= " + sliderF.get() + " (float)");
 
-            gui.layoutRowStatic(20, 120, 2);
+            gui.layoutRowDynamic(20, 2);
             gui.sliderInt(sliderI, 0, 100, 1);
             gui.label("= " + sliderI.get() + " (integer)");
 
-            gui.layoutRowStatic(20, 250, 1);
+            gui.layoutRowDynamic(20, 1);
             gui.label("Assimp preprocessing flags", gui.LEFT);
 
-            gui.layoutRowStatic(25, 250, 1);
+            gui.layoutRowDynamic(25, 1);
             if (gui.checkbox("Triangulate faces", triangulateFacecs)) {
                 triangulateFacecs = !triangulateFacecs;
             }
 
-            gui.layoutRowStatic(20, 250, 1);
+            gui.layoutRowDynamic(20, 1);
             gui.label("Progress bar", gui.LEFT);
 
-            gui.layoutRowStatic(25, 250, 1);
+            gui.layoutRowDynamic(25, 1);
             gui.progress(progress, false);
+
+            gui.layoutRowDynamic(20, 1);
+            if (gui.treePush(gui.TREE_TAB, "Tab", 0)) {
+                gui.treePop();
+            }
         }
         gui.end();
         progress.incr(1);
