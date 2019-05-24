@@ -3,6 +3,8 @@ package sandbox.layers;
 import jx3d.core.JX3D;
 import jx3d.core.Layer;
 import jx3d.graphics.*;
+import jx3d.graphics.debug.gui.GuiDebug;
+import jx3d.graphics.debug.gui.GuiValue;
 import jx3d.graphics.opengl.GLTexture2D;
 import jx3d.io.event.Event;
 import jx3d.io.event.EventDispatcher;
@@ -30,6 +32,15 @@ public class ModelViewerLayer extends Layer {
     private EventDispatcher dispatcher;
 
     private boolean triangulateFacecs;
+    private int lod = HIGH;
+    private int lod2 = HIGH;
+    private GuiValue.Float sliderF = GuiDebug.createValueFloat(0.5f);
+    private GuiValue.Int sliderI = GuiDebug.createValueInt(50);
+    private GuiValue.Progress progress = GuiDebug.createValueProgress(1000);
+
+    private static final int HIGH = 0;
+    private static final int MED = 1;
+    private static final int LOW = 2;
 
     public ModelViewerLayer() {
         Mesh mesh = JX3D.files.loadShape("models/lamborghini/lambo.obj");
@@ -109,24 +120,60 @@ public class ModelViewerLayer extends Layer {
     }
 
     @Override
-    public void onDebugGuiRender(DebugGui gui) {
+    public void onDebugGuiRender(GuiDebug gui) {
         if (gui.begin("Model Import Settings", gui.rect(1280-300, 0, 300, 720), gui.WINDOW_TITLE)) {
             gui.layoutRowStatic(20, 250, 1);
             gui.label("Select a model to import", gui.LEFT);
+
             gui.layoutRowStatic(25, 120, 1);
             gui.button("Import model");
+
             gui.layoutRowStatic(25, 120, 1);
             gui.button("Export model");
+
             gui.layoutRowStatic(25, 120, 1);
             gui.button("Convert model");
+
+            gui.layoutRowStatic(20, 250, 1);
+            gui.label("Level of detail", gui.LEFT);
+
+            gui.layoutRowDynamic(25, 3);
+            if (gui.radioButton("Low", lod == LOW)) { lod = LOW; }
+            if (gui.radioButton("Medium", lod == MED)) { lod = MED; }
+            if (gui.radioButton("High", lod == HIGH)) { lod = HIGH; }
+
+            gui.layoutRowStatic(20, 250, 1);
+            gui.label("Selectable level of detail", gui.LEFT);
+
+            gui.layoutRowDynamic(25, 3);
+            if (gui.selectable("Low", gui.TEXT_ALIGN_CENTERED, lod2 == LOW)) { lod2 = LOW; }
+            if (gui.selectable("Medium", gui.TEXT_ALIGN_CENTERED, lod2 == MED)) { lod2 = MED; }
+            if (gui.selectable("High", gui.TEXT_ALIGN_CENTERED, lod2 == HIGH)) { lod2 = HIGH; }
+
+            gui.layoutRowStatic(20, 120, 2);
+            gui.sliderFloat(sliderF, 0.0f, 1.0f, 0.01f);
+            gui.label("= " + sliderF.get() + " (float)");
+
+            gui.layoutRowStatic(20, 120, 2);
+            gui.sliderInt(sliderI, 0, 100, 1);
+            gui.label("= " + sliderI.get() + " (integer)");
+
             gui.layoutRowStatic(20, 250, 1);
             gui.label("Assimp preprocessing flags", gui.LEFT);
-            gui.layoutRowStatic(20, 250, 1);
+
+            gui.layoutRowStatic(25, 250, 1);
             if (gui.checkbox("Triangulate faces", triangulateFacecs)) {
                 triangulateFacecs = !triangulateFacecs;
             }
+
+            gui.layoutRowStatic(20, 250, 1);
+            gui.label("Progress bar", gui.LEFT);
+
+            gui.layoutRowStatic(25, 250, 1);
+            gui.progress(progress, false);
         }
         gui.end();
+        progress.incr(1);
     }
 
     @Override

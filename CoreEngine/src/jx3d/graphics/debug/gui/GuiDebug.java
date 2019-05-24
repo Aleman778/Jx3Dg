@@ -1,6 +1,13 @@
-package jx3d.graphics;
+package jx3d.graphics.debug.gui;
 
-public abstract class DebugGui {
+import jx3d.graphics.Image;
+
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+
+public abstract class GuiDebug {
+
+    private static GuiDebug instance;
 
     /**
      * Window flags.
@@ -36,8 +43,18 @@ public abstract class DebugGui {
         DOWN  = 2,
         LEFT  = 3;
 
-    public DebugGui() {
+    public final int
+        TEXT_ALIGN_LEFT     = 0x1,
+        TEXT_ALIGN_CENTERED = 0x2,
+        TEXT_ALIGN_RIGHT    = 0x4,
+        TEXT_ALIGN_TOP      = 0x8,
+        TEXT_ALIGN_MIDDLE   = 0x10,
+        TEXT_ALIGN_BOTTOM   = 0x20;
 
+
+    public GuiDebug() {
+        assert instance != null : "There already exists a debug gui!";
+        this.instance = this;
     }
 
     /**
@@ -48,7 +65,7 @@ public abstract class DebugGui {
      * @param flags set window flags e.g. {@link #WINDOW_BORDER}
      * @return
      */
-    public abstract boolean begin(String title, Rect rect, int flags);
+    public abstract boolean begin(String title, GuiRect rect, int flags);
 
     /**
      * Creates a new window with a specific name, this has to be called every frame for every
@@ -60,7 +77,7 @@ public abstract class DebugGui {
      * @param flags the window flags e.g. {@link #WINDOW_BORDER}
      * @return
      */
-    public abstract boolean begin(String name, String title, Rect rect, int flags);
+    public abstract boolean begin(String name, String title, GuiRect rect, int flags);
 
     /**
      * Needs to be called at the end after the window is built.
@@ -83,19 +100,61 @@ public abstract class DebugGui {
 
     /**
      * Creates a button with a label.
-     * @param label
-     * @return
+     * @param label the text to display
+     * @return true if the button is pressed, false otherwise
      */
     public abstract boolean button(String label);
 
+    /**
+     * Creates a checkbox with a label.
+     * @param label the text to display
+     * @param active set true if the checkbox active, false otherwise
+     * @return true if the checkbox is pressed, false otherwise
+     */
     public abstract boolean checkbox(String label, boolean active);
 
     /**
-     * NOTE: This is an inspiration from ImGui and is not directly supported by Nuklear.
-     * @param position
-     * @param spacing
+     * Creates a radio button with a label.
+     * @param label the text to display
+     * @param active set true if the radio button is active, false otherwise
+     * @return true if the radio button is pressed, false otherwise
      */
-    public abstract void sameLine(float position, float spacing);
+    public abstract boolean radioButton(String label, boolean active);
+
+    /**
+     * Creates a selectable widget with a label.
+     * @param label the text to display
+     * @param align the alignment of the label
+     * @param selected set true if the widget is selected, false if not
+     * @return true if the selectable widget is pressed, false otherwise
+     */
+    public abstract boolean selectable(String label, int align, boolean selected);
+
+    /**
+     * Creates a integer slider widget with specific min and max values.
+     * @param value the value of the slider
+     * @param minValue the minimum value
+     * @param maxValue the maximum value
+     * @param step the change of value at each tick of the slider
+     */
+    public abstract void sliderInt(GuiValue.Int value, int minValue, int maxValue, int step);
+
+    /**
+     * Creates a float slider widget with specific min and max values.
+     * @param value the value of the slider
+     * @param minValue the minimum value
+     * @param maxValue the maximum value
+     * @param step the change of value at each tick of the slider
+     */
+    public abstract void sliderFloat(GuiValue.Float value, float minValue, float maxValue, float step);
+
+    /**
+     * Creates a progress bar widget with specific max value.
+     * @param value the current value of the progress
+     * @param max the maximum value when the current value reaches this value then the progress is completed
+     * @param modifyable the progress bar is modifyable by the user
+     */
+    public abstract void progress(GuiValue.Progress value, boolean modifiable);
 
     /**
      * Set the current row layout to share horizontal column space between the widgets evenly.
@@ -147,7 +206,7 @@ public abstract class DebugGui {
     public abstract void layoutTemplateEnd();
 
     public abstract void layoutSpaceBegin(int format, float height, int numWidgets);
-    public abstract void layoutSpacePush(Rect bounds);
+    public abstract void layoutSpacePush(GuiRect bounds);
     public abstract void layoutSpaceEnd();
 
     public abstract void groupBegin(String title, int flags);
@@ -170,23 +229,29 @@ public abstract class DebugGui {
 
 
 
-    public Rect rect(float x, float y, float w, float h) {
-        return new Rect(x, y, w, h);
+    public GuiRect rect(float x, float y, float w, float h) {
+        return new GuiRect(x, y, w, h);
     }
 
+    public abstract GuiValue.Float valueFloat(float value);
 
-    /**
-     * Rectangle class.
-     */
-    protected class Rect {
+    public static GuiValue.Float createValueFloat(float value) {
+        return getInstance().valueFloat(value);
+    }
 
-        public float x, y, w, h;
+    public abstract GuiValue.Int valueInt(int value);
 
-        protected Rect(float x, float y, float w, float h) {
-            this.x = x;
-            this.y = y;
-            this.w = w;
-            this.h = h;
-        }
+    public static GuiValue.Int createValueInt(int value) {
+        return getInstance().valueInt(value);
+    }
+
+    public abstract GuiValue.Progress valueProgress(long max);
+
+    public static GuiValue.Progress createValueProgress(long value) {
+        return getInstance().valueProgress(value);
+    }
+
+    public static GuiDebug getInstance() {
+        return instance;
     }
 }

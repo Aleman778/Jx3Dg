@@ -1,6 +1,6 @@
 package jx3d.core;
 
-import jx3d.graphics.DebugGui;
+import jx3d.graphics.debug.gui.GuiDebug;
 import jx3d.io.event.Event;
 
 /**
@@ -37,7 +37,7 @@ public abstract class ApplicationAdapter implements ApplicationListener {
      * {@inheritDoc}
      */
     @Override
-    public void onDebugGuiRender(DebugGui gui) {
+    public void onDebugGuiRender(GuiDebug gui) {
 
     }
 

@@ -5,7 +5,6 @@ import jx3d.core.Module;
 import jx3d.io.event.Event;
 import jx3d.io.event.EventDispatcher;
 import org.lwjgl.nuklear.*;
-import org.lwjgl.system.MemoryStack;
 
 import java.util.Objects;
 
@@ -30,7 +29,7 @@ public class NkLayer extends Layer {
     private NkFont font;
     private NkInput input;
     private NkRenderer renderer;
-    private NkDebugGui debugGui;
+    private NkGuiDebug debugGui;
     private NkContext ctx = NkContext.create();
 
     private EventDispatcher dispatcher;
@@ -44,20 +43,20 @@ public class NkLayer extends Layer {
         dispatcher = new EventDispatcher();
         dispatcher.addListener(Module.INPUT_EVENTS, input);
         renderer = new NkRenderer(ctx);
-        debugGui = new NkDebugGui(ctx);
+        debugGui = new NkGuiDebug(ctx);
 
 
         nk_style_set_font(ctx, font.getUserFont());
-        try (MemoryStack stack = MemoryStack.stackPush()) {
-            NkStyle style = ctx.style();
-            NkStyleToggle checkbox = style.checkbox();
-            NkStyleItem item = NkStyleItem.callocStack(stack);
-            NkColor color = NkColor.callocStack(stack);
-            color.r((byte) 255);
-            color.a((byte) 255);
-            nk_style_item_color(color, item);
-            checkbox.normal(item);
-        }
+//        try (MemoryStack stack = MemoryStack.stackPush()) {
+//            NkStyle style = ctx.style();
+//            NkStyleToggle checkbox = style.checkbox();
+//            NkStyleItem item = NkStyleItem.callocStack(stack);
+//            NkColor color = NkColor.callocStack(stack);
+//            color.r((byte) 255);
+//            color.a((byte) 255);
+//            nk_style_item_color(color, item);
+//            checkbox.normal(item);
+//        }
     }
 
     public void beginInput() {
@@ -68,7 +67,7 @@ public class NkLayer extends Layer {
         nk_input_end(ctx);
     }
 
-    public NkDebugGui getDebugGui() {
+    public NkGuiDebug getDebugGui() {
         return debugGui;
     }
 

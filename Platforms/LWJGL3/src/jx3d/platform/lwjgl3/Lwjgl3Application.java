@@ -8,7 +8,6 @@ import jx3d.graphics.opengl.GLContext;
 import jx3d.graphics.opengl.GLGraphics;
 import jx3d.io.Files;
 import jx3d.io.Input;
-import jx3d.platform.lwjgl3.nuklear.NkDebugGui;
 import jx3d.platform.lwjgl3.nuklear.NkLayer;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GLUtil;

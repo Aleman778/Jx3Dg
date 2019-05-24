@@ -1,6 +1,6 @@
 package jx3d.core;
 
-import jx3d.graphics.DebugGui;
+import jx3d.graphics.debug.gui.GuiDebug;
 import jx3d.io.event.Event;
 
 /**
@@ -35,7 +35,7 @@ public interface ApplicationListener {
      * The <code>onDebugGuiRender</code> function is triggered after the update and is
      * used to setup a simple debug graphical user interface.
      */
-    void onDebugGuiRender(DebugGui gui);
+    void onDebugGuiRender(GuiDebug gui);
 
     /**
      * The dispose event is triggered at the end of the {@link Application} lifecycle e.g.

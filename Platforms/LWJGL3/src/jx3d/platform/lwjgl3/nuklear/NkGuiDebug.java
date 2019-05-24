@@ -1,25 +1,31 @@
 package jx3d.platform.lwjgl3.nuklear;
 
-import jx3d.graphics.DebugGui;
+import jx3d.graphics.debug.gui.GuiDebug;
 import jx3d.graphics.Image;
+import jx3d.graphics.debug.gui.GuiRect;
+import jx3d.graphics.debug.gui.GuiValue;
 import org.lwjgl.nuklear.*;
 import org.lwjgl.system.MemoryStack;
 
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.nio.LongBuffer;
+
 import static org.lwjgl.nuklear.Nuklear.*;
 
-public class NkDebugGui extends DebugGui {
+public class NkGuiDebug extends GuiDebug {
 
     private NkContext ctx;
     private MemoryStack stack;
 
 
-    public NkDebugGui(NkContext ctx) {
+    public NkGuiDebug(NkContext ctx) {
         this.ctx = ctx;
         this.stack = MemoryStack.stackGet();
     }
 
     @Override
-    public boolean begin(String title, Rect rect, int flags) {
+    public boolean begin(String title, GuiRect rect, int flags) {
         stack.push();
         NkRect bounds = NkRect.mallocStack(stack);
         nk_rect(rect.x, rect.y, rect.w, rect.h, bounds);
@@ -27,7 +33,7 @@ public class NkDebugGui extends DebugGui {
     }
 
     @Override
-    public boolean begin(String name, String title, Rect rect, int flags) {
+    public boolean begin(String name, String title, GuiRect rect, int flags) {
         stack.push();
         NkRect bounds = NkRect.mallocStack(stack);
         nk_rect(rect.x, rect.y, rect.w, rect.h, bounds);
@@ -56,8 +62,28 @@ public class NkDebugGui extends DebugGui {
     }
 
     @Override
-    public void sameLine(float position, float spacing) {
+    public boolean radioButton(String label, boolean active) {
+        return nk_radio_label(ctx, label, stack.ints(active ? 1 : 0));
+    }
 
+    @Override
+    public boolean selectable(String label, int align, boolean selected) {
+        return nk_selectable_label(ctx, label, align, stack.ints(selected ? 1 : 0));
+    }
+
+    @Override
+    public void sliderInt(GuiValue.Int value, int minValue, int maxValue, int step) {
+        nk_slider_int(ctx, minValue, ((NkGuiValue.NkInt) value).buffer, maxValue, step);
+    }
+
+    @Override
+    public void sliderFloat(GuiValue.Float value, float minValue, float maxValue, float step) {
+        nk_slider_float(ctx, minValue, ((NkGuiValue.NkFloat) value).buffer, maxValue, step);
+    }
+
+    @Override
+    public void progress(GuiValue.Progress value, boolean modifiable) {
+        nk_progress(ctx, ((NkGuiValue.NkProgress) value).buffer, value.max(), true);
     }
 
     @Override
@@ -116,7 +142,7 @@ public class NkDebugGui extends DebugGui {
     }
 
     @Override
-    public void layoutSpacePush(Rect bounds) {
+    public void layoutSpacePush(GuiRect bounds) {
 
     }
 
@@ -172,5 +198,20 @@ public class NkDebugGui extends DebugGui {
     @Override
     public void treePop() {
 
+    }
+
+    @Override
+    public GuiValue.Float valueFloat(float value) {
+        return new NkGuiValue.NkFloat(value);
+    }
+
+    @Override
+    public GuiValue.Int valueInt(int value) {
+        return new NkGuiValue.NkInt(value);
+    }
+
+    @Override
+    public GuiValue.Progress valueProgress(long max) {
+        return new NkGuiValue.NkProgress(max);
     }
 }
