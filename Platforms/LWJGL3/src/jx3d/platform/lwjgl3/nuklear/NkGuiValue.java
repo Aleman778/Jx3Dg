@@ -3,6 +3,7 @@ package jx3d.platform.lwjgl3.nuklear;
 import jx3d.graphics.debug.gui.GuiValue;
 import jx3d.util.BufferUtils;
 import org.lwjgl.PointerBuffer;
+import org.lwjgl.nuklear.NkColorf;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -120,6 +121,58 @@ public class NkGuiValue extends GuiValue {
             buffer.put(value.getBytes(), 0, Math.min(value.length(), max - 1));
             buffer.put((byte) 0);
             buffer.flip();
+        }
+    }
+
+    public static class NkColor implements Color {
+
+        public NkColorf color = NkColorf.create();
+
+        public NkColor(float red, float green, float blue, float alpha) {
+            color.r(red);
+            color.g(green);
+            color.b(blue);
+            color.a(alpha);
+        }
+
+        @Override
+        public float red() {
+            return color.r();
+        }
+
+        @Override
+        public float green() {
+            return color.g();
+        }
+
+        @Override
+        public float blue() {
+            return color.b();
+        }
+
+        @Override
+        public float alpha() {
+            return color.a();
+        }
+
+        @Override
+        public void red(float value) {
+            color.r(value);
+        }
+
+        @Override
+        public void green(float value) {
+            color.g(value);
+        }
+
+        @Override
+        public void blue(float value) {
+            color.b(value);
+        }
+
+        @Override
+        public void alpha(float value) {
+            color.a(value);
         }
     }
 }

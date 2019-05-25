@@ -1,5 +1,6 @@
 package jx3d.platform.lwjgl3.nuklear;
 
+import jx3d.core.JX3D;
 import jx3d.core.Module;
 import jx3d.graphics.*;
 import jx3d.util.BufferUtils;
@@ -65,10 +66,10 @@ public class NkRenderer implements Disposable {
     public NkRenderer(NkContext ctx) {
         this.ctx = ctx;
 
-        width = (int) (1280 * 1.0);
-        height = (int) (720 * 1.0);
-        display_width = (int) (1280 * 1.0);
-        display_height = (int) (720 * 1.0);
+        width = (int) JX3D.graphics.getWidth();
+        height = (int) JX3D.graphics.getHeight();
+        display_width = width;
+        display_height = height;
 
         setupShader();
         setupBuffers();
@@ -172,6 +173,11 @@ public class NkRenderer implements Disposable {
     }
 
     public void present() {
+        display_width = (int) JX3D.graphics.getWidth();
+        display_height = (int) JX3D.graphics.getHeight();
+        width = display_width;
+        height = display_height;
+
         try (MemoryStack stack = stackPush()) {
             // setup global state
             glEnable(GL_BLEND);

@@ -20,6 +20,12 @@ import static jx3d.core.Module.*;
  */
 public class ModelViewerLayer extends Layer {
 
+    private static final int GUI_WIDTH = 400;
+
+    private static final int HIGH = 0;
+    private static final int MED = 1;
+    private static final int LOW = 2;
+
     private VertexBuffer vbo;
     private IndexBuffer ibo;
     private VertexArray vao;
@@ -31,6 +37,8 @@ public class ModelViewerLayer extends Layer {
     private Graphics g;
     private EventDispatcher dispatcher;
 
+    private boolean preprocessingNode;
+    private boolean backgroundTab;
     private boolean triangulateFacecs;
     private int lod = HIGH;
     private int lod2 = HIGH;
@@ -38,10 +46,8 @@ public class ModelViewerLayer extends Layer {
     private GuiValue.Int sliderI = GuiDebug.createValueInt(50);
     private GuiValue.Progress progress = GuiDebug.createValueProgress(1000);
     private GuiValue.Text text = GuiDebug.createValueText("models/lamborghini/lambo.obj", 999);
+    private GuiValue.Color color = GuiDebug.createValueColor(0.0f, 0.5f, 1.0f, 1.0f);
 
-    private static final int HIGH = 0;
-    private static final int MED = 1;
-    private static final int LOW = 2;
 
     public ModelViewerLayer() {
         Mesh mesh = JX3D.files.loadShape("models/lamborghini/lambo.obj");
@@ -94,9 +100,6 @@ public class ModelViewerLayer extends Layer {
 
         camera3D = new FreeMoving3DCamera();
 
-        //shader.set("projection", perspective);
-        JX3D.graphics.viewport(0, 0, 1280-300, 720);
-
         shader.set("transform", t.getMapping());
 
 
@@ -107,7 +110,7 @@ public class ModelViewerLayer extends Layer {
 
     @Override
     public void onUpdate() {
-        JX3D.graphics.background(0.3f, 0.7f, 0.9f, 1.0f);
+        JX3D.graphics.background(color.red(), color.green(), color.blue(), color.alpha());
 
         shader.enable();
         shader.set("transform", t.getMapping());
@@ -116,13 +119,13 @@ public class ModelViewerLayer extends Layer {
         vao.bind();
         ibo.bind();
         tex.bind();
-        JX3D.graphics.viewport(0, 0, 1280-300, 720);
+        JX3D.graphics.viewport(0, 0, (int) JX3D.graphics.getWidth()-GUI_WIDTH, (int) JX3D.graphics.getHeight());
         JX3D.graphics.render(TRIANGLES, vao, ibo);
     }
 
     @Override
     public void onDebugGuiRender(GuiDebug gui) {
-        if (gui.begin("Model Import Settings", gui.rect(1280-300, 0, 300, 720), gui.WINDOW_TITLE)) {
+        if (gui.begin("Model Import Settings", gui.rect((int) JX3D.graphics.getWidth()-GUI_WIDTH, 0, GUI_WIDTH, (int) JX3D.graphics.getHeight()), gui.WINDOW_TITLE)) {
             gui.layoutRowDynamic(20, 1);
             gui.label("Select a model to import", gui.LEFT);
             //gui.layoutRowDynamic(30, 1);
@@ -142,7 +145,7 @@ public class ModelViewerLayer extends Layer {
                 gui.groupEnd();
             }
 
-            if (gui.treePush(gui.TREE_NODE, "Toggle widgets", 0)) {
+            if (preprocessingNode = gui.treePush(gui.TREE_NODE, "Toggle widgets", preprocessingNode)) {
                 gui.layoutRowDynamic(20, 1);
                 gui.label("Level of detail", gui.LEFT);
 
@@ -171,6 +174,13 @@ public class ModelViewerLayer extends Layer {
             gui.label("= " + sliderI.get() + " (integer)");
 
             gui.layoutRowDynamic(20, 1);
+            gui.propertyFloat("Float property", sliderF, 0.0f, 1.0f, 0.01f, 0.01f);
+
+            gui.layoutRowDynamic(20, 1);
+            gui.propertyInt("Integer property", sliderI, 0, 100, 1, 0.5f);
+
+
+            gui.layoutRowDynamic(20, 1);
             gui.label("Assimp preprocessing flags", gui.LEFT);
 
             gui.layoutRowDynamic(25, 1);
@@ -181,11 +191,13 @@ public class ModelViewerLayer extends Layer {
             gui.layoutRowDynamic(20, 1);
             gui.label("Progress bar", gui.LEFT);
 
-            gui.layoutRowDynamic(25, 1);
+            gui.layoutRowDynamic(20, 1);
             gui.progress(progress, false);
 
             gui.layoutRowDynamic(20, 1);
-            if (gui.treePush(gui.TREE_TAB, "Tab", 0)) {
+            if (backgroundTab = gui.treePush(gui.TREE_TAB, "Change background color", backgroundTab)) {
+                gui.layoutRowDynamic(270, 1);
+                gui.colorPicker(color, gui.RGB);
                 gui.treePop();
             }
         }

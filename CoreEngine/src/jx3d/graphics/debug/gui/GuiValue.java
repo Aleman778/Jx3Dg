@@ -38,4 +38,23 @@ public class GuiValue {
         void set(String value);
 
     }
+
+    public interface Color {
+
+        float red();
+
+        float green();
+
+        float blue();
+
+        float alpha();
+
+        void red(float value);
+
+        void green(float value);
+
+        void blue(float value);
+
+        void alpha(float value);
+    }
 }

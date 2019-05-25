@@ -7,8 +7,6 @@ import jx3d.graphics.debug.gui.GuiValue;
 import org.lwjgl.nuklear.*;
 import org.lwjgl.system.MemoryStack;
 
-import java.nio.ByteBuffer;
-
 import static org.lwjgl.nuklear.Nuklear.*;
 
 public class NkGuiDebug extends GuiDebug {
@@ -70,13 +68,23 @@ public class NkGuiDebug extends GuiDebug {
     }
 
     @Override
-    public void sliderInt(GuiValue.Int value, int minValue, int maxValue, int step) {
-        nk_slider_int(ctx, minValue, ((NkGuiValue.NkInt) value).buffer, maxValue, step);
+    public void sliderInt(GuiValue.Int value, int min, int max, int step) {
+        nk_slider_int(ctx, min, ((NkGuiValue.NkInt) value).buffer, max, step);
     }
 
     @Override
-    public void sliderFloat(GuiValue.Float value, float minValue, float maxValue, float step) {
-        nk_slider_float(ctx, minValue, ((NkGuiValue.NkFloat) value).buffer, maxValue, step);
+    public void sliderFloat(GuiValue.Float value, float min, float max, float step) {
+        nk_slider_float(ctx, min, ((NkGuiValue.NkFloat) value).buffer, max, step);
+    }
+
+    @Override
+    public void propertyInt(String name, GuiValue.Int value, int min, int max, int step, float incPerPixel) {
+        nk_property_int(ctx, name, min, ((NkGuiValue.NkInt) value).buffer, max, step, incPerPixel);
+    }
+
+    @Override
+    public void propertyFloat(String name, GuiValue.Float value, float min, float max, float step, float incPerPixel) {
+        nk_property_float(ctx, name, min, ((NkGuiValue.NkFloat) value).buffer, max, step, incPerPixel);
     }
 
     @Override
@@ -88,7 +96,15 @@ public class NkGuiDebug extends GuiDebug {
     public void textField(GuiValue.Text text, int filter) {
         //ByteBuffer buffer = ((NkGuiValue.NkText) text).buffer;
         //nk_edit_string(ctx, NK_EDIT_FIELD, buffer, stack.ints(buffer.remaining()), text.max(), );
+    }
 
+    @Override
+    public void colorPicker(GuiValue.Color color, int format) {
+        nk_color_picker(ctx, ((NkGuiValue.NkColor) color).color, format);
+    }
+
+    public void chartBegin() {
+        //nk_chart_begin
     }
 
     @Override
@@ -180,12 +196,12 @@ public class NkGuiDebug extends GuiDebug {
     }
 
     @Override
-    public boolean treePush(int type, String title, int state) {
-        return nk_tree_state_push(ctx, type, title, stack.ints(state));
+    public boolean treePush(int type, String title, boolean expanded) {
+        return nk_tree_state_push(ctx, type, title, stack.ints(expanded ? 1 : 0));
     }
 
     @Override
-    public boolean treeImagePush(int type, String title, Image image, int state) {
+    public boolean treeImagePush(int type, String title, Image image, boolean expanded) {
         throw new IllegalStateException("Not implemented yet!");
     }
 
@@ -212,5 +228,10 @@ public class NkGuiDebug extends GuiDebug {
     @Override
     public GuiValue.Text valueText(String value, int maxLength) {
         return new NkGuiValue.NkText(value, maxLength);
+    }
+
+    @Override
+    public GuiValue.Color valueColor(float r, float g, float b, float a) {
+        return new NkGuiValue.NkColor(r, g, b, a);
     }
 }

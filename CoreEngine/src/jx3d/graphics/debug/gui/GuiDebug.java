@@ -55,6 +55,9 @@ public abstract class GuiDebug {
 //        FILTER_ASCII = 1,
 //        ,
 
+    public static final int
+        RGB  = 0,
+        RGBA = 1;
 
     public GuiDebug() {
         assert instance != null : "There already exists a debug gui!";
@@ -135,22 +138,42 @@ public abstract class GuiDebug {
     public abstract boolean selectable(String label, int align, boolean selected);
 
     /**
-     * Creates a integer slider widget with specific min and max values.
+     * Creates a integer slider widget with specific min, max and step values.
      * @param value the value of the slider
-     * @param minValue the minimum value
-     * @param maxValue the maximum value
+     * @param min the minimum value
+     * @param max the maximum value
      * @param step the change of value at each tick of the slider
      */
-    public abstract void sliderInt(GuiValue.Int value, int minValue, int maxValue, int step);
+    public abstract void sliderInt(GuiValue.Int value, int min, int max, int step);
 
     /**
-     * Creates a float slider widget with specific min and max values.
+     * Creates a float slider widget with specific min, max and step values.
      * @param value the value of the slider
-     * @param minValue the minimum value
-     * @param maxValue the maximum value
+     * @param min the minimum value
+     * @param max the maximum value
      * @param step the change of value at each tick of the slider
      */
-    public abstract void sliderFloat(GuiValue.Float value, float minValue, float maxValue, float step);
+    public abstract void sliderFloat(GuiValue.Float value, float min, float max, float step);
+
+    /**
+     * Creates a integer property widget with specific min, max and step values.
+     * @param value the value of the slider
+     * @param min the minimum value
+     * @param max the maximum value
+     * @param step the change of value at each tick of the property slider
+     * @param incPerPixel the number of inces in one pixel
+     */
+    public abstract void propertyInt(String name, GuiValue.Int value, int min, int max, int step, float incPerPixel);
+
+    /**
+     * Creates a float property widget with specific min, max and step values.
+     * @param value the value of the slider
+     * @param min the minimum value
+     * @param max the maximum value
+     * @param step the change of value at each tick of the property slider
+     * @param incPerPixel the number of inces in one pixel
+     */
+    public abstract void propertyFloat(String name, GuiValue.Float value, float min, float max, float step, float incPerPixel);
 
     /**
      * Creates a progress bar widget with specific max value.
@@ -166,6 +189,14 @@ public abstract class GuiDebug {
      * @param filter filter only certain types of characters e.g. ASCII, decimal, binary etc.
      */
     public abstract void textField(GuiValue.Text text, int filter);
+
+    /**
+     * Create a color picker widget with specific color format
+     * @param color the color to set the picker to display
+     * @param format the format either <code>RGB</code> or <code>RGBA</code>
+     */
+    public abstract void colorPicker(GuiValue.Color color, int format);
+
 
     /**
      * Set the current row layout to share horizontal column space between the widgets evenly.
@@ -225,8 +256,8 @@ public abstract class GuiDebug {
     public abstract boolean groupBegin(int offsetX, int offsetY, String title, int flags);
     public abstract void groupEnd();
 
-    public abstract boolean treePush(int type, String title, int state);
-    public abstract boolean treeImagePush(int type, String title, Image image, int state);
+    public abstract boolean treePush(int type, String title, boolean expanded);
+    public abstract boolean treeImagePush(int type, String title, Image image, boolean expanded);
     public abstract void treePop();
 
     public GuiRect rect(float x, float y, float w, float h) {
@@ -240,6 +271,8 @@ public abstract class GuiDebug {
     public abstract GuiValue.Progress valueProgress(long max);
 
     public abstract GuiValue.Text valueText(String value, int maxLength);
+
+    public abstract GuiValue.Color valueColor(float r, float g, float b, float a);
 
     public static GuiValue.Int createValueInt(int value) {
         return getInstance().valueInt(value);
@@ -255,6 +288,10 @@ public abstract class GuiDebug {
 
     public static GuiValue.Text createValueText(String value, int maxLength) {
         return getInstance().valueText(value, maxLength);
+    }
+
+    public static GuiValue.Color createValueColor(float r, float g, float b, float a) {
+        return getInstance().valueColor(r, g, b, a);
     }
 
     public static GuiDebug getInstance() {

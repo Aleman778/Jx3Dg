@@ -139,6 +139,19 @@ public abstract class Graphics {
 
     public abstract Shader loadShader(int shader);
 
+    //TODO: This implementation is subject to change later, some platforms do not use the window construct e.g. HTML5.
+    public float getWidth() {
+        return window.getWidth();
+    }
+
+    public float getHeight() {
+        return window.getHeight();
+    }
+
+    public float getAspectRatio() {
+        return window.getAspectRatio();
+    }
+
     /**
      * Enable or disable the writing to each color component of the color buffer.
      *

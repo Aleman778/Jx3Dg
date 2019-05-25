@@ -162,9 +162,11 @@ public class Lwjgl3Window extends Window {
         decorated = config.windowDecorated;
         floating = config.windowFloating;
         swapInterval = config.vSyncEnabled ? 1 : 0;
-        screen = config.screen;
-        if (screen == null) {
-            screen = getScreen();
+        if (fullscreen) {
+            screen = config.screen;
+            if (screen == null) {
+                screen = getScreen();
+            }
         }
 
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
