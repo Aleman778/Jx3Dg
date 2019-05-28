@@ -55,9 +55,14 @@ public abstract class GuiDebug {
 //        FILTER_ASCII = 1,
 //        ,
 
-    public static final int
+    public final int
         RGB  = 0,
         RGBA = 1;
+
+    public final int
+        CHART_LINES  = 0,
+        CHART_COLUMN = 1,
+        CHART_MAX    = 2;
 
     public GuiDebug() {
         assert instance != null : "There already exists a debug gui!";
@@ -182,6 +187,40 @@ public abstract class GuiDebug {
      * @param modifyable the progress bar is modifyable by the user
      */
     public abstract void progress(GuiValue.Progress value, boolean modifiable);
+
+    /**
+     * Create a chart widget with the specific type of chart, number of data points, minumum and maxiumum values.
+     * @param type the type of chart can be {@link #CHART_COLUMN}, {@link #CHART_LINES} or {@link #CHART_MAX}
+     * @param count the number of data points to draw
+     * @param min the minimum value to display
+     * @param max the maximum value to display
+     */
+    public abstract void chartBegin(int type, int count, float min, float max);
+
+    /**
+     * Pushes the next value into the chart in order from left to right.
+     * @param value the value to push
+     */
+    public abstract void chartPush(float value);
+
+    /**
+     * Needs to be called when the chart is complete and should be drawn.
+     */
+    public abstract void chartEnd();
+
+    public abstract boolean comboBegin(String label, int width, int height);
+
+    public abstract boolean comboItem(String label);
+
+    public abstract boolean comboItem(String label, int algin);
+
+    public abstract void comboEnd();
+
+    public abstract boolean tooltipBegin(float width);
+
+    public abstract void tooltip(String text);
+
+    public abstract void tooltipEnd();
 
     /**
      * Create a text field widget with specific text and maximum size.

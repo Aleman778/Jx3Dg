@@ -103,8 +103,56 @@ public class NkGuiDebug extends GuiDebug {
         nk_color_picker(ctx, ((NkGuiValue.NkColor) color).color, format);
     }
 
-    public void chartBegin() {
-        //nk_chart_begin
+    @Override
+    public void chartBegin(int type, int count, float min, float max) {
+        nk_chart_begin(ctx, type, count, min, max);
+    }
+
+    @Override
+    public void chartPush(float value) {
+        nk_chart_push(ctx, value);
+    }
+
+    @Override
+    public void chartEnd() {
+        nk_chart_end(ctx);
+    }
+
+    @Override
+    public boolean comboBegin(String label, int width, int height) {
+        NkVec2 size = NkVec2.mallocStack(stack);
+        nk_vec2(width, height, size);
+        return nk_combo_begin_label(ctx, label, size);
+    }
+
+    @Override
+    public boolean comboItem(String label) {
+        return comboItem(label, LEFT);
+    }
+
+    @Override
+    public boolean comboItem(String label, int align) {
+        return nk_combo_item_label(ctx, label, align);
+    }
+
+    @Override
+    public void comboEnd() {
+        nk_combo_end(ctx);
+    }
+
+    @Override
+    public boolean tooltipBegin(float width) {
+        return nk_tooltip_begin(ctx, width);
+    }
+
+    @Override
+    public void tooltip(String text) {
+        nk_tooltip(ctx, text);
+    }
+
+    @Override
+    public void tooltipEnd() {
+        nk_tooltip_end(ctx);
     }
 
     @Override

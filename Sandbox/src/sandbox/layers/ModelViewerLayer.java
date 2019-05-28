@@ -38,16 +38,21 @@ public class ModelViewerLayer extends Layer {
     private EventDispatcher dispatcher;
 
     private boolean preprocessingNode;
+    private boolean chartNode;
+    private boolean comboNode;
+    private boolean contextualNode;
     private boolean backgroundTab;
     private boolean triangulateFacecs;
     private int lod = HIGH;
     private int lod2 = HIGH;
     private GuiValue.Float sliderF = GuiDebug.createValueFloat(0.5f);
     private GuiValue.Int sliderI = GuiDebug.createValueInt(50);
+    private GuiValue.Float propertyF = GuiDebug.createValueFloat(0.5f);
+    private GuiValue.Int propertyI = GuiDebug.createValueInt(50);
     private GuiValue.Progress progress = GuiDebug.createValueProgress(1000);
     private GuiValue.Text text = GuiDebug.createValueText("models/lamborghini/lambo.obj", 999);
     private GuiValue.Color color = GuiDebug.createValueColor(0.0f, 0.5f, 1.0f, 1.0f);
-
+    private String platform = "Desktop";
 
     public ModelViewerLayer() {
         Mesh mesh = JX3D.files.loadShape("models/lamborghini/lambo.obj");
@@ -127,7 +132,7 @@ public class ModelViewerLayer extends Layer {
     public void onDebugGuiRender(GuiDebug gui) {
         if (gui.begin("Model Import Settings", gui.rect((int) JX3D.graphics.getWidth()-GUI_WIDTH, 0, GUI_WIDTH, (int) JX3D.graphics.getHeight()), gui.WINDOW_TITLE)) {
             gui.layoutRowDynamic(20, 1);
-            gui.label("Select a model to import", gui.LEFT);
+            gui.label("Select a model to import");
             //gui.layoutRowDynamic(30, 1);
             //gui.textField(text);
 
@@ -147,20 +152,87 @@ public class ModelViewerLayer extends Layer {
 
             if (preprocessingNode = gui.treePush(gui.TREE_NODE, "Toggle widgets", preprocessingNode)) {
                 gui.layoutRowDynamic(20, 1);
-                gui.label("Level of detail", gui.LEFT);
+                gui.label("Level of detail");
 
-                gui.layoutRowDynamic(25, 3);
+                gui.layoutRowDynamic(20, 3);
                 if (gui.radioButton("Low", lod == LOW)) { lod = LOW; }
                 if (gui.radioButton("Medium", lod == MED)) { lod = MED; }
                 if (gui.radioButton("High", lod == HIGH)) { lod = HIGH; }
 
                 gui.layoutRowDynamic(20, 1);
-                gui.label("Selectable level of detail", gui.LEFT);
+                gui.label("Selectable level of detail");
 
                 gui.layoutRowDynamic(25, 3);
                 if (gui.selectable("Low", gui.TEXT_ALIGN_CENTERED, lod2 == LOW)) { lod2 = LOW; }
                 if (gui.selectable("Medium", gui.TEXT_ALIGN_CENTERED, lod2 == MED)) { lod2 = MED; }
                 if (gui.selectable("High", gui.TEXT_ALIGN_CENTERED, lod2 == HIGH)) { lod2 = HIGH; }
+                gui.treePop();
+
+
+                gui.layoutRowDynamic(20, 1);
+                gui.label("Assimp preprocessing flags");
+
+                gui.layoutRowDynamic(20, 1);
+                if (gui.checkbox("Triangulate faces", triangulateFacecs)) {
+                    triangulateFacecs = !triangulateFacecs;
+                }
+            }
+
+            if (chartNode = gui.treePush(gui.TREE_NODE, "Show charts", chartNode)) {
+                gui.layoutRowDynamic(20, 1);
+                gui.label("Chart type: CHART_LINES");
+                
+                gui.layoutRowDynamic(32, 1);
+                gui.chartBegin(gui.CHART_LINES, 5, 0, 100);
+                gui.chartPush(50);
+                gui.chartPush(65);
+                gui.chartPush(10);
+                gui.chartPush(95);
+                gui.chartPush(20);
+                gui.chartEnd();
+                
+                gui.layoutRowDynamic(20, 1);
+                gui.label("Chart type: CHART_MAX");
+                
+                gui.layoutRowDynamic(32, 1);
+                gui.chartBegin(gui.CHART_MAX, 5, 0, 100);
+                gui.chartPush(50);
+                gui.chartPush(65);
+                gui.chartPush(10);
+                gui.chartPush(95);
+                gui.chartPush(20);
+                gui.chartEnd();
+                
+                gui.layoutRowDynamic(20, 1);
+                gui.label("Chart type: CHART_COLUMN");
+                
+                gui.layoutRowDynamic(32, 1);
+                gui.chartBegin(gui.CHART_COLUMN, 5, 0, 100);
+                gui.chartPush(50);
+                gui.chartPush(65);
+                gui.chartPush(10);
+                gui.chartPush(95);
+                gui.chartPush(20);
+                gui.chartEnd();
+
+                gui.treePop();
+            }
+
+            if (comboNode = gui.treePush(gui.TREE_NODE, "Show combo boxes", comboNode)) {
+                gui.tooltip("Select a platform to run on");
+                if (gui.comboBegin(platform, 160, 155)) {
+                    gui.layoutRowDynamic(25, 1);
+                    if (gui.comboItem("Desktop")) platform = "Desktop";
+                    gui.layoutRowDynamic(25, 1);
+                    if (gui.comboItem("HTML5 (WebGL)")) platform = "HTML5 (WebGL)";
+                    gui.layoutRowDynamic(25, 1);
+                    if (gui.comboItem("Android")) platform = "Android";
+                    gui.layoutRowDynamic(25, 1);
+                    if (gui.comboItem("iOS")) platform = "iOS";
+                    gui.layoutRowDynamic(25, 1);
+                    if (gui.comboItem("Nintendo Switch")) platform = "Nintendo Switch";
+                    gui.comboEnd();
+                }
                 gui.treePop();
             }
 
@@ -174,22 +246,14 @@ public class ModelViewerLayer extends Layer {
             gui.label("= " + sliderI.get() + " (integer)");
 
             gui.layoutRowDynamic(20, 1);
-            gui.propertyFloat("Float property", sliderF, 0.0f, 1.0f, 0.01f, 0.01f);
+            gui.propertyFloat("Float property", propertyF, 0.0f, 1.0f, 0.01f, 0.01f);
 
             gui.layoutRowDynamic(20, 1);
-            gui.propertyInt("Integer property", sliderI, 0, 100, 1, 0.5f);
+            gui.propertyInt("Integer property", propertyI, 0, 100, 1, 1);
 
 
             gui.layoutRowDynamic(20, 1);
-            gui.label("Assimp preprocessing flags", gui.LEFT);
-
-            gui.layoutRowDynamic(25, 1);
-            if (gui.checkbox("Triangulate faces", triangulateFacecs)) {
-                triangulateFacecs = !triangulateFacecs;
-            }
-
-            gui.layoutRowDynamic(20, 1);
-            gui.label("Progress bar", gui.LEFT);
+            gui.label("Progress bar");
 
             gui.layoutRowDynamic(20, 1);
             gui.progress(progress, false);
