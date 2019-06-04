@@ -8,6 +8,7 @@ import jx3d.graphics.opengl.GL20;
 import jx3d.io.event.Event;
 import jx3d.io.event.EventType;
 import jx3d.io.event.KeyEvent;
+import sandbox.layers.GuiDebugLayer;
 import sandbox.layers.ModelViewerLayer;
 
 /**
@@ -18,11 +19,14 @@ import sandbox.layers.ModelViewerLayer;
 public class TestApplication extends ApplicationAdapter {
 
     private ModelViewerLayer layer;
+    private GuiDebugLayer debugGuiLayer;
 
     @Override
     public void onStart() {
-        layer = new ModelViewerLayer();
-        Application.get().pushLayer(layer);
+//        layer = new ModelViewerLayer();
+//        Application.get().pushLayer(layer);
+        debugGuiLayer = new GuiDebugLayer();
+        Application.get().pushLayer(debugGuiLayer);
     }
 
     @Override

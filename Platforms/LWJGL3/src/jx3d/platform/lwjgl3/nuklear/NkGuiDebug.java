@@ -7,12 +7,19 @@ import jx3d.graphics.debug.gui.GuiValue;
 import org.lwjgl.nuklear.*;
 import org.lwjgl.system.MemoryStack;
 
+import static jx3d.core.Module.MOUSE_BUTTON_MIDDLE;
+import static jx3d.core.Module.MOUSE_BUTTON_RIGHT;
 import static org.lwjgl.nuklear.Nuklear.*;
 
 public class NkGuiDebug extends GuiDebug {
 
     private NkContext ctx;
     private MemoryStack stack;
+    private boolean rowLayout = false;
+    private int colSize = 0;
+    private boolean spaceLayout = false;
+    private int widgetwidth = 0;
+    private boolean baseLayout = false;
 
 
     public NkGuiDebug(NkContext ctx) {
@@ -156,58 +163,86 @@ public class NkGuiDebug extends GuiDebug {
     }
 
     @Override
+    public boolean menuBegin(String label, float width, float height) {
+        NkVec2 vec = NkVec2.mallocStack(stack);
+        nk_vec2(width, height, vec);
+        return nk_menu_begin_label(ctx, label, LEFT, vec);
+    }
+
+    @Override
+    public boolean menuItem(String label) {
+        return nk_menu_item_label(ctx, label, LEFT);
+    }
+
+    @Override
+    public void menuEnd() {
+        nk_menu_end(ctx);
+    }
+
+    @Override
     public void layoutRowDynamic(float height, int cols) {
         nk_layout_row_dynamic(ctx, height, cols);
+        rowLayout = true;
     }
 
     @Override
     public void layoutRowStatic(float height, int colWidth, int cols) {
         nk_layout_row_static(ctx, height, colWidth, cols);
+        rowLayout = true;
     }
 
     @Override
     public void layoutRowBegin(int format, float height, int cols) {
         nk_layout_row_begin(ctx, format, height, cols);
+        rowLayout = true;
     }
 
     @Override
     public void layoutRowPush(float value) {
         nk_layout_row_push(ctx, value);
+        rowLayout = true;
     }
 
     @Override
     public void layoutRowEnd() {
         nk_layout_row_end(ctx);
+        rowLayout = false;
     }
 
     @Override
     public void layoutTemplateBegin(float height) {
         nk_layout_row_template_begin(ctx, height);
+        rowLayout = true;
     }
 
     @Override
     public void layoutTemplatePushDynamic() {
         nk_layout_row_template_push_dynamic(ctx);
+        rowLayout = true;
     }
 
     @Override
     public void layoutTemplatePushVariable(float minWidth) {
         nk_layout_row_template_push_variable(ctx, minWidth);
+        rowLayout = true;
     }
 
     @Override
     public void layoutTemplatePushStatic(float width) {
         nk_layout_row_template_push_static(ctx, width);
+        rowLayout = true;
     }
 
     @Override
     public void layoutTemplateEnd() {
         nk_layout_row_template_end(ctx);
+        rowLayout = false;
     }
 
     @Override
     public void layoutSpaceBegin(int format, float height, int numWidgets) {
         nk_layout_space_begin(ctx, format, height, numWidgets);
+        spaceLayout = true;
     }
 
     @Override
@@ -216,11 +251,21 @@ public class NkGuiDebug extends GuiDebug {
         NkRect rect = NkRect.mallocStack(stack);
         nk_rect(bounds.x, bounds.y, bounds.w, bounds.h, rect);
         nk_layout_space_push(ctx, rect);
+        spaceLayout = true;
     }
 
     @Override
     public void layoutSpaceEnd() {
         nk_layout_space_end(ctx);
+        spaceLayout = false;
+    }
+
+    @Override
+    public void sameLine() {
+        if (baseLayout) {
+            float width = nk_widget_width(ctx);
+            nk_layout_row_template_push_variable(ctx, 10);
+        }
     }
 
     @Override
@@ -259,6 +304,28 @@ public class NkGuiDebug extends GuiDebug {
     }
 
     @Override
+    public boolean isWidgetHovered() {
+        return nk_widget_is_hovered(ctx);
+    }
+
+    @Override
+    public boolean isWidgetClicked(int button) {
+        int nkButton;
+        switch (button) {
+            case MOUSE_BUTTON_RIGHT:
+                nkButton = NK_BUTTON_RIGHT;
+                break;
+            case MOUSE_BUTTON_MIDDLE:
+                nkButton = NK_BUTTON_MIDDLE;
+                break;
+            default:
+                nkButton = NK_BUTTON_LEFT;
+        }
+        return nk_widget_is_mouse_clicked(ctx, nkButton);
+    }
+
+
+    @Override
     public GuiValue.Float valueFloat(float value) {
         return new NkGuiValue.NkFloat(value);
     }
@@ -281,5 +348,29 @@ public class NkGuiDebug extends GuiDebug {
     @Override
     public GuiValue.Color valueColor(float r, float g, float b, float a) {
         return new NkGuiValue.NkColor(r, g, b, a);
+    }
+
+    private void layout() {
+        boolean noLayout = false;
+        if (rowLayout) {
+            if (colSize > 0)
+                colSize--;
+            if (colSize == 0)
+                rowLayout = false;
+            noLayout = true;
+        }
+        if (spaceLayout) {
+            spaceLayout = false;
+            noLayout = true;
+        }
+        if (!baseLayout && noLayout) {
+        }
+
+        baseLayout = noLayout;
+
+        if (noLayout) {
+
+
+        }
     }
 }

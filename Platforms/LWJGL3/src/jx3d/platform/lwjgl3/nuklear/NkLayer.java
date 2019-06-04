@@ -13,6 +13,8 @@ import static org.lwjgl.system.MemoryUtil.*;
 
 public class NkLayer extends Layer {
 
+    public static final float SCALE = 1.8f;
+
     private static final int BUFFER_INITIAL_SIZE = 4 * 1024;
 
     /**
@@ -31,6 +33,11 @@ public class NkLayer extends Layer {
     private NkRenderer renderer;
     private NkGuiDebug debugGui;
     private NkContext ctx = NkContext.create();
+
+    //The size of the GUI layer area, if less than the window size it will be
+    //automatically resized to fit the window size same if larger.
+    private int width = 640;
+    private int height = 480;
 
     private EventDispatcher dispatcher;
 

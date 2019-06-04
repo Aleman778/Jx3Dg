@@ -222,6 +222,12 @@ public abstract class GuiDebug {
 
     public abstract void tooltipEnd();
 
+    public abstract boolean menuBegin(String text, float width, float height);
+
+    public abstract boolean menuItem(String label);
+
+    public abstract void menuEnd();
+
     /**
      * Create a text field widget with specific text and maximum size.
      * @param text the text to display and edit
@@ -290,6 +296,8 @@ public abstract class GuiDebug {
     public abstract void layoutSpacePush(GuiRect bounds);
     public abstract void layoutSpaceEnd();
 
+    public abstract void sameLine();
+
     public abstract boolean groupBegin(String title, int flags);
     public abstract boolean groupBegin(String name, String title, int flags);
     public abstract boolean groupBegin(int offsetX, int offsetY, String title, int flags);
@@ -298,6 +306,10 @@ public abstract class GuiDebug {
     public abstract boolean treePush(int type, String title, boolean expanded);
     public abstract boolean treeImagePush(int type, String title, Image image, boolean expanded);
     public abstract void treePop();
+
+    public abstract boolean isWidgetHovered();
+
+    public abstract boolean isWidgetClicked(int button);
 
     public GuiRect rect(float x, float y, float w, float h) {
         return new GuiRect(x, y, w, h);

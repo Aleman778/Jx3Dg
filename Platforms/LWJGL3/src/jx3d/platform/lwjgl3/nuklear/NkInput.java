@@ -1,10 +1,9 @@
 package jx3d.platform.lwjgl3.nuklear;
 
-import jx3d.io.event.CharacterEvent;
-import jx3d.io.event.EventAdapter;
-import jx3d.io.event.KeyEvent;
-import jx3d.io.event.MouseEvent;
+import jx3d.io.event.*;
 import org.lwjgl.nuklear.NkContext;
+import org.lwjgl.nuklear.NkVec2;
+import org.lwjgl.system.MemoryStack;
 
 import static jx3d.core.Module.*;
 
@@ -124,12 +123,12 @@ public class NkInput extends EventAdapter {
 
     @Override
     public void mouseMoved(MouseEvent event) {
-        nk_input_motion(ctx, (int) event.getX(), (int) event.getY());
+        nk_input_motion(ctx, (int) (event.getX() / NkLayer.SCALE), (int) (event.getY() / NkLayer.SCALE));
     }
 
     @Override
     public void mouseDragged(MouseEvent event) {
-        nk_input_motion(ctx, (int) event.getX(), (int) event.getY());
+        nk_input_motion(ctx, (int) (event.getX() / NkLayer.SCALE), (int) (event.getY() / NkLayer.SCALE));
     }
 
     @Override
@@ -159,6 +158,15 @@ public class NkInput extends EventAdapter {
             default:
                 nkButton = NK_BUTTON_LEFT;
         }
-        nk_input_button(ctx, nkButton, (int) event.getX(), (int) event.getY(), pressed);
+        nk_input_button(ctx, nkButton, (int) (event.getX() / NkLayer.SCALE), (int) (event.getY() / NkLayer.SCALE), pressed);
+    }
+
+    @Override
+    public void mouseScrolled(MouseScrollEvent event) {
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            NkVec2 vec = NkVec2.mallocStack(stack);
+            nk_vec2(event.getScrollX(), event.getScrollY(), vec);
+            nk_input_scroll(ctx, vec);
+        }
     }
 }

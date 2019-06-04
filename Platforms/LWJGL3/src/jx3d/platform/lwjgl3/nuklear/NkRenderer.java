@@ -44,14 +44,6 @@ public class NkRenderer implements Disposable {
     private NkContext ctx;
     private NkBuffer cmds = NkBuffer.create();
 
-    private int
-            width,
-            height;
-
-    private int
-            display_width,
-            display_height;
-
     private int vbo, vao, ebo;
     private int prog;
     private int vert_shdr;
@@ -65,11 +57,6 @@ public class NkRenderer implements Disposable {
      */
     public NkRenderer(NkContext ctx) {
         this.ctx = ctx;
-
-        width = (int) JX3D.graphics.getWidth();
-        height = (int) JX3D.graphics.getHeight();
-        display_width = width;
-        display_height = height;
 
         setupShader();
         setupBuffers();
@@ -173,10 +160,10 @@ public class NkRenderer implements Disposable {
     }
 
     public void present() {
-        display_width = (int) JX3D.graphics.getWidth();
-        display_height = (int) JX3D.graphics.getHeight();
-        width = display_width;
-        height = display_height;
+        float display_width = JX3D.graphics.getWidth();
+        float display_height = JX3D.graphics.getHeight();
+        float width = display_width / NkLayer.SCALE;
+        float height = display_height / NkLayer.SCALE;
 
         try (MemoryStack stack = stackPush()) {
             // setup global state
@@ -197,7 +184,7 @@ public class NkRenderer implements Disposable {
                     0.0f, 0.0f, -1.0f, 0.0f,
                     -1.0f, 1.0f, 0.0f, 1.0f
             ));
-            glViewport(0, 0, display_width, display_height);
+            glViewport(0, 0, (int) display_width, (int) display_height);
         }
 
         {
@@ -240,8 +227,7 @@ public class NkRenderer implements Disposable {
             glUnmapBuffer(GL_ARRAY_BUFFER);
 
             // iterate over and execute each draw command
-            float fb_scale_x = (float)display_width / (float)width;
-            float fb_scale_y = (float)display_height / (float)height;
+            float scale = NkLayer.SCALE;
 
             long offset = 0L;
             for (NkDrawCommand cmd = nk__draw_begin(ctx, cmds); cmd != null; cmd = nk__draw_next(cmd, cmds, ctx)) {
@@ -250,10 +236,10 @@ public class NkRenderer implements Disposable {
                 }
                 glBindTexture(GL_TEXTURE_2D, cmd.texture().id());
                 glScissor(
-                        (int)(cmd.clip_rect().x() * fb_scale_x),
-                        (int)((height - (int)(cmd.clip_rect().y() + cmd.clip_rect().h())) * fb_scale_y),
-                        (int)(cmd.clip_rect().w() * fb_scale_x),
-                        (int)(cmd.clip_rect().h() * fb_scale_y)
+                        (int)(cmd.clip_rect().x() * scale),
+                        (int)((height - (int)(cmd.clip_rect().y() + cmd.clip_rect().h())) * scale),
+                        (int)(cmd.clip_rect().w() * scale),
+                        (int)(cmd.clip_rect().h() * scale)
                 );
                 glDrawElements(GL_TRIANGLES, cmd.elem_count(), GL_UNSIGNED_SHORT, offset);
                 offset += cmd.elem_count() * 2;
