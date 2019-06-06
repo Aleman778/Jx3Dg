@@ -37,22 +37,11 @@ public class ModelViewerLayer extends Layer {
     private Graphics g;
     private EventDispatcher dispatcher;
 
-    private boolean preprocessingNode;
-    private boolean chartNode;
-    private boolean comboNode;
-    private boolean contextualNode;
-    private boolean backgroundTab;
-    private boolean triangulateFacecs;
-    private int lod = HIGH;
-    private int lod2 = HIGH;
-    private GuiValue.Float sliderF = GuiDebug.createValueFloat(0.5f);
-    private GuiValue.Int sliderI = GuiDebug.createValueInt(50);
-    private GuiValue.Float propertyF = GuiDebug.createValueFloat(0.5f);
-    private GuiValue.Int propertyI = GuiDebug.createValueInt(50);
-    private GuiValue.Progress progress = GuiDebug.createValueProgress(1000);
-    private GuiValue.Text text = GuiDebug.createValueText("models/lamborghini/lambo.obj", 999);
+
+    private String modelPath = "models/lamborghini/lambo.obj";
+    private String texturePath = "models/lamborghini/lambo_diffuse.jpeg";
+
     private GuiValue.Color color = GuiDebug.createValueColor(0.0f, 0.5f, 1.0f, 1.0f);
-    private String platform = "Desktop";
 
     public ModelViewerLayer() {
         Mesh mesh = JX3D.files.loadShape("models/lamborghini/lambo.obj");
@@ -131,6 +120,7 @@ public class ModelViewerLayer extends Layer {
     @Override
     public void onDebugGuiRender(GuiDebug gui) {
         if (gui.begin("Model Import Settings", gui.rect((int) JX3D.graphics.getWidth()-GUI_WIDTH, 0, GUI_WIDTH, (int) JX3D.graphics.getHeight()), gui.WINDOW_TITLE)) {
+
         }
         gui.end();
     }
