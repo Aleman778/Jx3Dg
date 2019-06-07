@@ -139,6 +139,14 @@ public abstract class Graphics {
 
     public abstract Shader loadShader(int shader);
 
+    public float getWidth() {
+        return window.getWidth();
+    }
+
+    public float getHeight() {
+        return window.getHeight();
+    }
+
     /**
      * Enable or disable the writing to each color component of the color buffer.
      *

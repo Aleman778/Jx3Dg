@@ -1,8 +1,15 @@
 package jx3d.platform.lwjgl3;
 
+import glm_.vec2.Vec2;
+import glm_.vec2.Vec2i;
+import imgui.IO;
+import imgui.ImGui;
+import imgui.imgui.Context;
+import imgui.impl.ImplGL3;
+import imgui.impl.ImplGlfw;
+
 import jx3d.core.*;
 import jx3d.core.Module;
-import jx3d.graphics.Context;
 import jx3d.graphics.Context.RenderAPI;
 import jx3d.graphics.Graphics;
 import jx3d.graphics.opengl.GLContext;
@@ -10,11 +17,16 @@ import jx3d.graphics.opengl.GLGraphics;
 import jx3d.io.Files;
 import jx3d.io.Input;
 import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLUtil;
 
 import java.util.ArrayList;
 
 import static org.lwjgl.glfw.GLFW.*;
+
+import static imgui.impl.CommonGLKt.setGlslVersion;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.glClear;
 
 /**
  * Lightweight Java Game Library (LWJGL3) Application is an implementation that supports most common desktop
@@ -32,6 +44,12 @@ public final class Lwjgl3Application extends Application {
     private Files files;
     private Input input;
 
+    private ImGui imgui = ImGui.INSTANCE;
+    private Context ctx;
+    private ImplGlfw implGlfw;
+    private ImplGL3 implGl3;
+    private IO io;
+
     public Lwjgl3Application(Lwjgl3Configurations config, ApplicationListener listener) {
         super(listener);
 
@@ -48,6 +66,11 @@ public final class Lwjgl3Application extends Application {
         JX3D.graphics = graphics;
         JX3D.files = files;
 
+        setGlslVersion(130);
+        ctx = new Context();
+        imgui.styleColorsDark();
+        implGl3 = new ImplGL3();
+        io = imgui.getIo();
     }
 
     private void setupGraphics(Lwjgl3Configurations config) {
@@ -84,11 +107,28 @@ public final class Lwjgl3Application extends Application {
 
         mainWindow.setVisible(true);
         while (!mainWindow.shouldClose()) {
+            implGl3.newFrame();
+            io.setDisplaySize(new Vec2i(1280, 720));
+            io.setDisplayFramebufferScale(new Vec2(1.0f, 1.0f));
+
+            // Setup time step
+            //val currentTime = glfw.time
+            //io.deltaTime = if (time > 0) (currentTime - time).f else 1f / 60f
+            //time = currentTime
+
+            imgui.newFrame();
+
+            imgui.text("Hello World!");
 
             listener.onUpdate();
             for (Layer layer : layerStack) {
                 layer.onUpdate();
             }
+
+            imgui.render();
+            //imgui.getDrawData().setDisplaySize(new Vec2(JX3D.graphics.getWidth(), JX3D.graphics.getHeight()));
+            //imgui.getDrawData().setFramebufferScale(new Vec2(1.0f, 1.0f));
+            implGl3.renderDrawData(imgui.getDrawData());
 
             mainWindow.swapBuffers();
             mainWindow.pollEvents();

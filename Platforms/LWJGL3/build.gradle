@@ -3,6 +3,9 @@ sourceCompatibility = 1.10
 targetCompatibility = 1.10
 
 dependencies {
+    implementation libraries.imguiCore
+    implementation libraries.imguiGL
+    implementation libraries.imguiGLFW
     implementation libraries.lwjgl3
     runtimeOnly natives.lwjgl3
     testCompile libraries.junit

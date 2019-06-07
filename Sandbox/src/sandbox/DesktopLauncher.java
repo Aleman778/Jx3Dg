@@ -9,6 +9,8 @@ public class DesktopLauncher {
     public static void main(String args[]) {
         Lwjgl3Configurations config = new Lwjgl3Configurations();
         config.renderer = Module.OPENGL_DEBUG;
+        config.windowWidth = 1280;
+        config.windowHeight = 720;
 
         Lwjgl3Application app = new Lwjgl3Application(config, new TestApplication());
         app.run();

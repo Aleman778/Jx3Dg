@@ -4,7 +4,7 @@ ext {
     natives = [:]
 }
 
-versions.lwjgl3 = "3.2.1"
+versions.lwjgl3 = "3.2.2"
 versions.joml = "1.9.13"
 versions.junit = "4.11"
 
@@ -15,7 +15,8 @@ libraries.lwjgl3 = [
     "org.lwjgl:lwjgl-openal:${versions.lwjgl3}",
     "org.lwjgl:lwjgl-opengl:${versions.lwjgl3}",
     "org.lwjgl:lwjgl-stb:${versions.lwjgl3}",
-    "org.lwjgl:lwjgl-assimp:${versions.lwjgl3}"
+    "org.lwjgl:lwjgl-assimp:${versions.lwjgl3}",
+    "org.lwjgl:lwjgl-jemalloc:${versions.lwjgl3}"
 ]
 
 natives.lwjgl3 = [
@@ -36,7 +37,10 @@ natives.lwjgl3 = [
     "org.lwjgl:lwjgl-stb:${versions.lwjgl3}:natives-windows",
     "org.lwjgl:lwjgl-assimp:${versions.lwjgl3}:natives-linux",
     "org.lwjgl:lwjgl-assimp:${versions.lwjgl3}:natives-macos",
-    "org.lwjgl:lwjgl-assimp:${versions.lwjgl3}:natives-windows"
+    "org.lwjgl:lwjgl-assimp:${versions.lwjgl3}:natives-windows",
+    "org.lwjgl:lwjgl-jemalloc:${versions.lwjgl3}:natives-linux",
+    "org.lwjgl:lwjgl-jemalloc:${versions.lwjgl3}:natives-macos",
+    "org.lwjgl:lwjgl-jemalloc:${versions.lwjgl3}:natives-windows"
 ]
 
 
@@ -48,4 +52,16 @@ libraries.joml = [
 //jUnit dependencies
 libraries.junit = [
     "junit:junit:${versions.junit}"
+]
+
+libraries.imguiCore = [
+    "com.github.kotlin-graphics.imgui:imgui-core:-SNAPSHOT"
+]
+
+libraries.imguiGL = [
+        "com.github.kotlin-graphics.imgui:imgui-gl:-SNAPSHOT"
+]
+
+libraries.imguiGLFW = [
+        "com.github.kotlin-graphics.imgui:imgui-glfw:-SNAPSHOT"
 ]

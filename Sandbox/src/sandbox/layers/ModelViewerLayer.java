@@ -81,7 +81,7 @@ public class ModelViewerLayer extends Layer {
         camera3D = new FreeMoving3DCamera();
 
         //shader.set("projection", perspective);
-        JX3D.graphics.viewport(0, 0, 640, 480);
+        JX3D.graphics.viewport(0, 0, (int) JX3D.graphics.getWidth(), (int) JX3D.graphics.getHeight());
 
         shader.set("transform", t.getMapping());
 
